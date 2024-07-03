@@ -3120,7 +3120,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/run_benchmark",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "f6841a43b31ae713d55d961588606d7633486913",
+    "git_commit" : "2b7107f4100f31dc5741c3f0eac02f0438ad405a",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3452,7 +3452,7 @@ def findStatesTemp(Map params, Map config) {
           if (args.rename_keys) {
             def renameMap = args.rename_keys.collectEntries{renameString ->
               def split = renameString.split(":")
-              assert split.size() == 2: "Argument 'rename_keys' should be of the form 'newKey:oldKey,newKey:oldKey'"
+              assert split.size() == 2: "Argument 'rename_keys' should be of the form 'newKey:oldKey;newKey:oldKey'"
               split
             }
 

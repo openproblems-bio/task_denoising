@@ -22,10 +22,10 @@ process {
 }
 HERE
 
-tw launch https://github.com/openproblems-bio/openproblems-v2.git \
-  --revision main_build \
+tw launch https://github.com/openproblems-bio/task_denoising.git \
+  --revision build/main \
   --pull-latest \
-  --main-script target/nextflow/denoising/workflows/process_datasets/main.nf \
+  --main-script target/nextflow/workflows/process_datasets/main.nf \
   --workspace 53907369739130 \
   --compute-env 6TeIFgV5OY4pJCk8I0bfOh \
   --params-file /tmp/params.yaml \

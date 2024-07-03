@@ -7,10 +7,10 @@ output_state: "state.yaml"
 publish_dir: s3://openproblems-nextflow/temp/denoising/
 HERE
 
-tw launch https://github.com/openproblems-bio/openproblems-v2.git \
-  --revision main_build \
+tw launch https://github.com/openproblems-bio/task_denoising.git \
+  --revision build/main \
   --pull-latest \
-  --main-script target/nextflow/denoising/workflows/run_benchmark/main.nf \
+  --main-script target/nextflow/workflows/run_benchmark/main.nf \
   --workspace 53907369739130 \
   --compute-env 6TeIFgV5OY4pJCk8I0bfOh \
   --params-file /tmp/params.yaml \

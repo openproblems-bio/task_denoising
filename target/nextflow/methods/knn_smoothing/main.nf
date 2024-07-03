@@ -2985,7 +2985,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/methods/knn_smoothing",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "71fd29174b340923af294f978d1bfcaa3c9592b5",
+    "git_commit" : "f6841a43b31ae713d55d961588606d7633486913",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3074,7 +3074,7 @@ dep = {
 ## VIASH END
 
 print("Load input data", flush=True)
-input_train = ad.read_h5ad(par["input_train"], backed="r")
+input_train = ad.read_h5ad(par["input_train"])
 
 print("Remove unneeded data", flush=True)
 X = input_train.layers["counts"].astype(float).transpose().toarray()

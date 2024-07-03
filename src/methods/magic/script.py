@@ -20,7 +20,7 @@ meta = {
 ## VIASH END
 
 print("Load data", flush=True)
-input_train = ad.read_h5ad(par["input_train"], backed="r")
+input_train = ad.read_h5ad(par["input_train"])
 
 print("Set normalization method", flush=True)
 if par["norm"] == "sqrt":

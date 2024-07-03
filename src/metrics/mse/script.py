@@ -15,8 +15,8 @@ meta = {
 ## VIASH END
 
 print("Load data", flush=True)
-input_denoised = ad.read_h5ad(par['input_prediction'], backed="r")
-input_test = ad.read_h5ad(par['input_test'], backed="r")
+input_denoised = ad.read_h5ad(par['input_prediction'])
+input_test = ad.read_h5ad(par['input_test'])
 
 test_data = ad.AnnData(X=input_test.layers["counts"], dtype="float")
 denoised_data = ad.AnnData(X=input_denoised.layers["denoised"], dtype="float")

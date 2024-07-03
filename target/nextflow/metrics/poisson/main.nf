@@ -3077,7 +3077,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/metrics/poisson",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "71fd29174b340923af294f978d1bfcaa3c9592b5",
+    "git_commit" : "f6841a43b31ae713d55d961588606d7633486913",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3168,8 +3168,8 @@ dep = {
 ## VIASH END
 
 print("Load Data", flush=True)
-input_denoised = ad.read_h5ad(par['input_prediction'], backed="r")
-input_test = ad.read_h5ad(par['input_test'], backed="r")
+input_denoised = ad.read_h5ad(par['input_prediction'])
+input_test = ad.read_h5ad(par['input_test'])
 
 test_data = scprep.utils.toarray(input_test.layers["counts"])
 denoised_data = scprep.utils.toarray(input_denoised.layers["denoised"])

@@ -468,9 +468,9 @@ RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packag
   Rscript -e 'remotes::install_github(c("KlugerLab/ALRA"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component methods alra"
-LABEL org.opencontainers.image.created="2024-07-03T09:26:45Z"
+LABEL org.opencontainers.image.created="2024-07-03T09:47:53Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="71fd29174b340923af294f978d1bfcaa3c9592b5"
+LABEL org.opencontainers.image.revision="f6841a43b31ae713d55d961588606d7633486913"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -1045,7 +1045,7 @@ rm(.viash_orig_warn)
 ## VIASH END
 
 cat(">> Load input data\\n")
-input_train <- read_h5ad(par\$input_train, backed = "r")
+input_train <- read_h5ad(par\$input_train)
 
 cat(">> Set normalization method\\n")
 if (par\$norm == "sqrt") {

@@ -12,7 +12,7 @@ meta = {
 ## VIASH END
 
 print("Load input data", flush=True)
-input_train = ad.read_h5ad(par["input_train"], backed="r")
+input_train = ad.read_h5ad(par["input_train"])
 
 print("Remove unneeded data", flush=True)
 X = input_train.layers["counts"].astype(float).transpose().toarray()

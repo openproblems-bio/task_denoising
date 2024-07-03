@@ -14,8 +14,8 @@ meta = {
 ## VIASH END
 
 print("Load Data", flush=True)
-input_denoised = ad.read_h5ad(par['input_prediction'], backed="r")
-input_test = ad.read_h5ad(par['input_test'], backed="r")
+input_denoised = ad.read_h5ad(par['input_prediction'])
+input_test = ad.read_h5ad(par['input_test'])
 
 test_data = scprep.utils.toarray(input_test.layers["counts"])
 denoised_data = scprep.utils.toarray(input_denoised.layers["denoised"])

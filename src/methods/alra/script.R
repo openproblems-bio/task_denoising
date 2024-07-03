@@ -14,7 +14,7 @@ meta <- list(
 ## VIASH END
 
 cat(">> Load input data\n")
-input_train <- read_h5ad(par$input_train, backed = "r")
+input_train <- read_h5ad(par$input_train)
 
 cat(">> Set normalization method\n")
 if (par$norm == "sqrt") {

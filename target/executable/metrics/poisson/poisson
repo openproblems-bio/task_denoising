@@ -465,9 +465,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scprep"
 
 LABEL org.opencontainers.image.description="Companion container for running component metrics poisson"
-LABEL org.opencontainers.image.created="2024-07-03T09:26:45Z"
+LABEL org.opencontainers.image.created="2024-07-03T09:47:54Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="71fd29174b340923af294f978d1bfcaa3c9592b5"
+LABEL org.opencontainers.image.revision="f6841a43b31ae713d55d961588606d7633486913"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -1028,8 +1028,8 @@ dep = {
 ## VIASH END
 
 print("Load Data", flush=True)
-input_denoised = ad.read_h5ad(par['input_prediction'], backed="r")
-input_test = ad.read_h5ad(par['input_test'], backed="r")
+input_denoised = ad.read_h5ad(par['input_prediction'])
+input_test = ad.read_h5ad(par['input_test'])
 
 test_data = scprep.utils.toarray(input_test.layers["counts"])
 denoised_data = scprep.utils.toarray(input_denoised.layers["denoised"])

@@ -1,0 +1,193 @@
+name: "knn_smoothing"
+namespace: "methods"
+version: "build_main"
+argument_groups:
+- name: "Arguments"
+  arguments:
+  - type: "file"
+    name: "--input_train"
+    info:
+      label: "Training data"
+      summary: "The subset of molecules used for the training dataset"
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/train.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Denoised data"
+      summary: "A denoised dataset as output by a method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "denoised"
+          description: "denoised data"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/denoised.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+test_resources:
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+- type: "python_script"
+  path: "check_method_config.py"
+  is_executable: true
+- type: "file"
+  path: "library.bib"
+- type: "file"
+  path: "resources_test/denoising/pancreas"
+  dest: "resources_test/denoising/pancreas"
+info:
+  label: "KNN Smoothing"
+  summary: "Iterative kNN-smoothing denoises scRNA-seq data by iteratively increasing\
+    \ the size of neighbourhoods for smoothing until a maximum k value is reached."
+  description: "Iterative kNN-smoothing is a method to repair or denoise noisy scRNA-seq\
+    \ expression matrices. Given a scRNA-seq expression matrix, KNN-smoothing first\
+    \ applies initial normalisation and smoothing. Then, a chosen number of principal\
+    \ components is used to calculate Euclidean distances between cells. Minimally\
+    \ sized neighbourhoods are initially determined from these Euclidean distances,\
+    \ and expression profiles are shared between neighbouring cells. Then, the resultant\
+    \ smoothed matrix is used as input to the next step of smoothing, where the size\
+    \ (k) of the considered neighbourhoods is increased, leading to greater smoothing.\
+    \ This process continues until a chosen maximum k value has been reached, at which\
+    \ point the iteratively smoothed object is then optionally scaled to yield a final\
+    \ result."
+  reference: "wagner2018knearest"
+  documentation_url: "https://github.com/yanailab/knn-smoothing#readme"
+  repository_url: "https://github.com/yanailab/knn-smoothing"
+  v1:
+    path: "openproblems/tasks/denoising/methods/knn_smoothing.py"
+    commit: "b3456fd73c04c28516f6df34c57e6e3e8b0dab32"
+  preferred_normalization: "counts"
+  type: "method"
+  type_info:
+    label: "Method"
+    summary: "A method."
+    description: "A denoising method to remove noise (i.e. technical artifacts) from\
+      \ a dataset.\n"
+status: "enabled"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/task_denoising"
+  docker_registry: "ghcr.io/openproblems-bio"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "highcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "ghcr.io/openproblems-bio/base_images/python:1.1.0"
+  namespace_separator: "/"
+  setup:
+  - type: "python"
+    user: false
+    packages:
+    - "scipy"
+    github:
+    - "scottgigante-immunai/knn-smoothing@python_package"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/methods/knn_smoothing/config.vsh.yaml"
+  runner: "executable"
+  engine: "docker"
+  output: "target/executable/methods/knn_smoothing"
+  executable: "target/executable/methods/knn_smoothing/knn_smoothing"
+  viash_version: "0.9.0-RC6"
+  git_commit: "252dbd70663dc91b11c6891331b4546c375a4303"
+  git_remote: "https://github.com/openproblems-bio/task_denoising"
+package_config:
+  name: "denoising"
+  version: "build_main"
+  description: "An OpenProblems benchmark task.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/denoising/"
+      dest: "resources_test/denoising"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common/"
+      dest: "resources_test/common"
+  viash_version: "0.9.0-RC6"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }"
+  keywords:
+  - "single-cell"
+  - "openproblems"
+  - "benchmark"
+  - "denoising"
+  license: "MIT"
+  links:
+    repository: "https://github.com/openproblems-bio/task_denoising"
+    docker_registry: "ghcr.io/openproblems-bio"
+    issue_tracker: "https://github.com/openproblems-bio/task_denoising/issues"

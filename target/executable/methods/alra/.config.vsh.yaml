@@ -1,0 +1,202 @@
+name: "alra"
+namespace: "methods"
+version: "build_main"
+argument_groups:
+- name: "Arguments"
+  arguments:
+  - type: "file"
+    name: "--input_train"
+    info:
+      label: "Training data"
+      summary: "The subset of molecules used for the training dataset"
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/train.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Denoised data"
+      summary: "A denoised dataset as output by a method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "denoised"
+          description: "denoised data"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/denoised.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--norm"
+    description: "Normalization method"
+    info: null
+    default:
+    - "log"
+    required: false
+    choices:
+    - "sqrt"
+    - "log"
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "r_script"
+  path: "script.R"
+  is_executable: true
+test_resources:
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+- type: "python_script"
+  path: "check_method_config.py"
+  is_executable: true
+- type: "file"
+  path: "library.bib"
+- type: "file"
+  path: "resources_test/denoising/pancreas"
+  dest: "resources_test/denoising/pancreas"
+info:
+  label: "ALRA"
+  summary: "ALRA imputes missing values in scRNA-seq data by computing rank-k approximation,\
+    \ thresholding by gene, and rescaling the matrix."
+  description: "Adaptively-thresholded Low Rank Approximation (ALRA). \n\nALRA is\
+    \ a method for imputation of missing values in single cell RNA-sequencing data,\
+    \ \ndescribed in the preprint, \"Zero-preserving imputation of scRNA-seq data\
+    \ using low-rank approximation\" \navailable [here](https://www.biorxiv.org/content/early/2018/08/22/397588).\
+    \ Given a \nscRNA-seq expression matrix, ALRA first computes its rank-k approximation\
+    \ using randomized SVD. \nNext, each row (gene) is thresholded by the magnitude\
+    \ of the most negative value of that gene. \nFinally, the matrix is rescaled.\n"
+  reference: "linderman2018zero"
+  repository_url: "https://github.com/KlugerLab/ALRA"
+  documentation_url: "https://github.com/KlugerLab/ALRA/blob/master/README.md"
+  v1:
+    path: "openproblems/tasks/denoising/methods/alra.py"
+    commit: "b3456fd73c04c28516f6df34c57e6e3e8b0dab32"
+  preferred_normalization: "counts"
+  type: "method"
+  type_info:
+    label: "Method"
+    summary: "A method."
+    description: "A denoising method to remove noise (i.e. technical artifacts) from\
+      \ a dataset.\n"
+status: "enabled"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/task_denoising"
+  docker_registry: "ghcr.io/openproblems-bio"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "highcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "ghcr.io/openproblems-bio/base_images/r:1.1.0"
+  namespace_separator: "/"
+  setup:
+  - type: "r"
+    cran:
+    - "Matrix"
+    - "rsvd"
+    github:
+    - "KlugerLab/ALRA"
+    bioc_force_install: false
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/methods/alra/config.vsh.yaml"
+  runner: "executable"
+  engine: "docker"
+  output: "target/executable/methods/alra"
+  executable: "target/executable/methods/alra/alra"
+  viash_version: "0.9.0-RC6"
+  git_commit: "252dbd70663dc91b11c6891331b4546c375a4303"
+  git_remote: "https://github.com/openproblems-bio/task_denoising"
+package_config:
+  name: "denoising"
+  version: "build_main"
+  description: "An OpenProblems benchmark task.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/denoising/"
+      dest: "resources_test/denoising"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common/"
+      dest: "resources_test/common"
+  viash_version: "0.9.0-RC6"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }"
+  keywords:
+  - "single-cell"
+  - "openproblems"
+  - "benchmark"
+  - "denoising"
+  license: "MIT"
+  links:
+    repository: "https://github.com/openproblems-bio/task_denoising"
+    docker_registry: "ghcr.io/openproblems-bio"
+    issue_tracker: "https://github.com/openproblems-bio/task_denoising/issues"

@@ -1,0 +1,246 @@
+name: "poisson"
+namespace: "metrics"
+version: "build_main"
+argument_groups:
+- name: "Arguments"
+  arguments:
+  - type: "file"
+    name: "--input_test"
+    info:
+      label: "Test data"
+      summary: "The subset of molecules used for the test dataset"
+      slots:
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_name"
+          type: "string"
+          description: "Nicely formatted name."
+          required: true
+        - type: "string"
+          name: "dataset_url"
+          description: "Link to the original source of the dataset."
+          required: false
+        - name: "dataset_reference"
+          type: "string"
+          description: "Bibtex reference of the paper in which the dataset was published."
+          required: false
+        - name: "dataset_summary"
+          type: "string"
+          description: "Short description of the dataset."
+          required: true
+        - name: "dataset_description"
+          type: "string"
+          description: "Long description of the dataset."
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+        - name: "train_sum"
+          type: "integer"
+          description: "The total number of counts in the training dataset."
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/test.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--input_prediction"
+    info:
+      label: "Denoised data"
+      summary: "A denoised dataset as output by a method."
+      slots:
+        layers:
+        - type: "integer"
+          name: "denoised"
+          description: "denoised data"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/denoised.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output"
+    info:
+      label: "Score"
+      summary: "File indicating the score of a metric."
+      file_type: "h5ad"
+      slots:
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+        - type: "string"
+          name: "metric_ids"
+          description: "One or more unique metric identifiers"
+          multiple: true
+          required: true
+        - type: "double"
+          name: "metric_values"
+          description: "The metric values obtained for the given prediction. Must\
+            \ be of same length as 'metric_ids'."
+          multiple: true
+          required: true
+    example:
+    - "resources_test/denoising/pancreas/score.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+test_resources:
+- type: "python_script"
+  path: "check_metric_config.py"
+  is_executable: true
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+- type: "file"
+  path: "library.bib"
+- type: "file"
+  path: "resources_test/denoising/pancreas"
+  dest: "resources_test/denoising/pancreas"
+info:
+  metrics:
+  - name: "poisson"
+    label: "Poisson Loss"
+    summary: "The Poisson log likelihood of the true counts observed in the distribution\
+      \ of denoised counts"
+    description: "The Poisson log likelihood of observing the true counts of the test\
+      \ dataset given the distribution given in the denoised dataset."
+    reference: "batson2019molecular"
+    v1:
+      path: "openproblems/tasks/denoising/metrics/poisson.py"
+      commit: "b3456fd73c04c28516f6df34c57e6e3e8b0dab32"
+    maximize: false
+    min: 0
+    max: "+.inf"
+  type: "metric"
+  type_info:
+    label: "Metric"
+    summary: "A metric."
+    description: "A metric for evaluating denoised datasets.\n"
+status: "enabled"
+license: "MIT"
+links:
+  repository: "https://github.com/openproblems-bio/task_denoising"
+  docker_registry: "ghcr.io/openproblems-bio"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "midcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "ghcr.io/openproblems-bio/base_images/python:1.1.0"
+  namespace_separator: "/"
+  setup:
+  - type: "python"
+    user: false
+    pypi:
+    - "scprep"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/metrics/poisson/config.vsh.yaml"
+  runner: "executable"
+  engine: "docker"
+  output: "target/executable/metrics/poisson"
+  executable: "target/executable/metrics/poisson/poisson"
+  viash_version: "0.9.0-RC6"
+  git_commit: "252dbd70663dc91b11c6891331b4546c375a4303"
+  git_remote: "https://github.com/openproblems-bio/task_denoising"
+package_config:
+  name: "denoising"
+  version: "build_main"
+  description: "An OpenProblems benchmark task.\n"
+  info:
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/denoising/"
+      dest: "resources_test/denoising"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common/"
+      dest: "resources_test/common"
+  viash_version: "0.9.0-RC6"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }"
+  keywords:
+  - "single-cell"
+  - "openproblems"
+  - "benchmark"
+  - "denoising"
+  license: "MIT"
+  links:
+    repository: "https://github.com/openproblems-bio/task_denoising"
+    docker_registry: "ghcr.io/openproblems-bio"
+    issue_tracker: "https://github.com/openproblems-bio/task_denoising/issues"

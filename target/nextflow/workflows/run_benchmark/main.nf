@@ -3075,7 +3075,7 @@ meta = [
   "license" : "MIT",
   "links" : {
     "repository" : "https://github.com/openproblems-bio/task_denoising",
-    "docker_registry" : "ghcr.io/openproblems-bio"
+    "docker_registry" : "ghcr.io"
   },
   "runners" : [
     {
@@ -3120,7 +3120,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/run_benchmark",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "252dbd70663dc91b11c6891331b4546c375a4303",
+    "git_commit" : "ea675898c243e7b038272ee34bf9f25e9a1098ec",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3154,9 +3154,10 @@ meta = [
       "denoising"
     ],
     "license" : "MIT",
+    "organization" : "openproblems-bio",
     "links" : {
       "repository" : "https://github.com/openproblems-bio/task_denoising",
-      "docker_registry" : "ghcr.io/openproblems-bio",
+      "docker_registry" : "ghcr.io",
       "issue_tracker" : "https://github.com/openproblems-bio/task_denoising/issues"
     }
   }

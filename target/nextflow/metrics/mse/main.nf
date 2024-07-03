@@ -3078,11 +3078,11 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/metrics/mse",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "ea675898c243e7b038272ee34bf9f25e9a1098ec",
+    "git_commit" : "71fd29174b340923af294f978d1bfcaa3c9592b5",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
-    "name" : "denoising",
+    "name" : "task_denoising",
     "version" : "build_main",
     "description" : "An OpenProblems benchmark task.\n",
     "info" : {
@@ -3558,7 +3558,7 @@ meta["defaults"] = [
   directives: readJsonBlob('''{
   "container" : {
     "registry" : "ghcr.io",
-    "image" : "openproblems-bio/denoising/metrics/mse",
+    "image" : "openproblems-bio/task_denoising/metrics/mse",
     "tag" : "build_main"
   },
   "label" : [

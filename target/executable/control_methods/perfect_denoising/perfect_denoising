@@ -462,9 +462,9 @@ function ViashDockerfile {
 FROM ghcr.io/openproblems-bio/base_images/python:1.1.0
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component control_methods perfect_denoising"
-LABEL org.opencontainers.image.created="2024-07-03T09:22:28Z"
+LABEL org.opencontainers.image.created="2024-07-03T09:26:45Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="ea675898c243e7b038272ee34bf9f25e9a1098ec"
+LABEL org.opencontainers.image.revision="71fd29174b340923af294f978d1bfcaa3c9592b5"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -698,7 +698,7 @@ if [[ "$VIASH_ENGINE_TYPE" == "docker" ]]; then
 
   # determine docker image id
   if [[ "$VIASH_ENGINE_ID" == 'docker' ]]; then
-    VIASH_DOCKER_IMAGE_ID='ghcr.io/openproblems-bio/denoising/control_methods/perfect_denoising:build_main'
+    VIASH_DOCKER_IMAGE_ID='ghcr.io/openproblems-bio/task_denoising/control_methods/perfect_denoising:build_main'
   fi
 
   # print dockerfile

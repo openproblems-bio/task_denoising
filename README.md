@@ -60,7 +60,7 @@ Optionally, you can provide the `--query` argument to test only a subset
 of components:
 
 ``` bash
-viash ns test --parallel --query "component_name"
+viash ns test --parallel --query 'component_name'
 ```
 
 ## Motivation
@@ -155,23 +155,23 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                                    |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
-| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
-| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
-| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
-| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
-| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
-| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
+| Slot | Type | Description |
+|:---|:---|:---|
+| `layers["counts"]` | `integer` | Raw counts. |
+| `uns["dataset_id"]` | `string` | A unique identifier for the dataset. |
+| `uns["dataset_name"]` | `string` | Nicely formatted name. |
+| `uns["dataset_url"]` | `string` | (*Optional*) Link to the original source of the dataset. |
+| `uns["dataset_reference"]` | `string` | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]` | `string` | Short description of the dataset. |
+| `uns["dataset_description"]` | `string` | Long description of the dataset. |
+| `uns["dataset_organism"]` | `string` | (*Optional*) The organism of the sample in the dataset. |
 
 </div>
 
 ## Component type: Data processor
 
 Path:
-[`src/`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/)
+[`src/process_dataset`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/process_dataset)
 
 A denoising dataset processor.
 
@@ -179,11 +179,11 @@ Arguments:
 
 <div class="small">
 
-| Name             | Type   | Description                                                       |
-|:-----------------|:-------|:------------------------------------------------------------------|
-| `--input`        | `file` | A subset of the common dataset.                                   |
+| Name | Type | Description |
+|:---|:---|:---|
+| `--input` | `file` | A subset of the common dataset. |
 | `--output_train` | `file` | (*Output*) The subset of molecules used for the training dataset. |
-| `--output_test`  | `file` | (*Output*) The subset of molecules used for the test dataset.     |
+| `--output_test` | `file` | (*Output*) The subset of molecules used for the test dataset. |
 
 </div>
 
@@ -234,17 +234,17 @@ Slot description:
 
 <div class="small">
 
-| Slot                         | Type      | Description                                                                    |
-|:-----------------------------|:----------|:-------------------------------------------------------------------------------|
-| `layers["counts"]`           | `integer` | Raw counts.                                                                    |
-| `uns["dataset_id"]`          | `string`  | A unique identifier for the dataset.                                           |
-| `uns["dataset_name"]`        | `string`  | Nicely formatted name.                                                         |
-| `uns["dataset_url"]`         | `string`  | (*Optional*) Link to the original source of the dataset.                       |
-| `uns["dataset_reference"]`   | `string`  | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
-| `uns["dataset_summary"]`     | `string`  | Short description of the dataset.                                              |
-| `uns["dataset_description"]` | `string`  | Long description of the dataset.                                               |
-| `uns["dataset_organism"]`    | `string`  | (*Optional*) The organism of the sample in the dataset.                        |
-| `uns["train_sum"]`           | `integer` | The total number of counts in the training dataset.                            |
+| Slot | Type | Description |
+|:---|:---|:---|
+| `layers["counts"]` | `integer` | Raw counts. |
+| `uns["dataset_id"]` | `string` | A unique identifier for the dataset. |
+| `uns["dataset_name"]` | `string` | Nicely formatted name. |
+| `uns["dataset_url"]` | `string` | (*Optional*) Link to the original source of the dataset. |
+| `uns["dataset_reference"]` | `string` | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
+| `uns["dataset_summary"]` | `string` | Short description of the dataset. |
+| `uns["dataset_description"]` | `string` | Long description of the dataset. |
+| `uns["dataset_organism"]` | `string` | (*Optional*) The organism of the sample in the dataset. |
+| `uns["train_sum"]` | `integer` | The total number of counts in the training dataset. |
 
 </div>
 
@@ -259,11 +259,11 @@ Arguments:
 
 <div class="small">
 
-| Name            | Type   | Description                                            |
-|:----------------|:-------|:-------------------------------------------------------|
+| Name | Type | Description |
+|:---|:---|:---|
 | `--input_train` | `file` | The subset of molecules used for the training dataset. |
-| `--input_test`  | `file` | The subset of molecules used for the test dataset.     |
-| `--output`      | `file` | (*Output*) A denoised dataset as output by a method.   |
+| `--input_test` | `file` | The subset of molecules used for the test dataset. |
+| `--output` | `file` | (*Output*) A denoised dataset as output by a method. |
 
 </div>
 
@@ -278,10 +278,10 @@ Arguments:
 
 <div class="small">
 
-| Name            | Type   | Description                                            |
-|:----------------|:-------|:-------------------------------------------------------|
+| Name | Type | Description |
+|:---|:---|:---|
 | `--input_train` | `file` | The subset of molecules used for the training dataset. |
-| `--output`      | `file` | (*Output*) A denoised dataset as output by a method.   |
+| `--output` | `file` | (*Output*) A denoised dataset as output by a method. |
 
 </div>
 
@@ -296,11 +296,11 @@ Arguments:
 
 <div class="small">
 
-| Name                 | Type   | Description                                        |
-|:---------------------|:-------|:---------------------------------------------------|
-| `--input_test`       | `file` | The subset of molecules used for the test dataset. |
-| `--input_prediction` | `file` | A denoised dataset as output by a method.          |
-| `--output`           | `file` | (*Output*) File indicating the score of a metric.  |
+| Name | Type | Description |
+|:---|:---|:---|
+| `--input_test` | `file` | The subset of molecules used for the test dataset. |
+| `--input_prediction` | `file` | A denoised dataset as output by a method. |
+| `--output` | `file` | (*Output*) File indicating the score of a metric. |
 
 </div>
 
@@ -351,11 +351,11 @@ Slot description:
 
 <div class="small">
 
-| Slot                   | Type     | Description                                                                                  |
-|:-----------------------|:---------|:---------------------------------------------------------------------------------------------|
-| `uns["dataset_id"]`    | `string` | A unique identifier for the dataset.                                                         |
-| `uns["method_id"]`     | `string` | A unique identifier for the method.                                                          |
-| `uns["metric_ids"]`    | `string` | One or more unique metric identifiers.                                                       |
+| Slot | Type | Description |
+|:---|:---|:---|
+| `uns["dataset_id"]` | `string` | A unique identifier for the dataset. |
+| `uns["method_id"]` | `string` | A unique identifier for the method. |
+| `uns["metric_ids"]` | `string` | One or more unique metric identifiers. |
 | `uns["metric_values"]` | `double` | The metric values obtained for the given prediction. Must be of same length as ‘metric_ids’. |
 
 </div>

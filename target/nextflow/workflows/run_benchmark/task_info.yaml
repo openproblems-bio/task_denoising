@@ -2,52 +2,6 @@ name: denoising
 label: Denoising
 summary: "Removing noise in sparse single-cell RNA-sequencing count data"
 image: "thumbnail.svg"
-readme: |
-  ## Installation
-
-  You need to have Docker, Java, and Viash installed. Follow
-  [these instructions](https://openproblems.bio/documentation/fundamentals/requirements)
-  to install the required dependencies.
-
-  ## Add a method
-
-  To add a method to the repository, follow the instructions in the `scripts/add_a_method.sh` script.
-
-  ## Frequently used commands
-  
-  To get started, you can run the following commands:
-
-  ```bash
-  git clone git@github.com:openproblems-bio/task_denoising.git
-
-  cd task_denoising
-
-  # initialise submodule
-  scripts/init_submodule.sh
-  
-  # download resources
-  scripts/download_resources.sh
-  ```
-
-  To run the benchmark, you first need to build the components. Afterwards, you can run the benchmark:
-  
-  ```bash
-  viash ns build --parallel --setup cachedbuild
-
-  scripts/run_benchmark.sh
-  ```
-
-  After adding a component, it is recommended to run the tests to ensure that the component is working correctly:
-
-  ```bash
-  viash ns test --parallel
-  ```
-  
-  Optionally, you can provide the `--query` argument to test only a subset of components:
-
-  ```bash
-  viash ns test --parallel --query "component_name"
-  ```
 motivation: |
   Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
   in each cell. As a result, the measurements (UMI counts) observed for each gene and each

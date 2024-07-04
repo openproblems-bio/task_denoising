@@ -3046,7 +3046,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/control_methods/perfect_denoising",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "3f40a9c98b5eedaf7159fca754884fe89c51d99f",
+    "git_commit" : "0f7ddbe78a00dcd4d835f9f766622a89c2459c5e",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

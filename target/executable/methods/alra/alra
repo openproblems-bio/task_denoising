@@ -468,9 +468,9 @@ RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packag
   Rscript -e 'remotes::install_github(c("KlugerLab/ALRA"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component methods alra"
-LABEL org.opencontainers.image.created="2024-07-04T15:32:50Z"
+LABEL org.opencontainers.image.created="2024-07-04T19:05:36Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="2b9af15308541090e9913adc43b2dfd01ffd81c3"
+LABEL org.opencontainers.image.revision="3f40a9c98b5eedaf7159fca754884fe89c51d99f"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

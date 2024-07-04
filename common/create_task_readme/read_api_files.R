@@ -2,7 +2,7 @@
 anndata_struct_names <- c("obs", "var", "obsm", "obsp", "varm", "varp", "layers", "uns")
 
 read_anndata_spec <- function(path) {
-  spec <- read_and_merge_yaml(path)
+  spec <- openproblems::read_nested_yaml(path)
   list(
     info = read_anndata_info(spec, path),
     slots = read_anndata_slots(spec, path)
@@ -84,7 +84,7 @@ list_as_tibble <- function(li) {
 }
 
 read_comp_spec <- function(path) {
-  spec_yaml <- read_and_merge_yaml(path)
+  spec_yaml <- openproblems::read_nested_yaml(path)
   list(
     info = read_comp_info(spec_yaml, path),
     args = read_comp_args(spec_yaml, path)
@@ -93,23 +93,23 @@ read_comp_spec <- function(path) {
 
 read_comp_info <- function(spec_yaml, path) {
   # TEMP: make it readable
-  spec_yaml$arguments <- NULL
-  spec_yaml$argument_groups <- NULL
+  spec_yaml$functionality$arguments <- NULL
+  spec_yaml$functionality$argument_groups <- NULL
   
-  df <- list_as_tibble(spec_yaml)
-  if (list_contains_tibble(spec_yaml$info)) {
-    df <- dplyr::bind_cols(df, list_as_tibble(spec_yaml$info))
+  df <- list_as_tibble(spec_yaml$functionality)
+  if (list_contains_tibble(spec_yaml$functionality$info)) {
+    df <- dplyr::bind_cols(df, list_as_tibble(spec_yaml$functionality$info))
   }
-  if (list_contains_tibble(spec_yaml$info$type_info)) {
-    df <- dplyr::bind_cols(df, list_as_tibble(spec_yaml$info$type_info))
+  if (list_contains_tibble(spec_yaml$functionality$info$type_info)) {
+    df <- dplyr::bind_cols(df, list_as_tibble(spec_yaml$functionality$info$type_info))
   }
   df$file_name <- basename(path) %>% gsub("\\.yaml", "", .)
   as_tibble(df)
 }
 
 read_comp_args <- function(spec_yaml, path) {
-  arguments <- spec_yaml$arguments
-  for (arg_group in spec_yaml$argument_groups) {
+  arguments <- spec_yaml$functionality$arguments
+  for (arg_group in spec_yaml$functionality$argument_groups) {
     arguments <- c(arguments, arg_group$arguments)
   }
   map_df(arguments, function(arg) {
@@ -168,7 +168,7 @@ render_component <- function(spec) {
     spec <- read_comp_spec(spec)
   }
 
-  strip_margin(glue::glue("
+  openproblems::strip_margin(glue::glue("
     §## Component type: {spec$info$label}
     §
     §Path: [`src/{spec$info$namespace}`](https://github.com/openproblems-bio/openproblems-v2/tree/main/src/{spec$info$namespace})
@@ -208,7 +208,7 @@ render_file <- function(spec) {
       paste0("Description:\n\n", spec$info$description)
     }
 
-  strip_margin(glue::glue("
+  openproblems::strip_margin(glue::glue("
     §## File format: {spec$info$label}
     §
     §{spec$info$summary %||% ''}
@@ -235,13 +235,13 @@ render_file <- function(spec) {
 # path <- "src/tasks/denoising"
 read_task_api <- function(path) {
   cli::cli_inform("Looking for project root")
-  project_path <- .ram_find_project(path)
+  project_path <- openproblems::find_project_root(path)
   api_dir <- paste0(path, "/api")
 
   cli::cli_inform("Reading task info")
   task_info_yaml <- list.files(api_dir, pattern = "task_info.ya?ml", full.names = TRUE)
   assertthat::assert_that(length(task_info_yaml) == 1)
-  task_info <- read_and_merge_yaml(task_info_yaml, project_path)
+  task_info <- openproblems::read_nested_yaml(task_info_yaml, project_path)
 
   cli::cli_inform("Reading task authors")
   authors <- map_df(task_info$authors, function(aut) {
@@ -257,7 +257,7 @@ read_task_api <- function(path) {
   names(comps) <- basename(comp_yamls) %>% gsub("\\..*$", "", .)
 
   cli::cli_inform("Reading file yamls")
-  file_yamls <- .ram_resolve_path(
+  file_yamls <- openproblems:::resolve_path(
     path = na.omit(unique(comp_args$`__merge__`)),
     project_path = project_path,
     parent_path = api_dir
@@ -348,7 +348,7 @@ render_task_graph <- function(task_api, root = .task_graph_get_root(task_api)) {
   edf <- igraph::as_data_frame(task_api$task_graph, "edges") %>%
     arrange(match(from, order), match(to, order))
 
-  strip_margin(glue::glue("
+  openproblems::strip_margin(glue::glue("
     §```mermaid
     §flowchart LR
     §{paste(vdf$str, collapse = '\n')}

@@ -3114,7 +3114,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/process_dataset/process_dataset",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "5ea555a7a44828e9c6893d886a001fa3a90c3001",
+    "git_commit" : "07d9ec3d44c024184ba4ada6e4cf18a81bc26b23",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

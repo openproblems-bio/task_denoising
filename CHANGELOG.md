@@ -8,11 +8,7 @@
 
 ## NEW FUNCTIONALITY
 
-* Add `CHANGELOG.md` (PR #7).
-
-## MINOR CHANGES
-
-* Remove dtype parameter in `.Anndata()` (PR #6).
+* Add `CHANGELOG.md` (PR #7)
 
 ## transfer from openproblems-v2 repository
 

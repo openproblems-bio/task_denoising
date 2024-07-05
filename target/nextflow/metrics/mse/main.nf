@@ -3078,7 +3078,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/metrics/mse",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "0921fb09ac6644216da44f481a2b06930acb8bac",
+    "git_commit" : "1c1d064830a8741183214e324af5ac75b396d791",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3173,8 +3173,8 @@ print("Load data", flush=True)
 input_denoised = ad.read_h5ad(par['input_prediction'])
 input_test = ad.read_h5ad(par['input_test'])
 
-test_data = ad.AnnData(X=input_test.layers["counts"], dtype="float")
-denoised_data = ad.AnnData(X=input_denoised.layers["denoised"], dtype="float")
+test_data = ad.AnnData(X=input_test.layers["counts"])
+denoised_data = ad.AnnData(X=input_denoised.layers["denoised"])
 
 print("Normalize data", flush=True)
 

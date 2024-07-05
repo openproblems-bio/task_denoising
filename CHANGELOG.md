@@ -14,6 +14,7 @@
 
 * Remove dtype parameter in `.Anndata()` (PR #6).
 
+* Fix target_sum deprecation warning in `mse` mmetric (PR #8).
 
 ## transfer from openproblems-v2 repository
 

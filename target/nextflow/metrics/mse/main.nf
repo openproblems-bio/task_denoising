@@ -3078,7 +3078,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/metrics/mse",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "1c1d064830a8741183214e324af5ac75b396d791",
+    "git_commit" : "6867a4c767d48b0264b9dfd4ddccb4a65180a755",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3184,7 +3184,7 @@ target_sum = 10000
 sc.pp.normalize_total(test_data, target_sum=target_sum)
 sc.pp.log1p(test_data)
 
-sc.pp.normalize_total(denoised_data, target_sum)
+sc.pp.normalize_total(denoised_data, target_sum=target_sum)
 sc.pp.log1p(denoised_data)
 
 print("Compute mse value", flush=True)

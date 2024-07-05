@@ -29,7 +29,7 @@ target_sum = 10000
 sc.pp.normalize_total(test_data, target_sum=target_sum)
 sc.pp.log1p(test_data)
 
-sc.pp.normalize_total(denoised_data, target_sum)
+sc.pp.normalize_total(denoised_data, target_sum=target_sum)
 sc.pp.log1p(denoised_data)
 
 print("Compute mse value", flush=True)

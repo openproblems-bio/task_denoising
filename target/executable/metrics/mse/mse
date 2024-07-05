@@ -465,9 +465,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scikit-learn" "scprep"
 
 LABEL org.opencontainers.image.description="Companion container for running component metrics mse"
-LABEL org.opencontainers.image.created="2024-07-05T07:49:34Z"
+LABEL org.opencontainers.image.created="2024-07-05T07:56:55Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="1c1d064830a8741183214e324af5ac75b396d791"
+LABEL org.opencontainers.image.revision="6867a4c767d48b0264b9dfd4ddccb4a65180a755"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -1043,7 +1043,7 @@ target_sum = 10000
 sc.pp.normalize_total(test_data, target_sum=target_sum)
 sc.pp.log1p(test_data)
 
-sc.pp.normalize_total(denoised_data, target_sum)
+sc.pp.normalize_total(denoised_data, target_sum=target_sum)
 sc.pp.log1p(denoised_data)
 
 print("Compute mse value", flush=True)

@@ -16,6 +16,8 @@
 
 * Fix target_sum deprecation warning in `mse` mmetric (PR #8).
 
+* Update `task_name` variable to denoising in component scripts (PR #9).
+
 ## transfer from openproblems-v2 repository
 
 ### NEW FUNCTIONALITY

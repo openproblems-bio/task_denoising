@@ -1,6 +1,6 @@
 #!/bin/bash
 
-task_name="task_template"
+task_name="denoising"
 component_name="my_method"
 component_lang="python" # change this to "r" if need be
 

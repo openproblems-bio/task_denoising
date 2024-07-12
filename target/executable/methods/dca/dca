@@ -470,9 +470,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "anndata~=0.8.0" "scanpy" "pyyaml" "requests" "jsonschema" "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
 
 LABEL org.opencontainers.image.description="Companion container for running component methods dca"
-LABEL org.opencontainers.image.created="2024-07-05T07:56:54Z"
+LABEL org.opencontainers.image.created="2024-07-12T05:45:48Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="6867a4c767d48b0264b9dfd4ddccb4a65180a755"
+LABEL org.opencontainers.image.revision="ade2b62d2236242101631604dffd6b4c27714681"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

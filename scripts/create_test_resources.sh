@@ -16,7 +16,7 @@ mkdir -p $DATASET_DIR
 # process dataset
 echo Running process_dataset
 nextflow run . \
-  -main-script target/nextflow/denoising/workflows/process_datasets/main.nf \
+  -main-script target/nextflow/workflows/process_datasets/main.nf \
   -profile docker \
   -entry auto \
   --input_states "$RAW_DATA/**/state.yaml" \

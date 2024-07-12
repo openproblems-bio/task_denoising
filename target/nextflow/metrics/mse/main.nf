@@ -3078,7 +3078,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/metrics/mse",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "ade2b62d2236242101631604dffd6b4c27714681",
+    "git_commit" : "9b13d1fb66f1123d8a171af4dd4be2c45faf471d",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

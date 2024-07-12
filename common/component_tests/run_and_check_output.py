@@ -50,14 +50,9 @@ def run_and_check_outputs(arguments, cmd):
             assert not arg["must_exist"] or path.exists(arg["value"]), f"Input file '{arg['value']}' does not exist"
 
     print(f">> Running script as test", flush=True)
-    out = subprocess.run(cmd, stderr=subprocess.STDOUT)
+    out = subprocess.run(cmd)
 
-    if out.stdout:
-        print(out.stdout)
-
-    if out.returncode:
-        print(f"script: \'{' '.join(cmd)}\' exited with an error.")
-        exit(out.returncode)
+    assert out.returncode == 0, f"Script exited with an error. Return code: {out.returncode}"
 
     print(">> Checking whether output file exists", flush=True)
     for arg in arguments:

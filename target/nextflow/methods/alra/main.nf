@@ -3001,7 +3001,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/methods/alra",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "9b13d1fb66f1123d8a171af4dd4be2c45faf471d",
+    "git_commit" : "247a53e6692a8efdf2b13581025ab8813534ab49",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

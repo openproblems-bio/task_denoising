@@ -187,7 +187,7 @@ function ViashHelp {
   echo ""
   echo "    -o, --output"
   echo "        type: file, output, file must exist"
-  echo "        default: resources_test"
+  echo "        default: /resources_test"
   echo "        Path to the test resource directory."
   echo ""
   echo "    --quiet"
@@ -492,9 +492,9 @@ RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
 chmod +x /usr/bin/yq
 
 LABEL org.opencontainers.image.description="Companion container for running component common sync_resources"
-LABEL org.opencontainers.image.created="2024-07-10T16:14:47+02:00"
+LABEL org.opencontainers.image.created="2024-07-11T22:25:47+02:00"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/common_resources"
-LABEL org.opencontainers.image.revision="66a108d61ca7ef1a18e88ecf56afc23c616aa3cb"
+LABEL org.opencontainers.image.revision="7bd60870f551dd252f8316467e710ab0d9440bfa"
 LABEL org.opencontainers.image.version="dev"
 
 VIASHDOCKER
@@ -871,7 +871,7 @@ if [ -z ${VIASH_PAR_INPUT+x} ]; then
   VIASH_PAR_INPUT="_viash.yaml"
 fi
 if [ -z ${VIASH_PAR_OUTPUT+x} ]; then
-  VIASH_PAR_OUTPUT="resources_test"
+  VIASH_PAR_OUTPUT="/resources_test"
 fi
 if [ -z ${VIASH_PAR_QUIET+x} ]; then
   VIASH_PAR_QUIET="false"

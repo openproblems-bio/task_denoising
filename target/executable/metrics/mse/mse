@@ -465,9 +465,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scikit-learn" "scprep"
 
 LABEL org.opencontainers.image.description="Companion container for running component metrics mse"
-LABEL org.opencontainers.image.created="2024-07-12T06:01:46Z"
+LABEL org.opencontainers.image.created="2024-07-12T06:03:23Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="9b13d1fb66f1123d8a171af4dd4be2c45faf471d"
+LABEL org.opencontainers.image.revision="247a53e6692a8efdf2b13581025ab8813534ab49"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

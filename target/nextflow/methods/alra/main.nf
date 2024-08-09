@@ -2978,7 +2978,7 @@ meta = [
     {
       "type" : "docker",
       "id" : "docker",
-      "image" : "ghcr.io/openproblems-bio/base_images/r:1.1.0",
+      "image" : "openproblems/base_r:1.0.0",
       "namespace_separator" : "/",
       "setup" : [
         {
@@ -3001,7 +3001,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/methods/alra",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "77e65bbbf069057a0f70e2f2cc4cb4b77db8935d",
+    "git_commit" : "40fb9184cac7353179139eca0d16bd5a4b5bf5d1",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

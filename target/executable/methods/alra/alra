@@ -461,16 +461,16 @@ function ViashDockerfile {
 
   if [[ "$engine_id" == "docker" ]]; then
     cat << 'VIASHDOCKER'
-FROM ghcr.io/openproblems-bio/base_images/r:1.1.0
+FROM openproblems/base_r:1.0.0
 ENTRYPOINT []
 RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
   Rscript -e 'remotes::install_cran(c("Matrix", "rsvd"), repos = "https://cran.rstudio.com")' && \
   Rscript -e 'remotes::install_github(c("KlugerLab/ALRA"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component methods alra"
-LABEL org.opencontainers.image.created="2024-08-09T09:38:42Z"
+LABEL org.opencontainers.image.created="2024-08-09T11:25:12Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="77e65bbbf069057a0f70e2f2cc4cb4b77db8935d"
+LABEL org.opencontainers.image.revision="40fb9184cac7353179139eca0d16bd5a4b5bf5d1"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

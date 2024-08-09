@@ -18,6 +18,8 @@
 
 * Update `task_name` variable to denoising in component scripts (PR #9).
 
+* Update docker containers used in components (PR #12).
+
 ## transfer from openproblems-v2 repository
 
 ### NEW FUNCTIONALITY

@@ -1,6 +1,6 @@
 import yaml
 import re
-from typing import Dict
+from typing import Dict, Optional
 
 ## VIASH START
 meta = {
@@ -49,7 +49,7 @@ def check_url(url):
         return False
 
 
-def check_reference(reference) -> str | None:
+def check_reference(reference) -> Optional[str]:
     # reference is a doi
     if re.match(r"^10.\d{4,9}/[-._;()/:A-Za-z0-9]+$", reference):
         print(f"Checking DOI: {reference}", flush=True)

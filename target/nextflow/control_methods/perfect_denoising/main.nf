@@ -3046,14 +3046,19 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/control_methods/perfect_denoising",
     "viash_version" : "0.9.0-RC6",
-    "git_commit" : "f2bb633c3d2ae59b00ad3da5eee40aa03e9ea580",
+    "git_commit" : "77e65bbbf069057a0f70e2f2cc4cb4b77db8935d",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
     "name" : "task_denoising",
     "version" : "build_main",
-    "description" : "An OpenProblems benchmark task.\n",
+    "description" : "Removing noise in sparse single-cell RNA-sequencing count data.\n",
     "info" : {
+      "label" : "Denoising",
+      "summary" : "Removing noise in sparse single-cell RNA-sequencing count data",
+      "image" : "/src/api/thumbnail.svg",
+      "motivation" : "Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present\nin each cell. As a result, the measurements (UMI counts) observed for each gene and each\ncell are associated with generally high levels of technical noise ([Grün et al.,\n2014](https://www.nature.com/articles/nmeth.2930)). Denoising describes the task of\nestimating the true expression level of each gene in each cell. In the single-cell\nliterature, this task is also referred to as *imputation*, a term which is typically\nused for missing data problems in statistics. Similar to the use of the terms \\"dropout\\",\n\\"missing data\\", and \\"technical zeros\\", this terminology can create confusion about the\nunderlying measurement process ([Sarkar and Stephens,\n2020](https://www.biorxiv.org/content/10.1101/2020.04.07.030007v2)).\n",
+      "description" : "A key challenge in evaluating denoising methods is the general lack of a ground truth. A\nrecent benchmark study ([Hou et al.,\n2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))\nrelied on flow-sorted datasets, mixture control experiments ([Tian et al.,\n2019](https://www.nature.com/articles/s41592-019-0425-8)), and comparisons with bulk\nRNA-Seq data. Since each of these approaches suffers from specific limitations, it is\ndifficult to combine these different approaches into a single quantitative measure of\ndenoising accuracy. Here, we instead rely on an approach termed molecular\ncross-validation (MCV), which was specifically developed to quantify denoising accuracy\nin the absence of a ground truth ([Batson et al.,\n2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the observed molecules\nin a given scRNA-Seq dataset are first partitioned between a *training* and a *test*\ndataset. Next, a denoising method is applied to the training dataset. Finally, denoising\naccuracy is measured by comparing the result to the test dataset. The authors show that\nboth in theory and in practice, the measured denoising accuracy is representative of the\naccuracy that would be obtained on a ground truth dataset.\n",
       "test_resources" : [
         {
           "type" : "s3",
@@ -3072,6 +3077,49 @@ meta = [
     "target" : "target",
     "config_mods" : [
       ".runners[.type == \\"nextflow\\"].config.labels := { lowmem : \\"memory = 20.Gb\\", midmem : \\"memory = 50.Gb\\", highmem : \\"memory = 100.Gb\\", lowcpu : \\"cpus = 5\\", midcpu : \\"cpus = 15\\", highcpu : \\"cpus = 30\\", lowtime : \\"time = 1.h\\", midtime : \\"time = 4.h\\", hightime : \\"time = 8.h\\", veryhightime : \\"time = 24.h\\" }"
+    ],
+    "authors" : [
+      {
+        "name" : "Wesley Lewis",
+        "roles" : [
+          "author",
+          "maintainer"
+        ],
+        "info" : {
+          "github" : "wes-lewis"
+        }
+      },
+      {
+        "name" : "Scott Gigante",
+        "roles" : [
+          "author",
+          "maintainer"
+        ],
+        "info" : {
+          "github" : "scottgigante",
+          "orcid" : "0000-0002-4544-2764"
+        }
+      },
+      {
+        "name" : "Robrecht Cannoodt",
+        "roles" : [
+          "author"
+        ],
+        "info" : {
+          "github" : "rcannood",
+          "orcid" : "0000-0003-3641-729X"
+        }
+      },
+      {
+        "name" : "Kai Waldrant",
+        "roles" : [
+          "contributor"
+        ],
+        "info" : {
+          "github" : "KaiWaldrant",
+          "orcid" : "0009-0003-8555-1361"
+        }
+      }
     ],
     "keywords" : [
       "single-cell",

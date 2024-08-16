@@ -3,6 +3,7 @@ example: "resources_test/denoising/pancreas/test.h5ad"
 info:
   label: "Test data"
   summary: The subset of molecules used for the test dataset
+  file_type: h5ad
   slots:
     layers: 
       - type: integer

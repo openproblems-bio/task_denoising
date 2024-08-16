@@ -1,14 +1,15 @@
 __merge__: ../../api/comp_method.yaml
 name: "dca"
-info:
-  label: DCA
-  summary: "A deep autoencoder with ZINB loss function to address the dropout effect in count data"
-  description: |
-    "Deep Count Autoencoder
+label: DCA
+summary: "A deep autoencoder with ZINB loss function to address the dropout effect in count data"
+description: |
+  "Deep Count Autoencoder
 
-    Removes the dropout effect by taking the count structure, overdispersed nature and sparsity of the data into account 
-    using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function."
-  reference: "eraslan2019single"
+  Removes the dropout effect by taking the count structure, overdispersed nature and sparsity of the data into account 
+  using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function."
+references:
+  doi: 10.1038/s41467-018-07931-2
+info:
   documentation_url: "https://github.com/theislab/dca#readme"
   repository_url: "https://github.com/theislab/dca"
   v1:

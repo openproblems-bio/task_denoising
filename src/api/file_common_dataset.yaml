@@ -10,17 +10,6 @@ info:
         name: counts
         description: Raw counts
         required: true
-    obs:
-      - type: integer
-        name: soma_joinid
-        description: If the dataset was retrieved from CELLxGENE census, this is a unique identifier for the cell.
-        required: false
-
-      - type: string
-        name: dataset
-        description: The names for the used datasets if the dataset is a combination of different experiments/studies.
-        required: false
-      
     uns:
       - type: string
         name: dataset_id

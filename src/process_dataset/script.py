@@ -1,4 +1,5 @@
 import sys
+import random
 import anndata as ad
 import numpy as np
 
@@ -25,6 +26,17 @@ random_state = np.random.RandomState(par['seed'])
 
 print(">> Load Data", flush=True)
 adata = ad.read_h5ad(par["input"])
+
+
+# limit to 1 batch with big cellxgene datasets
+if "soma_joinid" in adata.obs:
+    print(f">> Setting seed to {par['seed']}")
+    random.seed(par["seed"])
+    batch = adata.obs["batch"].unique()
+    selected_batch = random.choice(batch)
+    adata = adata[adata.obs["batch"]==selected_batch,:]
+        
+
 
 # remove all layers except for counts
 for key in list(adata.layers.keys()):

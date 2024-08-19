@@ -10,6 +10,7 @@
 
 * Add `CHANGELOG.md` (PR #7).
 
+
 ## MINOR CHANGES
 
 * Remove dtype parameter in `.Anndata()` (PR #6).
@@ -19,6 +20,10 @@
 * Update `task_name` variable to denoising in component scripts (PR #9).
 
 * Update docker containers used in components (PR #12).
+
+* Update `process_dataset` component to subsample large CxG datasets (PR #14).
+
+* Add `sharedmem` label to `alra` and `knn_smoothing` methods (PR #14).
 
 ## transfer from openproblems-v2 repository
 

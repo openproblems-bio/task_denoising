@@ -29,11 +29,13 @@ adata = ad.read_h5ad(par["input"])
 
 
 # limit to 1 batch with big cellxgene datasets
-if "soma_joinid" in adata.obs:
+if adata.n_obs > par["n_obs_limit"]:
     print(f">> Setting seed to {par['seed']}")
     random.seed(par["seed"])
-    batch = adata.obs["batch"].unique()
-    selected_batch = random.choice(batch)
+    batch_counts = adata.obs.groupby('batch').size()
+    filtered_batches = batch_counts[batch_counts <= par["n_obs_limit"]]
+    sorted_filtered_batches = filtered_batches.sort_values(ascending=False)
+    selected_batch = sorted_filtered_batches.index[0]
     adata = adata[adata.obs["batch"]==selected_batch,:]
         
 

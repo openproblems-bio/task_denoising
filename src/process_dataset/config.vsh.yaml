@@ -19,6 +19,10 @@ arguments:
     type: "integer"
     description: "A seed for the subsampling."
     example: 123
+  - name: "--n_obs_limit"
+    type: "integer"
+    description: "The maximum number of cells the dataset may have before subsampling according to `obs.batch`."
+    default: 20000
 resources:
   - type: python_script
     path: script.py

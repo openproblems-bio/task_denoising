@@ -27,10 +27,8 @@ random_state = np.random.RandomState(par['seed'])
 print(">> Load Data", flush=True)
 adata = ad.read_h5ad(par["input"])
 
-
-
-
-# limit to 1 batch with big cellxgene datasets
+# limit to max number of observations
+adata_output = adata.copy()
 if adata.n_obs > par["n_obs_limit"]:
     print(">> Subsampling the observations", flush=True)
     print(f">> Setting seed to {par['seed']}")
@@ -46,8 +44,6 @@ if adata.n_obs > par["n_obs_limit"]:
         selected_batch = sorted_filtered_batches.index[0]
         adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
         
-
-
 # remove all layers except for counts
 for key in list(adata_output.layers.keys()):
     if key != "counts":

@@ -40,6 +40,7 @@ engines:
           - requests
           - jsonschema
           - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
+        github: openproblems-bio/core#subdirectory=packages/python/openproblems
 runners:
   - type: executable
   - type: nextflow

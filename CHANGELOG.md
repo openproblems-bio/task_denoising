@@ -21,9 +21,7 @@
 
 * Update docker containers used in components (PR #12).
 
-* Update `process_dataset` component to subsample large CxG datasets (PR #14).
-
-* Add `sharedmem` label to `alra` and `knn_smoothing` methods (PR #14).
+* Update `process_dataset` component to subsample large datasets (PR #14).
 
 ## transfer from openproblems-v2 repository
 

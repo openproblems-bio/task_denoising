@@ -19,7 +19,7 @@ test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
   - type: python_script
-    path: /common/component_tests/check_method_config.py
+    path: /common/component_tests/check_config.py
   - path: /common/library.bib
   - path: /resources_test/denoising/pancreas
     dest: resources_test/denoising/pancreas

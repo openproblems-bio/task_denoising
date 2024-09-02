@@ -1,10 +1,10 @@
 type: file
 example: "resources_test/denoising/pancreas/denoised.h5ad"
+label: "Denoised data"
+summary: A denoised dataset as output by a method.
 info:
-  label: "Denoised data"
-  summary: A denoised dataset as output by a method.
-  file_type: h5ad
-  slots:
+  format:
+    type: h5ad
     layers:
       - type: integer
         name: denoised

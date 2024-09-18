@@ -15,9 +15,10 @@ description: |
   used as the SAVER recovered expression value.
 references:
   doi: 10.1038/s41592-018-0033-z
+links:
+  documentation: https://mohuangx.github.io/SAVER/index.html
+  repository: https://github.com/mohuangx/SAVER
 info:
-  repository_url: https://github.com/mohuangx/SAVER
-  documentation_url: https://mohuangx.github.io/SAVER/index.html
   preferred_normalization: counts
 resources:
   - type: r_script

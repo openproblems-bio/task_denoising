@@ -14,9 +14,10 @@ description: |
   Finally, the matrix is rescaled.
 references:
   doi: 10.1101/397588
+links:
+  documentation: https://github.com/KlugerLab/ALRA/blob/master/README.md
+  repository: https://github.com/KlugerLab/ALRA
 info:
-  repository_url: "https://github.com/KlugerLab/ALRA"
-  documentation_url: https://github.com/KlugerLab/ALRA/blob/master/README.md
   v1:
     path: openproblems/tasks/denoising/methods/alra.py
     commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32

@@ -2831,7 +2831,7 @@ meta = [
     {
       "type" : "docker",
       "id" : "docker",
-      "image" : "ghcr.io/openproblems-bio/base_python:1.0.4",
+      "image" : "openproblems/base_python:1.0.0",
       "target_organization" : "openproblems-bio",
       "target_registry" : "ghcr.io",
       "namespace_separator" : "/",
@@ -2877,7 +2877,8 @@ meta = [
           "highcpu" : "cpus = 30",
           "lowtime" : "time = 1.h",
           "midtime" : "time = 4.h",
-          "hightime" : "time = 8.h"
+          "hightime" : "time = 8.h",
+          "veryhightime" : "time = 24.h"
         },
         "script" : [
           "process.errorStrategy = 'ignore'"
@@ -2892,7 +2893,7 @@ meta = [
     "platform" : "nextflow",
     "output" : "/home/runner/work/openproblems-v2/openproblems-v2/target/nextflow/common/check_dataset_schema",
     "viash_version" : "0.8.0",
-    "git_commit" : "aab07afa0046ed6b1648ffcd6994ffddb481299e",
+    "git_commit" : "4b24f7be3c0337f4470b42ea208fe2575370dbfe",
     "git_remote" : "https://github.com/openproblems-bio/openproblems-v2"
   }
 }'''))

@@ -484,9 +484,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scprep" "magic-impute" "scipy" "scikit-learn<1.2"
 
 LABEL org.opencontainers.image.description="Companion container for running component methods magic"
-LABEL org.opencontainers.image.created="2024-09-04T05:12:08Z"
+LABEL org.opencontainers.image.created="2024-09-18T13:28:12Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="e4594b29e65d761aed4d8c217915410010ff9ea5"
+LABEL org.opencontainers.image.revision="1f5450984aa710042e5b6ca066e9549637a3c1ad"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

@@ -9,9 +9,10 @@ description: |
   using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function."
 references:
   doi: 10.1038/s41467-018-07931-2
+links:
+  documentation: "https://github.com/theislab/dca#readme"
+  repository: "https://github.com/theislab/dca"
 info:
-  documentation_url: "https://github.com/theislab/dca#readme"
-  repository_url: "https://github.com/theislab/dca"
   v1:
     path: openproblems/tasks/denoising/methods/dca.py
     commit: b3456fd73c04c28516f6df34c57e6e3e8b0dab32
@@ -33,6 +34,9 @@ engines:
       - type: apt
         packages: procps
       - type: python
+        github:
+          - openproblems-bio/core@feature/no-ref/add-support-py3.9#subdirectory=packages/python/openproblems
+      - type: python
         packages:
           - anndata~=0.8.0
           - scanpy
@@ -40,7 +44,7 @@ engines:
           - requests
           - jsonschema
           - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
-        github: openproblems-bio/core#subdirectory=packages/python/openproblems
+          - numpy<2
 runners:
   - type: executable
   - type: nextflow

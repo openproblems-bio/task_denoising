@@ -35,7 +35,7 @@ engines:
         packages: procps
       - type: python
         github:
-          - openproblems-bio/core@feature/no-ref/add-support-py3.9#subdirectory=packages/python/openproblems
+          - openproblems-bio/core#subdirectory=packages/python/openproblems
       - type: python
         packages:
           - anndata~=0.8.0

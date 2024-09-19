@@ -1,11 +1,20 @@
 #!/bin/bash
 
+# get the root of the directory
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# ensure that the command below is run from the root of the repository
+cd "$REPO_ROOT"
+
+set -e
+
+# generate a unique id
 RUN_ID="run_$(date +%Y-%m-%d_%H-%M-%S)"
 publish_dir="s3://openproblems-data/resources/denoising/results/${RUN_ID}"
 
-# make sure only log_cp10k is used
+# write the parameters to file
 cat > /tmp/params.yaml << HERE
-input_states: s3://openproblems-data/resources/denoising/datasets/**/log_cp10k/state.yaml
+input_states: s3://openproblems-data/resources/denoising/datasets/**/state.yaml
 rename_keys: 'input_train:output_train;input_test:output_test'
 output_state: "state.yaml"
 publish_dir: "$publish_dir"

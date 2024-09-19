@@ -6,9 +6,17 @@
 
 * Directory structure has been updated.
 
+* Update to viash 0.9.0 (PR #13).
+
 ## NEW FUNCTIONALITY
 
 * Add `CHANGELOG.md` (PR #7).
+
+## MAJOR CHANGES
+
+* Revamp `scripts` directory (PR #13).
+
+* Relocated `process_datasets` to `data_processors/process_datasets` (PR #13).
 
 ## MINOR CHANGES
 
@@ -19,6 +27,11 @@
 * Update `task_name` variable to denoising in component scripts (PR #9).
 
 * Update docker containers used in components (PR #12).
+
+* Set `numpy<2` for some failing methods (PR #13).
+
+* Small changes to api file names (PR #13).
+
 
 ## transfer from openproblems-v2 repository
 

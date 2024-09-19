@@ -4,11 +4,11 @@ argument_groups:
   - name: Inputs
     arguments:
       - name: "--input_train"
-        __merge__: "/src/api/file_train_h5ad.yaml"
+        __merge__: "/src/api/file_train.yaml"
         required: true
         direction: input
       - name: "--input_test"
-        __merge__: "/src/api/file_test_h5ad.yaml"
+        __merge__: "/src/api/file_test.yaml"
         required: true
         direction: input
   - name: Outputs

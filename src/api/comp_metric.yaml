@@ -8,7 +8,7 @@ info:
       A metric for evaluating denoised datasets.
 arguments:
   - name: "--input_test"
-    __merge__: file_test_h5ad.yaml
+    __merge__: file_test.yaml
     direction: input
     required: true
   - name: "--input_prediction"

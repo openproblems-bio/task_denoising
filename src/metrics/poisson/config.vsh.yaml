@@ -23,7 +23,8 @@ engines:
     setup:
       - type: python
         pypi: 
-        - scprep
+          - scprep
+          - numpy<2
 runners:
   - type: executable
   - type: nextflow

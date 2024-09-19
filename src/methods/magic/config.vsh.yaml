@@ -58,7 +58,7 @@ engines:
     image: openproblems/base_python:1.0.0
     setup:
       - type: python
-        pip: [scprep, magic-impute, scipy, scikit-learn<1.2]
+        pip: [scprep, magic-impute, scipy, scikit-learn<1.2, numpy<2]
 runners:
   - type: executable
   - type: nextflow

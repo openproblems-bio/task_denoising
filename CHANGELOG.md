@@ -32,6 +32,10 @@
 
 * Small changes to api file names (PR #13).
 
+## BUG FIXES
+
+* Update the nextflow workflow dependencies (PR #17).
+
 
 ## transfer from openproblems-v2 repository
 

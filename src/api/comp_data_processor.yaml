@@ -1,4 +1,4 @@
-namespace: "process_dataset"
+namespace: "data_processors"
 info:
   type: process_dataset
   type_info:

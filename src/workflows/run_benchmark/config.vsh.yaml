@@ -64,10 +64,5 @@ dependencies:
   - name: methods/magic
   - name: metrics/mse
   - name: metrics/poisson
-repositories:
-  - name: openproblems
-    type: github
-    repo: openproblems-bio/openproblems
-    tag: build/main
 runners:
   - type: nextflow

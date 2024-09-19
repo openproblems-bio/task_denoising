@@ -71,6 +71,12 @@ authors:
       github: KaiWaldrant
       orcid: "0009-0003-8555-1361"
 
+repositories:
+  - name: openproblems
+    type: github
+    repo: openproblems-bio/openproblems
+    tag: build/main
+
 viash_version: 0.9.0
 
 config_mods: |

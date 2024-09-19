@@ -53,9 +53,9 @@ resources:
     path: /_viash.yaml
 dependencies:
   - name: common/check_dataset_schema
-    repository: openproblems-v2
+    repository: openproblems
   - name: common/extract_metadata
-    repository: openproblems-v2
+    repository: openproblems
   - name: control_methods/no_denoising
   - name: control_methods/perfect_denoising
   - name: methods/alra
@@ -65,9 +65,9 @@ dependencies:
   - name: metrics/mse
   - name: metrics/poisson
 repositories:
-  - name: openproblems-v2
+  - name: openproblems
     type: github
-    repo: openproblems-bio/openproblems-v2
-    tag: main_build
+    repo: openproblems-bio/openproblems
+    tag: build/main
 runners:
   - type: nextflow

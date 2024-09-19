@@ -1,9 +1,10 @@
 type: file
 example: "resources_test/denoising/pancreas/test.h5ad"
+label: "Test data"
+summary: The subset of molecules used for the test dataset
 info:
-  label: "Test data"
-  summary: The subset of molecules used for the test dataset
-  slots:
+  format:
+    type: h5ad
     layers: 
       - type: integer
         name: counts

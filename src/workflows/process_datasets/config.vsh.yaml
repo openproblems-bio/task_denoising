@@ -10,11 +10,11 @@ argument_groups:
   - name: Outputs
     arguments:
       - name: "--output_train"
-        __merge__: "/src/api/file_train_h5ad.yaml"
+        __merge__: "/src/api/file_train.yaml"
         direction: output
         required: true
       - name: "--output_test"
-        __merge__: "/src/api/file_test_h5ad.yaml"
+        __merge__: "/src/api/file_test.yaml"
         direction: output
         required: true
 resources:

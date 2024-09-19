@@ -1,4 +1,4 @@
-__merge__: ../api/comp_process_dataset.yaml
+__merge__: ../../api/comp_data_processor.yaml
 name: "process_dataset"
 description: |
   Split data using molecular cross-validation.

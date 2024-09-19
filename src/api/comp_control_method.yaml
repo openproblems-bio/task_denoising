@@ -12,11 +12,11 @@ info:
       in the task. 
 arguments:
   - name: --input_train
-    __merge__: file_train_h5ad.yaml
+    __merge__: file_train.yaml
     required: true
     direction: input
   - name: --input_test
-    __merge__: file_test_h5ad.yaml
+    __merge__: file_test.yaml
     required: true
     direction: input
   - name: --output
@@ -27,7 +27,7 @@ test_resources:
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
   - type: python_script
-    path: /common/component_tests/check_method_config.py
+    path: /common/component_tests/check_config.py
   - path: /common/library.bib
   - path: /resources_test/denoising/pancreas
     dest: resources_test/denoising/pancreas

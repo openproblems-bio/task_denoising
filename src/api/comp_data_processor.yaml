@@ -1,4 +1,4 @@
-namespace: "process_dataset"
+namespace: "data_processors"
 info:
   type: process_dataset
   type_info:
@@ -12,11 +12,11 @@ arguments:
     direction: input
     required: true
   - name: "--output_train"
-    __merge__: file_train_h5ad.yaml
+    __merge__: file_train.yaml
     direction: output
     required: true
   - name: "--output_test"
-    __merge__: file_test_h5ad.yaml
+    __merge__: file_test.yaml
     direction: output
     required: true
 test_resources:

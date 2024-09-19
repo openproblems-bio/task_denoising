@@ -1,32 +1,12 @@
 name: task_denoising
-version: dev
-
 organization: openproblems-bio
-description: |
-  Removing noise in sparse single-cell RNA-sequencing count data.
+version: dev
 license: MIT
-keywords: [single-cell, openproblems, benchmark, denoising]
-links:
-  issue_tracker: https://github.com/openproblems-bio/task_denoising/issues
-  repository: https://github.com/openproblems-bio/task_denoising
-  docker_registry: ghcr.io
 
-info:
-  label: Denoising
-  summary: "Removing noise in sparse single-cell RNA-sequencing count data"
-  image: /src/api/thumbnail.svg
-  motivation: |
-    Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
-    in each cell. As a result, the measurements (UMI counts) observed for each gene and each
-    cell are associated with generally high levels of technical noise ([Grün et al.,
-    2014](https://www.nature.com/articles/nmeth.2930)). Denoising describes the task of
-    estimating the true expression level of each gene in each cell. In the single-cell
-    literature, this task is also referred to as *imputation*, a term which is typically
-    used for missing data problems in statistics. Similar to the use of the terms "dropout",
-    "missing data", and "technical zeros", this terminology can create confusion about the
-    underlying measurement process ([Sarkar and Stephens,
-    2020](https://www.biorxiv.org/content/10.1101/2020.04.07.030007v2)).
-  description: |
+label: Denoising
+keywords: [single-cell, openproblems, benchmark, denoising]
+summary: "Removing noise in sparse single-cell RNA-sequencing count data"
+description: |
     A key challenge in evaluating denoising methods is the general lack of a ground truth. A
     recent benchmark study ([Hou et al.,
     2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))
@@ -43,6 +23,25 @@ info:
     accuracy is measured by comparing the result to the test dataset. The authors show that
     both in theory and in practice, the measured denoising accuracy is representative of the
     accuracy that would be obtained on a ground truth dataset.
+links:
+  issue_tracker: https://github.com/openproblems-bio/task_denoising/issues
+  repository: https://github.com/openproblems-bio/task_denoising
+  docker_registry: ghcr.io
+
+info:  
+  image: thumbnail.svg
+  motivation: |
+    Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
+    in each cell. As a result, the measurements (UMI counts) observed for each gene and each
+    cell are associated with generally high levels of technical noise ([Grün et al.,
+    2014](https://www.nature.com/articles/nmeth.2930)). Denoising describes the task of
+    estimating the true expression level of each gene in each cell. In the single-cell
+    literature, this task is also referred to as *imputation*, a term which is typically
+    used for missing data problems in statistics. Similar to the use of the terms "dropout",
+    "missing data", and "technical zeros", this terminology can create confusion about the
+    underlying measurement process ([Sarkar and Stephens,
+    2020](https://www.biorxiv.org/content/10.1101/2020.04.07.030007v2)).
+  
   test_resources:
     - type: s3
       path: s3://openproblems-data/resources_test/denoising/
@@ -50,6 +49,7 @@ info:
     - type: s3
       path: s3://openproblems-data/resources_test/common/
       dest: resources_test/common
+
 authors: 
   - name: "Wesley Lewis"
     roles: [ author, maintainer ]

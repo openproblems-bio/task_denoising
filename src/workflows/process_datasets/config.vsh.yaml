@@ -26,8 +26,8 @@ dependencies:
   - name: common/check_dataset_schema
     repository:
       type: github
-      repo: openproblems-bio/openproblems-v2
-      tag: main_build
-  - name: process_dataset/process_dataset
+      repo: openproblems-bio/openproblems
+      tag: build/main
+  - name: data_processors/process_dataset
 runners:
   - type: nextflow

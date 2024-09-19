@@ -48,20 +48,20 @@ dataset.
 flowchart LR
   file_common_dataset("Common Dataset")
   comp_process_dataset[/"Data processor"/]
-  file_test_h5ad("Test data")
-  file_train_h5ad("Training data")
+  file_test("Test data")
+  file_train("Training data")
   comp_control_method[/"Control Method"/]
   comp_metric[/"Metric"/]
   comp_method[/"Method"/]
   file_prediction("Denoised data")
   file_score("Score")
   file_common_dataset---comp_process_dataset
-  comp_process_dataset-->file_test_h5ad
-  comp_process_dataset-->file_train_h5ad
-  file_test_h5ad---comp_control_method
-  file_test_h5ad---comp_metric
-  file_train_h5ad---comp_control_method
-  file_train_h5ad---comp_method
+  comp_process_dataset-->file_test
+  comp_process_dataset-->file_train
+  file_test---comp_control_method
+  file_test---comp_metric
+  file_train---comp_control_method
+  file_train---comp_method
   comp_control_method-->file_prediction
   comp_metric-->file_score
   comp_method-->file_prediction

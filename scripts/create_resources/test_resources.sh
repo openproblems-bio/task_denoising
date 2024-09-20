@@ -9,7 +9,7 @@ cd "$REPO_ROOT"
 set -e
 
 RAW_DATA=resources_test/common
-DATASET_DIR=resources_test/denoising
+DATASET_DIR=resources_test/task_denoising
 
 mkdir -p $DATASET_DIR
 
@@ -41,5 +41,5 @@ HERE
 
 # only run this if you have access to the openproblems-data bucket
 aws s3 sync --profile OP \
-  "$DATASET_DIR" s3://openproblems-data/resources_test/denoising \
+  "$DATASET_DIR" s3://openproblems-data/resources_test/task_denoising \
   --delete --dryrun

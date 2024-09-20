@@ -5,8 +5,8 @@ import scprep
 
 ## VIASH START
 par = {
-    'input_test': 'resources_test/denoising/cxg_mouse_pancreas_atlas/test.h5ad',
-    'input_prediction': 'resources_test/denoising/cxg_mouse_pancreas_atlas/denoised.h5ad',
+    'input_test': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad',
+    'input_prediction': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad',
     'output': 'output_mse.h5ad'
 }
 meta = {

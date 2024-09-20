@@ -2827,6 +2827,14 @@ meta = [
                   "required" : true
                 }
               ],
+              "obs" : [
+                {
+                  "type" : "string",
+                  "name" : "batch",
+                  "description" : "Batch information",
+                  "required" : false
+                }
+              ],
               "uns" : [
                 {
                   "type" : "string",
@@ -3035,6 +3043,18 @@ meta = [
           "direction" : "input",
           "multiple" : false,
           "multiple_sep" : ";"
+        },
+        {
+          "type" : "integer",
+          "name" : "--n_obs_limit",
+          "description" : "The maximum number of cells the dataset may have before subsampling according to `obs.batch`.",
+          "default" : [
+            20000
+          ],
+          "required" : false,
+          "direction" : "input",
+          "multiple" : false,
+          "multiple_sep" : ";"
         }
       ]
     }
@@ -3151,7 +3171,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/data_processors/process_dataset",
     "viash_version" : "0.9.0",
-    "git_commit" : "16f5aee55b0c67935955cef2b2dab27d2841e932",
+    "git_commit" : "bd043b20ca5a1c48dbea68e0f0af199b55413946",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3260,6 +3280,7 @@ def innerWorkflowFactory(args) {
 tempscript=".viash_script.sh"
 cat > "$tempscript" << VIASHMAIN
 import sys
+import random
 import anndata as ad
 import numpy as np
 
@@ -3271,7 +3292,8 @@ par = {
   'output_test': $( if [ ! -z ${VIASH_PAR_OUTPUT_TEST+x} ]; then echo "r'${VIASH_PAR_OUTPUT_TEST//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'method': $( if [ ! -z ${VIASH_PAR_METHOD+x} ]; then echo "r'${VIASH_PAR_METHOD//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
   'train_frac': $( if [ ! -z ${VIASH_PAR_TRAIN_FRAC+x} ]; then echo "float(r'${VIASH_PAR_TRAIN_FRAC//\\'/\\'\\"\\'\\"r\\'}')"; else echo None; fi ),
-  'seed': $( if [ ! -z ${VIASH_PAR_SEED+x} ]; then echo "int(r'${VIASH_PAR_SEED//\\'/\\'\\"\\'\\"r\\'}')"; else echo None; fi )
+  'seed': $( if [ ! -z ${VIASH_PAR_SEED+x} ]; then echo "int(r'${VIASH_PAR_SEED//\\'/\\'\\"\\'\\"r\\'}')"; else echo None; fi ),
+  'n_obs_limit': $( if [ ! -z ${VIASH_PAR_N_OBS_LIMIT+x} ]; then echo "int(r'${VIASH_PAR_N_OBS_LIMIT//\\'/\\'\\"\\'\\"r\\'}')"; else echo None; fi )
 }
 meta = {
   'name': $( if [ ! -z ${VIASH_META_NAME+x} ]; then echo "r'${VIASH_META_NAME//\\'/\\'\\"\\'\\"r\\'}'"; else echo None; fi ),
@@ -3309,13 +3331,30 @@ random_state = np.random.RandomState(par['seed'])
 print(">> Load Data", flush=True)
 adata = ad.read_h5ad(par["input"])
 
+# limit to max number of observations
+adata_output = adata.copy()
+if adata.n_obs > par["n_obs_limit"]:
+    print(">> Subsampling the observations", flush=True)
+    print(f">> Setting seed to {par['seed']}")
+    random.seed(par["seed"])
+    if "batch" not in adata.obs:
+        obs_filt = np.ones(dtype=np.bool_, shape=adata.n_obs)
+        obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
+        adata_output = adata[obs_index].copy()
+    else:
+        batch_counts = adata.obs.groupby('batch').size()
+        filtered_batches = batch_counts[batch_counts <= par["n_obs_limit"]]
+        sorted_filtered_batches = filtered_batches.sort_values(ascending=False)
+        selected_batch = sorted_filtered_batches.index[0]
+        adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
+        
 # remove all layers except for counts
-for key in list(adata.layers.keys()):
+for key in list(adata_output.layers.keys()):
     if key != "counts":
-        del adata.layers[key]
+        del adata_output.layers[key]
 
 # round counts and convert to int
-counts = np.array(adata.layers["counts"]).round().astype(int)
+counts = np.array(adata_output.layers["counts"]).round().astype(int)
 
 print(">> process and split data", flush=True)
 train_data, test_data = split_molecules(
@@ -3332,16 +3371,16 @@ X_test.eliminate_zeros()
 # copy adata to train_set, test_set
 output_train = ad.AnnData(
     layers={"counts": X_train},
-    obs=adata.obs[[]],
-    var=adata.var[[]],
-    uns={"dataset_id": adata.uns["dataset_id"]}
+    obs=adata_output.obs[[]],
+    var=adata_output.var[[]],
+    uns={"dataset_id": adata_output.uns["dataset_id"]}
 )
 test_uns_keys = ["dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism"]
 output_test = ad.AnnData(
     layers={"counts": X_test},
-    obs=adata.obs[[]],
-    var=adata.var[[]],
-    uns={key: adata.uns[key] for key in test_uns_keys}
+    obs=adata_output.obs[[]],
+    var=adata_output.var[[]],
+    uns={key: adata_output.uns[key] for key in test_uns_keys}
 )
 
 # add additional information for the train set

@@ -12,6 +12,8 @@
 
 * Add `CHANGELOG.md` (PR #7).
 
+* Update `process_dataset` component to subsample large datasets (PR #14).
+
 ## MAJOR CHANGES
 
 * Revamp `scripts` directory (PR #13).

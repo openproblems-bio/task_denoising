@@ -2827,6 +2827,14 @@ meta = [
                   "required" : true
                 }
               ],
+              "obs" : [
+                {
+                  "type" : "string",
+                  "name" : "batch",
+                  "description" : "Batch information",
+                  "required" : false
+                }
+              ],
               "uns" : [
                 {
                   "type" : "string",
@@ -3090,7 +3098,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/process_datasets",
     "viash_version" : "0.9.0",
-    "git_commit" : "16f5aee55b0c67935955cef2b2dab27d2841e932",
+    "git_commit" : "bd043b20ca5a1c48dbea68e0f0af199b55413946",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

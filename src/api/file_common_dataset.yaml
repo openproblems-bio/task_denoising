@@ -10,6 +10,12 @@ info:
         name: counts
         description: Raw counts
         required: true
+    obs:
+      - type: string
+        name: batch
+        description: Batch information
+        required: false
+      
     uns:
       - type: string
         name: dataset_id

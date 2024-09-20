@@ -207,6 +207,12 @@ function ViashHelp {
   echo "        type: integer"
   echo "        example: 123"
   echo "        A seed for the subsampling."
+  echo ""
+  echo "    --n_obs_limit"
+  echo "        type: integer"
+  echo "        default: 20000"
+  echo "        The maximum number of cells the dataset may have before subsampling"
+  echo "        according to \`obs.batch\`."
 }
 
 # initialise variables
@@ -488,9 +494,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "numpy" "scipy"
 
 LABEL org.opencontainers.image.description="Companion container for running component data_processors process_dataset"
-LABEL org.opencontainers.image.created="2024-09-20T10:35:51Z"
+LABEL org.opencontainers.image.created="2024-09-20T10:38:56Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="16f5aee55b0c67935955cef2b2dab27d2841e932"
+LABEL org.opencontainers.image.revision="bd043b20ca5a1c48dbea68e0f0af199b55413946"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -694,6 +700,17 @@ while [[ $# -gt 0 ]]; do
         --seed=*)
             [ -n "$VIASH_PAR_SEED" ] && ViashError Bad arguments for option \'--seed=*\': \'$VIASH_PAR_SEED\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
             VIASH_PAR_SEED=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --n_obs_limit)
+            [ -n "$VIASH_PAR_N_OBS_LIMIT" ] && ViashError Bad arguments for option \'--n_obs_limit\': \'$VIASH_PAR_N_OBS_LIMIT\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_N_OBS_LIMIT="$2"
+            [ $# -lt 2 ] && ViashError Not enough arguments passed to --n_obs_limit. Use "--help" to get more information on the parameters. && exit 1
+            shift 2
+            ;;
+        --n_obs_limit=*)
+            [ -n "$VIASH_PAR_N_OBS_LIMIT" ] && ViashError Bad arguments for option \'--n_obs_limit=*\': \'$VIASH_PAR_N_OBS_LIMIT\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_N_OBS_LIMIT=$(ViashRemoveFlags "$1")
             shift 1
             ;;
         ---engine)
@@ -910,6 +927,9 @@ fi
 if [ -z ${VIASH_PAR_TRAIN_FRAC+x} ]; then
   VIASH_PAR_TRAIN_FRAC="0.9"
 fi
+if [ -z ${VIASH_PAR_N_OBS_LIMIT+x} ]; then
+  VIASH_PAR_N_OBS_LIMIT="20000"
+fi
 
 # check whether required files exist
 if [ ! -z "$VIASH_PAR_INPUT" ] && [ ! -e "$VIASH_PAR_INPUT" ]; then
@@ -927,6 +947,12 @@ fi
 if [[ -n "$VIASH_PAR_SEED" ]]; then
   if ! [[ "$VIASH_PAR_SEED" =~ ^[-+]?[0-9]+$ ]]; then
     ViashError '--seed' has to be an integer. Use "--help" to get more information on the parameters.
+    exit 1
+  fi
+fi
+if [[ -n "$VIASH_PAR_N_OBS_LIMIT" ]]; then
+  if ! [[ "$VIASH_PAR_N_OBS_LIMIT" =~ ^[-+]?[0-9]+$ ]]; then
+    ViashError '--n_obs_limit' has to be an integer. Use "--help" to get more information on the parameters.
     exit 1
   fi
 fi
@@ -1109,6 +1135,7 @@ trap clean_up EXIT
 trap interrupt INT SIGINT
 cat > "\$tempscript" << 'VIASHMAIN'
 import sys
+import random
 import anndata as ad
 import numpy as np
 
@@ -1120,7 +1147,8 @@ par = {
   'output_test': $( if [ ! -z ${VIASH_PAR_OUTPUT_TEST+x} ]; then echo "r'${VIASH_PAR_OUTPUT_TEST//\'/\'\"\'\"r\'}'"; else echo None; fi ),
   'method': $( if [ ! -z ${VIASH_PAR_METHOD+x} ]; then echo "r'${VIASH_PAR_METHOD//\'/\'\"\'\"r\'}'"; else echo None; fi ),
   'train_frac': $( if [ ! -z ${VIASH_PAR_TRAIN_FRAC+x} ]; then echo "float(r'${VIASH_PAR_TRAIN_FRAC//\'/\'\"\'\"r\'}')"; else echo None; fi ),
-  'seed': $( if [ ! -z ${VIASH_PAR_SEED+x} ]; then echo "int(r'${VIASH_PAR_SEED//\'/\'\"\'\"r\'}')"; else echo None; fi )
+  'seed': $( if [ ! -z ${VIASH_PAR_SEED+x} ]; then echo "int(r'${VIASH_PAR_SEED//\'/\'\"\'\"r\'}')"; else echo None; fi ),
+  'n_obs_limit': $( if [ ! -z ${VIASH_PAR_N_OBS_LIMIT+x} ]; then echo "int(r'${VIASH_PAR_N_OBS_LIMIT//\'/\'\"\'\"r\'}')"; else echo None; fi )
 }
 meta = {
   'name': $( if [ ! -z ${VIASH_META_NAME+x} ]; then echo "r'${VIASH_META_NAME//\'/\'\"\'\"r\'}'"; else echo None; fi ),
@@ -1158,13 +1186,30 @@ random_state = np.random.RandomState(par['seed'])
 print(">> Load Data", flush=True)
 adata = ad.read_h5ad(par["input"])
 
+# limit to max number of observations
+adata_output = adata.copy()
+if adata.n_obs > par["n_obs_limit"]:
+    print(">> Subsampling the observations", flush=True)
+    print(f">> Setting seed to {par['seed']}")
+    random.seed(par["seed"])
+    if "batch" not in adata.obs:
+        obs_filt = np.ones(dtype=np.bool_, shape=adata.n_obs)
+        obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
+        adata_output = adata[obs_index].copy()
+    else:
+        batch_counts = adata.obs.groupby('batch').size()
+        filtered_batches = batch_counts[batch_counts <= par["n_obs_limit"]]
+        sorted_filtered_batches = filtered_batches.sort_values(ascending=False)
+        selected_batch = sorted_filtered_batches.index[0]
+        adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
+        
 # remove all layers except for counts
-for key in list(adata.layers.keys()):
+for key in list(adata_output.layers.keys()):
     if key != "counts":
-        del adata.layers[key]
+        del adata_output.layers[key]
 
 # round counts and convert to int
-counts = np.array(adata.layers["counts"]).round().astype(int)
+counts = np.array(adata_output.layers["counts"]).round().astype(int)
 
 print(">> process and split data", flush=True)
 train_data, test_data = split_molecules(
@@ -1181,16 +1226,16 @@ X_test.eliminate_zeros()
 # copy adata to train_set, test_set
 output_train = ad.AnnData(
     layers={"counts": X_train},
-    obs=adata.obs[[]],
-    var=adata.var[[]],
-    uns={"dataset_id": adata.uns["dataset_id"]}
+    obs=adata_output.obs[[]],
+    var=adata_output.var[[]],
+    uns={"dataset_id": adata_output.uns["dataset_id"]}
 )
 test_uns_keys = ["dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism"]
 output_test = ad.AnnData(
     layers={"counts": X_test},
-    obs=adata.obs[[]],
-    var=adata.var[[]],
-    uns={key: adata.uns[key] for key in test_uns_keys}
+    obs=adata_output.obs[[]],
+    var=adata_output.var[[]],
+    uns={key: adata_output.uns[key] for key in test_uns_keys}
 )
 
 # add additional information for the train set

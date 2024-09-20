@@ -34,10 +34,13 @@
 
 * Small changes to api file names (PR #13).
 
+* Update test_resources path in components (PR #18).
+
 ## BUG FIXES
 
 * Update the nextflow workflow dependencies (PR #17).
 
+* Fix paths in scripts (PR #18).
 
 ## transfer from openproblems-v2 repository
 

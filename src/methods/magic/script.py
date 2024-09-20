@@ -7,7 +7,7 @@ import scipy
 
 ## VIASH START
 par = {
-    "input_train": "resources_test/denoising/pancreas/train.h5ad",
+    "input_train": "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad",
     "output": "output_magic.h5ad",
     "solver": "exact",
     "norm": "sqrt",

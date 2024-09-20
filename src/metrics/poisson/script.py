@@ -4,8 +4,8 @@ import numpy as np
 
 ## VIASH START
 par = {
-    'input_prediction': 'output_magic.h5ad',
-    'input_test': 'output_test.h5ad',
+    'input_test': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad',
+    'input_prediction': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad',
     'output': 'output_poisson.h5ad'
 }
 meta = {

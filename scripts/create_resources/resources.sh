@@ -14,7 +14,7 @@ output_state: "$id/state.yaml"
 publish_dir: s3://openproblems-data/resources/denoising/datasets
 HERE
 
-tw launch https://github.com/openproblems-bio/task_template.git \
+tw launch https://github.com/openproblems-bio/task_denoising.git \
   --revision build/main \
   --pull-latest \
   --main-script target/nextflow/workflows/process_datasets/main.nf \

@@ -44,8 +44,8 @@ info:
   
   test_resources:
     - type: s3
-      path: s3://openproblems-data/resources_test/denoising/
-      dest: resources_test/denoising
+      path: s3://openproblems-data/resources_test/task_denoising/
+      dest: resources_test/task_denoising
     - type: s3
       path: s3://openproblems-data/resources_test/common/
       dest: resources_test/common

@@ -72,13 +72,15 @@ flowchart LR
 
 A subset of the common dataset.
 
-Example file: `resources_test/common/pancreas/dataset.h5ad`
+Example file:
+`resources_test/common/cxg_mouse_pancreas_atlas/dataset.h5ad`
 
 Format:
 
 <div class="small">
 
     AnnData object
+     obs: 'batch'
      layers: 'counts'
      uns: 'dataset_id', 'dataset_name', 'dataset_url', 'dataset_reference', 'dataset_summary', 'dataset_description', 'dataset_organism'
 
@@ -90,6 +92,7 @@ Data structure:
 
 | Slot | Type | Description |
 |:---|:---|:---|
+| `obs["batch"]` | `string` | (*Optional*) Batch information. |
 | `layers["counts"]` | `integer` | Raw counts. |
 | `uns["dataset_id"]` | `string` | A unique identifier for the dataset. |
 | `uns["dataset_name"]` | `string` | Nicely formatted name. |
@@ -121,7 +124,8 @@ Arguments:
 
 The subset of molecules used for the test dataset
 
-Example file: `resources_test/denoising/pancreas/test.h5ad`
+Example file:
+`resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad`
 
 Format:
 
@@ -155,7 +159,8 @@ Data structure:
 
 The subset of molecules used for the training dataset
 
-Example file: `resources_test/denoising/pancreas/train.h5ad`
+Example file:
+`resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad`
 
 Format:
 
@@ -229,7 +234,8 @@ Arguments:
 
 A denoised dataset as output by a method.
 
-Example file: `resources_test/denoising/pancreas/denoised.h5ad`
+Example file:
+`resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad`
 
 Format:
 
@@ -257,7 +263,8 @@ Data structure:
 
 File indicating the score of a metric.
 
-Example file: `resources_test/denoising/pancreas/score.h5ad`
+Example file:
+`resources_test/task_denoising/cxg_mouse_pancreas_atlas/score.h5ad`
 
 Format:
 

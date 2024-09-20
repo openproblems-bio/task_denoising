@@ -1,18 +1,33 @@
 name: task_denoising
-version: build_main
 organization: openproblems-bio
-description: |
-  Removing noise in sparse single-cell RNA-sequencing count data.
+version: build_main
 license: MIT
+label: Denoising
 keywords: [single-cell, openproblems, benchmark, denoising]
+summary: "Removing noise in sparse single-cell RNA-sequencing count data"
+description: |
+  A key challenge in evaluating denoising methods is the general lack of a ground truth. A
+  recent benchmark study ([Hou et al.,
+  2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))
+  relied on flow-sorted datasets, mixture control experiments ([Tian et al.,
+  2019](https://www.nature.com/articles/s41592-019-0425-8)), and comparisons with bulk
+  RNA-Seq data. Since each of these approaches suffers from specific limitations, it is
+  difficult to combine these different approaches into a single quantitative measure of
+  denoising accuracy. Here, we instead rely on an approach termed molecular
+  cross-validation (MCV), which was specifically developed to quantify denoising accuracy
+  in the absence of a ground truth ([Batson et al.,
+  2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the observed molecules
+  in a given scRNA-Seq dataset are first partitioned between a *training* and a *test*
+  dataset. Next, a denoising method is applied to the training dataset. Finally, denoising
+  accuracy is measured by comparing the result to the test dataset. The authors show that
+  both in theory and in practice, the measured denoising accuracy is representative of the
+  accuracy that would be obtained on a ground truth dataset.
 links:
   issue_tracker: https://github.com/openproblems-bio/task_denoising/issues
   repository: https://github.com/openproblems-bio/task_denoising
   docker_registry: ghcr.io
 info:
-  label: Denoising
-  summary: "Removing noise in sparse single-cell RNA-sequencing count data"
-  image: /src/api/thumbnail.svg
+  image: thumbnail.svg
   motivation: |
     Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present
     in each cell. As a result, the measurements (UMI counts) observed for each gene and each
@@ -24,23 +39,6 @@ info:
     "missing data", and "technical zeros", this terminology can create confusion about the
     underlying measurement process ([Sarkar and Stephens,
     2020](https://www.biorxiv.org/content/10.1101/2020.04.07.030007v2)).
-  description: |
-    A key challenge in evaluating denoising methods is the general lack of a ground truth. A
-    recent benchmark study ([Hou et al.,
-    2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))
-    relied on flow-sorted datasets, mixture control experiments ([Tian et al.,
-    2019](https://www.nature.com/articles/s41592-019-0425-8)), and comparisons with bulk
-    RNA-Seq data. Since each of these approaches suffers from specific limitations, it is
-    difficult to combine these different approaches into a single quantitative measure of
-    denoising accuracy. Here, we instead rely on an approach termed molecular
-    cross-validation (MCV), which was specifically developed to quantify denoising accuracy
-    in the absence of a ground truth ([Batson et al.,
-    2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the observed molecules
-    in a given scRNA-Seq dataset are first partitioned between a *training* and a *test*
-    dataset. Next, a denoising method is applied to the training dataset. Finally, denoising
-    accuracy is measured by comparing the result to the test dataset. The authors show that
-    both in theory and in practice, the measured denoising accuracy is representative of the
-    accuracy that would be obtained on a ground truth dataset.
   test_resources:
     - type: s3
       path: s3://openproblems-data/resources_test/denoising/
@@ -68,6 +66,11 @@ authors:
     info:
       github: KaiWaldrant
       orcid: "0009-0003-8555-1361"
+repositories:
+  - name: openproblems
+    type: github
+    repo: openproblems-bio/openproblems
+    tag: build/main
 viash_version: 0.9.0
 config_mods: |
   .runners[.type == "nextflow"].config.labels := { lowmem : "memory = 20.Gb", midmem : "memory = 50.Gb", highmem : "memory = 100.Gb", lowcpu : "cpus = 5", midcpu : "cpus = 15", highcpu : "cpus = 30", lowtime : "time = 1.h", midtime : "time = 4.h", hightime : "time = 8.h", veryhightime : "time = 24.h" }

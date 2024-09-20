@@ -8,7 +8,7 @@ info:
       A metric for evaluating denoised datasets.
 arguments:
   - name: "--input_test"
-    __merge__: file_test_h5ad.yaml
+    __merge__: file_test.yaml
     direction: input
     required: true
   - name: "--input_prediction"
@@ -21,7 +21,7 @@ arguments:
     required: true
 test_resources:
   - type: python_script
-    path: /common/component_tests/check_metric_config.py
+    path: /common/component_tests/check_config.py
   - type: python_script
     path: /common/component_tests/run_and_check_output.py
   - path: /common/library.bib

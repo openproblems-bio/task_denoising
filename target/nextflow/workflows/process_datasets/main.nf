@@ -2814,10 +2814,11 @@ meta = [
         {
           "type" : "file",
           "name" : "--input",
+          "label" : "Common Dataset",
+          "summary" : "A subset of the common dataset.",
           "info" : {
-            "label" : "Common Dataset",
-            "summary" : "A subset of the common dataset.",
-            "slots" : {
+            "format" : {
+              "type" : "h5ad",
               "layers" : [
                 {
                   "type" : "integer",
@@ -2890,10 +2891,11 @@ meta = [
         {
           "type" : "file",
           "name" : "--output_train",
+          "label" : "Training data",
+          "summary" : "The subset of molecules used for the training dataset",
           "info" : {
-            "label" : "Training data",
-            "summary" : "The subset of molecules used for the training dataset",
-            "slots" : {
+            "format" : {
+              "type" : "h5ad",
               "layers" : [
                 {
                   "type" : "integer",
@@ -2925,10 +2927,11 @@ meta = [
         {
           "type" : "file",
           "name" : "--output_test",
+          "label" : "Test data",
+          "summary" : "The subset of molecules used for the test dataset",
           "info" : {
-            "label" : "Test data",
-            "summary" : "The subset of molecules used for the test dataset",
-            "slots" : {
+            "format" : {
+              "type" : "h5ad",
               "layers" : [
                 {
                   "type" : "integer",
@@ -3020,15 +3023,23 @@ meta = [
       "name" : "common/check_dataset_schema",
       "repository" : {
         "type" : "github",
-        "repo" : "openproblems-bio/openproblems-v2",
-        "tag" : "main_build"
+        "repo" : "openproblems-bio/openproblems",
+        "tag" : "build/main"
       }
     },
     {
-      "name" : "process_dataset/process_dataset",
+      "name" : "data_processors/process_dataset",
       "repository" : {
         "type" : "local"
       }
+    }
+  ],
+  "repositories" : [
+    {
+      "type" : "github",
+      "name" : "openproblems",
+      "repo" : "openproblems-bio/openproblems",
+      "tag" : "build/main"
     }
   ],
   "license" : "MIT",
@@ -3079,19 +3090,18 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/process_datasets",
     "viash_version" : "0.9.0",
-    "git_commit" : "1f5450984aa710042e5b6ca066e9549637a3c1ad",
+    "git_commit" : "16f5aee55b0c67935955cef2b2dab27d2841e932",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
     "name" : "task_denoising",
     "version" : "build_main",
-    "description" : "Removing noise in sparse single-cell RNA-sequencing count data.\n",
+    "label" : "Denoising",
+    "summary" : "Removing noise in sparse single-cell RNA-sequencing count data",
+    "description" : "A key challenge in evaluating denoising methods is the general lack of a ground truth. A\nrecent benchmark study ([Hou et al.,\n2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))\nrelied on flow-sorted datasets, mixture control experiments ([Tian et al.,\n2019](https://www.nature.com/articles/s41592-019-0425-8)), and comparisons with bulk\nRNA-Seq data. Since each of these approaches suffers from specific limitations, it is\ndifficult to combine these different approaches into a single quantitative measure of\ndenoising accuracy. Here, we instead rely on an approach termed molecular\ncross-validation (MCV), which was specifically developed to quantify denoising accuracy\nin the absence of a ground truth ([Batson et al.,\n2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the observed molecules\nin a given scRNA-Seq dataset are first partitioned between a *training* and a *test*\ndataset. Next, a denoising method is applied to the training dataset. Finally, denoising\naccuracy is measured by comparing the result to the test dataset. The authors show that\nboth in theory and in practice, the measured denoising accuracy is representative of the\naccuracy that would be obtained on a ground truth dataset.\n",
     "info" : {
-      "label" : "Denoising",
-      "summary" : "Removing noise in sparse single-cell RNA-sequencing count data",
-      "image" : "/src/api/thumbnail.svg",
+      "image" : "thumbnail.svg",
       "motivation" : "Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present\nin each cell. As a result, the measurements (UMI counts) observed for each gene and each\ncell are associated with generally high levels of technical noise ([Grün et al.,\n2014](https://www.nature.com/articles/nmeth.2930)). Denoising describes the task of\nestimating the true expression level of each gene in each cell. In the single-cell\nliterature, this task is also referred to as *imputation*, a term which is typically\nused for missing data problems in statistics. Similar to the use of the terms \\"dropout\\",\n\\"missing data\\", and \\"technical zeros\\", this terminology can create confusion about the\nunderlying measurement process ([Sarkar and Stephens,\n2020](https://www.biorxiv.org/content/10.1101/2020.04.07.030007v2)).\n",
-      "description" : "A key challenge in evaluating denoising methods is the general lack of a ground truth. A\nrecent benchmark study ([Hou et al.,\n2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))\nrelied on flow-sorted datasets, mixture control experiments ([Tian et al.,\n2019](https://www.nature.com/articles/s41592-019-0425-8)), and comparisons with bulk\nRNA-Seq data. Since each of these approaches suffers from specific limitations, it is\ndifficult to combine these different approaches into a single quantitative measure of\ndenoising accuracy. Here, we instead rely on an approach termed molecular\ncross-validation (MCV), which was specifically developed to quantify denoising accuracy\nin the absence of a ground truth ([Batson et al.,\n2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the observed molecules\nin a given scRNA-Seq dataset are first partitioned between a *training* and a *test*\ndataset. Next, a denoising method is applied to the training dataset. Finally, denoising\naccuracy is measured by comparing the result to the test dataset. The authors show that\nboth in theory and in practice, the measured denoising accuracy is representative of the\naccuracy that would be obtained on a ground truth dataset.\n",
       "test_resources" : [
         {
           "type" : "s3",
@@ -3105,6 +3115,14 @@ meta = [
         }
       ]
     },
+    "repositories" : [
+      {
+        "type" : "github",
+        "name" : "openproblems",
+        "repo" : "openproblems-bio/openproblems",
+        "tag" : "build/main"
+      }
+    ],
     "viash_version" : "0.9.0",
     "source" : "src",
     "target" : "target",
@@ -3173,8 +3191,8 @@ meta = [
 
 // resolve dependencies dependencies (if any)
 meta["root_dir"] = getRootDir()
-include { check_dataset_schema } from "${meta.root_dir}/dependencies/github/openproblems-bio/openproblems-v2/main_build/nextflow/common/check_dataset_schema/main.nf"
-include { process_dataset } from "${meta.resources_dir}/../../../nextflow/process_dataset/process_dataset/main.nf"
+include { check_dataset_schema } from "${meta.root_dir}/dependencies/github/openproblems-bio/openproblems/build/main/nextflow/common/check_dataset_schema/main.nf"
+include { process_dataset } from "${meta.resources_dir}/../../../nextflow/data_processors/process_dataset/main.nf"
 
 // inner workflow
 // user-provided Nextflow code

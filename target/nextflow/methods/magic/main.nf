@@ -2814,10 +2814,11 @@ meta = [
         {
           "type" : "file",
           "name" : "--input_train",
+          "label" : "Training data",
+          "summary" : "The subset of molecules used for the training dataset",
           "info" : {
-            "label" : "Training data",
-            "summary" : "The subset of molecules used for the training dataset",
-            "slots" : {
+            "format" : {
+              "type" : "h5ad",
               "layers" : [
                 {
                   "type" : "integer",
@@ -2849,10 +2850,11 @@ meta = [
         {
           "type" : "file",
           "name" : "--output",
+          "label" : "Denoised data",
+          "summary" : "A denoised dataset as output by a method.",
           "info" : {
-            "label" : "Denoised data",
-            "summary" : "A denoised dataset as output by a method.",
-            "slots" : {
+            "format" : {
+              "type" : "h5ad",
               "layers" : [
                 {
                   "type" : "integer",
@@ -2953,6 +2955,9 @@ meta = [
       "is_executable" : true
     }
   ],
+  "label" : "MAGIC",
+  "summary" : "MAGIC imputes and denoises scRNA-seq data that is noisy or dropout-prone.",
+  "description" : "MAGIC (Markov Affinity-based Graph Imputation of Cells) is a method for imputation and denoising of noisy or dropout-prone single cell RNA-sequencing data. Given a normalised scRNA-seq expression matrix, it first calculates Euclidean distances between each pair of cells in the dataset, which is then augmented using a Gaussian kernel (function) and row-normalised to give a normalised affinity matrix. A t-step markov process is then calculated, by powering this affinity matrix t times. Finally, the powered affinity matrix is right-multiplied by the normalised data, causing the final imputed values to take the value of a per-gene average weighted by the affinities of cells. The resultant imputed matrix is then rescaled, to more closely match the magnitude of measurements in the normalised (input) matrix.",
   "test_resources" : [
     {
       "type" : "python_script",
@@ -2961,7 +2966,7 @@ meta = [
     },
     {
       "type" : "python_script",
-      "path" : "/common/component_tests/check_method_config.py",
+      "path" : "/common/component_tests/check_config.py",
       "is_executable" : true
     },
     {
@@ -2975,12 +2980,6 @@ meta = [
     }
   ],
   "info" : {
-    "label" : "MAGIC",
-    "summary" : "MAGIC imputes and denoises scRNA-seq data that is noisy or dropout-prone.",
-    "description" : "MAGIC (Markov Affinity-based Graph Imputation of Cells) is a method for imputation and denoising of noisy or dropout-prone single cell RNA-sequencing data. Given a normalised scRNA-seq expression matrix, it first calculates Euclidean distances between each pair of cells in the dataset, which is then augmented using a Gaussian kernel (function) and row-normalised to give a normalised affinity matrix. A t-step markov process is then calculated, by powering this affinity matrix t times. Finally, the powered affinity matrix is right-multiplied by the normalised data, causing the final imputed values to take the value of a per-gene average weighted by the affinities of cells. The resultant imputed matrix is then rescaled, to more closely match the magnitude of measurements in the normalised (input) matrix.",
-    "reference" : "van2018recovering",
-    "documentation_url" : "https://github.com/KrishnaswamyLab/MAGIC#readme",
-    "repository_url" : "https://github.com/KrishnaswamyLab/MAGIC",
     "v1" : {
       "path" : "openproblems/tasks/denoising/methods/magic.py",
       "commit" : "b3456fd73c04c28516f6df34c57e6e3e8b0dab32"
@@ -3004,10 +3003,24 @@ meta = [
     }
   },
   "status" : "enabled",
+  "repositories" : [
+    {
+      "type" : "github",
+      "name" : "openproblems",
+      "repo" : "openproblems-bio/openproblems",
+      "tag" : "build/main"
+    }
+  ],
   "license" : "MIT",
+  "references" : {
+    "doi" : [
+      "10.1016/j.cell.2018.05.061"
+    ]
+  },
   "links" : {
-    "repository" : "https://github.com/openproblems-bio/task_denoising",
-    "docker_registry" : "ghcr.io"
+    "repository" : "https://github.com/KrishnaswamyLab/MAGIC",
+    "docker_registry" : "ghcr.io",
+    "documentation" : "https://github.com/KrishnaswamyLab/MAGIC#readme"
   },
   "runners" : [
     {
@@ -3064,7 +3077,8 @@ meta = [
             "scprep",
             "magic-impute",
             "scipy",
-            "scikit-learn<1.2"
+            "scikit-learn<1.2",
+            "numpy<2"
           ],
           "upgrade" : true
         }
@@ -3077,19 +3091,18 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/methods/magic",
     "viash_version" : "0.9.0",
-    "git_commit" : "1f5450984aa710042e5b6ca066e9549637a3c1ad",
+    "git_commit" : "16f5aee55b0c67935955cef2b2dab27d2841e932",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
     "name" : "task_denoising",
     "version" : "build_main",
-    "description" : "Removing noise in sparse single-cell RNA-sequencing count data.\n",
+    "label" : "Denoising",
+    "summary" : "Removing noise in sparse single-cell RNA-sequencing count data",
+    "description" : "A key challenge in evaluating denoising methods is the general lack of a ground truth. A\nrecent benchmark study ([Hou et al.,\n2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))\nrelied on flow-sorted datasets, mixture control experiments ([Tian et al.,\n2019](https://www.nature.com/articles/s41592-019-0425-8)), and comparisons with bulk\nRNA-Seq data. Since each of these approaches suffers from specific limitations, it is\ndifficult to combine these different approaches into a single quantitative measure of\ndenoising accuracy. Here, we instead rely on an approach termed molecular\ncross-validation (MCV), which was specifically developed to quantify denoising accuracy\nin the absence of a ground truth ([Batson et al.,\n2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the observed molecules\nin a given scRNA-Seq dataset are first partitioned between a *training* and a *test*\ndataset. Next, a denoising method is applied to the training dataset. Finally, denoising\naccuracy is measured by comparing the result to the test dataset. The authors show that\nboth in theory and in practice, the measured denoising accuracy is representative of the\naccuracy that would be obtained on a ground truth dataset.\n",
     "info" : {
-      "label" : "Denoising",
-      "summary" : "Removing noise in sparse single-cell RNA-sequencing count data",
-      "image" : "/src/api/thumbnail.svg",
+      "image" : "thumbnail.svg",
       "motivation" : "Single-cell RNA-Seq protocols only detect a fraction of the mRNA molecules present\nin each cell. As a result, the measurements (UMI counts) observed for each gene and each\ncell are associated with generally high levels of technical noise ([Grün et al.,\n2014](https://www.nature.com/articles/nmeth.2930)). Denoising describes the task of\nestimating the true expression level of each gene in each cell. In the single-cell\nliterature, this task is also referred to as *imputation*, a term which is typically\nused for missing data problems in statistics. Similar to the use of the terms \\"dropout\\",\n\\"missing data\\", and \\"technical zeros\\", this terminology can create confusion about the\nunderlying measurement process ([Sarkar and Stephens,\n2020](https://www.biorxiv.org/content/10.1101/2020.04.07.030007v2)).\n",
-      "description" : "A key challenge in evaluating denoising methods is the general lack of a ground truth. A\nrecent benchmark study ([Hou et al.,\n2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))\nrelied on flow-sorted datasets, mixture control experiments ([Tian et al.,\n2019](https://www.nature.com/articles/s41592-019-0425-8)), and comparisons with bulk\nRNA-Seq data. Since each of these approaches suffers from specific limitations, it is\ndifficult to combine these different approaches into a single quantitative measure of\ndenoising accuracy. Here, we instead rely on an approach termed molecular\ncross-validation (MCV), which was specifically developed to quantify denoising accuracy\nin the absence of a ground truth ([Batson et al.,\n2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the observed molecules\nin a given scRNA-Seq dataset are first partitioned between a *training* and a *test*\ndataset. Next, a denoising method is applied to the training dataset. Finally, denoising\naccuracy is measured by comparing the result to the test dataset. The authors show that\nboth in theory and in practice, the measured denoising accuracy is representative of the\naccuracy that would be obtained on a ground truth dataset.\n",
       "test_resources" : [
         {
           "type" : "s3",
@@ -3103,6 +3116,14 @@ meta = [
         }
       ]
     },
+    "repositories" : [
+      {
+        "type" : "github",
+        "name" : "openproblems",
+        "repo" : "openproblems-bio/openproblems",
+        "tag" : "build/main"
+      }
+    ],
     "viash_version" : "0.9.0",
     "source" : "src",
     "target" : "target",

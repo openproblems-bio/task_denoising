@@ -52,10 +52,8 @@ resources:
   - type: file
     path: /_viash.yaml
 dependencies:
-  - name: common/check_dataset_schema
-    repository: openproblems
-  - name: common/extract_metadata
-    repository: openproblems
+  - name: h5ad/extract_uns_metadata
+    repository: core
   - name: control_methods/no_denoising
   - name: control_methods/perfect_denoising
   - name: methods/alra

@@ -72,10 +72,11 @@ authors:
       orcid: "0009-0003-8555-1361"
 
 repositories:
-  - name: openproblems
+  - name: core
     type: github
-    repo: openproblems-bio/openproblems
+    repo: openproblems-bio/core
     tag: build/main
+    path: viash/core
 
 viash_version: 0.9.0
 

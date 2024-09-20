@@ -1,5 +1,5 @@
 workflow auto {
-  findStatesTemp(params, meta.config)
+  findStates(params, meta.config)
     | meta.workflow.run(
       auto: [publish: "state"]
     )
@@ -37,7 +37,7 @@ workflow run_wf {
     }
 
     // extract the dataset metadata
-    | extract_metadata.run(
+    | extract_uns_metadata.run(
       fromState: [input: "input_test"],
       toState: { id, output, state ->
         state + [
@@ -100,6 +100,27 @@ workflow run_wf {
       }
     )
 
+    // extract the scores
+    | extract_uns_metadata.run(
+      key: "extract_scores",
+      fromState: [input: "metric_output"],
+      toState: { id, output, state ->
+        state + [
+          score_uns: readYaml(output.output).uns
+        ]
+      }
+    )
+
+    | joinStates { ids, states ->
+      // store the scores in a file
+      def score_uns = states.collect{it.score_uns}
+      def score_uns_yaml_blob = toYamlBlob(score_uns)
+      def score_uns_file = tempFile("score_uns.yaml")
+      score_uns_file.write(score_uns_yaml_blob)
+      
+      ["output", [output_scores: score_uns_file]]
+    }
+
   /******************************
    * GENERATE OUTPUT YAML FILES *
    ******************************/
@@ -108,7 +129,7 @@ workflow run_wf {
   // so code related to normalization_ids is commented out
 
   // extract the dataset metadata
-  dataset_meta_ch = dataset_ch
+  meta_ch = dataset_ch
     // // only keep one of the normalization methods
     // | filter{ id, state ->
     //   state.dataset_uns.normalization_id == "log_cp10k"
@@ -124,23 +145,6 @@ workflow run_wf {
       def dataset_uns_file = tempFile("dataset_uns.yaml")
       dataset_uns_file.write(dataset_uns_yaml_blob)
 
-      ["output", [output_dataset_info: dataset_uns_file]]
-    }
-
-  output_ch = score_ch
-
-    // extract the scores
-    | extract_metadata.run(
-      key: "extract_scores",
-      fromState: [input: "metric_output"],
-      toState: { id, output, state ->
-        state + [
-          score_uns: readYaml(output.output).uns
-        ]
-      }
-    )
-
-    | joinStates { ids, states ->
       // store the method configs in a file
       def method_configs = methods.collect{it.config}
       def method_configs_yaml_blob = toYamlBlob(method_configs)
@@ -155,25 +159,21 @@ workflow run_wf {
 
       def task_info_file = meta.resources_dir.resolve("_viash.yaml")
 
-      // store the scores in a file
-      def score_uns = states.collect{it.score_uns}
-      def score_uns_yaml_blob = toYamlBlob(score_uns)
-      def score_uns_file = tempFile("score_uns.yaml")
-      score_uns_file.write(score_uns_yaml_blob)
-
+      // create output
       def new_state = [
         output_method_configs: method_configs_file,
         output_metric_configs: metric_configs_file,
         output_task_info: task_info_file,
-        output_scores: score_uns_file,
+        output_dataset_info: dataset_uns_file,
         _meta: states[0]._meta
       ]
 
       ["output", new_state]
     }
 
-    // merge all of the output data 
-    | mix(dataset_meta_ch)
+  // merge all of the output data 
+  output_ch = score_ch
+    | mix(meta_ch)
     | joinStates{ ids, states ->
       def mergedStates = states.inject([:]) { acc, m -> acc + m }
       [ids[0], mergedStates]
@@ -181,122 +181,4 @@ workflow run_wf {
 
   emit:
   output_ch
-}
-
-
-// temp fix for rename_keys typo
-
-def findStatesTemp(Map params, Map config) {
-  def auto_config = deepClone(config)
-  def auto_params = deepClone(params)
-
-  auto_config = auto_config.clone()
-  // override arguments
-  auto_config.argument_groups = []
-  auto_config.arguments = [
-    [
-      type: "string",
-      name: "--id",
-      description: "A dummy identifier",
-      required: false
-    ],
-    [
-      type: "file",
-      name: "--input_states",
-      example: "/path/to/input/directory/**/state.yaml",
-      description: "Path to input directory containing the datasets to be integrated.",
-      required: true,
-      multiple: true,
-      multiple_sep: ";"
-    ],
-    [
-      type: "string",
-      name: "--filter",
-      example: "foo/.*/state.yaml",
-      description: "Regex to filter state files by path.",
-      required: false
-    ],
-    // to do: make this a yaml blob?
-    [
-      type: "string",
-      name: "--rename_keys",
-      example: ["newKey1:oldKey1", "newKey2:oldKey2"],
-      description: "Rename keys in the detected input files. This is useful if the input files do not match the set of input arguments of the workflow.",
-      required: false,
-      multiple: true,
-      multiple_sep: ";"
-    ],
-    [
-      type: "string",
-      name: "--settings",
-      example: '{"output_dataset": "dataset.h5ad", "k": 10}',
-      description: "Global arguments as a JSON glob to be passed to all components.",
-      required: false
-    ]
-  ]
-  if (!(auto_params.containsKey("id"))) {
-    auto_params["id"] = "auto"
-  }
-
-  // run auto config through processConfig once more
-  auto_config = processConfig(auto_config)
-
-  workflow findStatesTempWf {
-    helpMessage(auto_config)
-
-    output_ch = 
-      channelFromParams(auto_params, auto_config)
-        | flatMap { autoId, args ->
-
-          def globalSettings = args.settings ? readYamlBlob(args.settings) : [:]
-
-          // look for state files in input dir
-          def stateFiles = args.input_states
-
-          // filter state files by regex
-          if (args.filter) {
-            stateFiles = stateFiles.findAll{ stateFile ->
-              def stateFileStr = stateFile.toString()
-              def matcher = stateFileStr =~ args.filter
-              matcher.matches()}
-          }
-
-          // read in states
-          def states = stateFiles.collect { stateFile ->
-            def state_ = readTaggedYaml(stateFile)
-            [state_.id, state_]
-          }
-
-          // construct renameMap
-          if (args.rename_keys) {
-            def renameMap = args.rename_keys.collectEntries{renameString ->
-              def split = renameString.split(":")
-              assert split.size() == 2: "Argument 'rename_keys' should be of the form 'newKey:oldKey;newKey:oldKey'"
-              split
-            }
-
-            // rename keys in state, only let states through which have all keys
-            // also add global settings
-            states = states.collectMany{id, state ->
-              def newState = [:]
-
-              for (key in renameMap.keySet()) {
-                def origKey = renameMap[key]
-                if (!(state.containsKey(origKey))) {
-                  return []
-                }
-                newState[key] = state[origKey]
-              }
-
-              [[id, globalSettings + newState]]
-            }
-          }
-
-          states
-        }
-    emit:
-    output_ch
-  }
-
-  return findStatesTempWf
 }

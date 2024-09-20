@@ -36,6 +36,8 @@
 
 * Update test_resources path in components (PR #18).
 
+* Update workflows to use core repository dependency (PR #20).
+
 ## BUG FIXES
 
 * Update the nextflow workflow dependencies (PR #17).

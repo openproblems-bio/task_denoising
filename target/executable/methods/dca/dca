@@ -483,9 +483,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "anndata~=0.8.0" "scanpy" "pyyaml" "requests" "jsonschema" "git+https://github.com/scottgigante-immunai/dca.git@patch-1" "numpy<2"
 
 LABEL org.opencontainers.image.description="Companion container for running component methods dca"
-LABEL org.opencontainers.image.created="2024-09-20T13:36:58Z"
+LABEL org.opencontainers.image.created="2024-09-20T14:52:36Z"
 LABEL org.opencontainers.image.source="https://github.com/theislab/dca"
-LABEL org.opencontainers.image.revision="10119ed5dbf499b0a9abe490e8b742a4494fdc3a"
+LABEL org.opencontainers.image.revision="f5021bb07bb8638aef9164cc64e742dde4c7fe76"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

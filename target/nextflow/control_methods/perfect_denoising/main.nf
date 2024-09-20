@@ -3018,9 +3018,10 @@ meta = [
   "repositories" : [
     {
       "type" : "github",
-      "name" : "openproblems",
-      "repo" : "openproblems-bio/openproblems",
-      "tag" : "build/main"
+      "name" : "core",
+      "repo" : "openproblems-bio/core",
+      "tag" : "build/main",
+      "path" : "viash/core"
     }
   ],
   "license" : "MIT",
@@ -3083,7 +3084,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/control_methods/perfect_denoising",
     "viash_version" : "0.9.0",
-    "git_commit" : "10119ed5dbf499b0a9abe490e8b742a4494fdc3a",
+    "git_commit" : "f5021bb07bb8638aef9164cc64e742dde4c7fe76",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3111,9 +3112,10 @@ meta = [
     "repositories" : [
       {
         "type" : "github",
-        "name" : "openproblems",
-        "repo" : "openproblems-bio/openproblems",
-        "tag" : "build/main"
+        "name" : "core",
+        "repo" : "openproblems-bio/core",
+        "tag" : "build/main",
+        "path" : "viash/core"
       }
     ],
     "viash_version" : "0.9.0",

@@ -21,7 +21,7 @@ nextflow run . \
   -resume \
   -c common/nextflow_helpers/labels_ci.config \
   --id cxg_mouse_pancreas_atlas \
-  --input_train resources_test/denoising/cxg_mouse_pancreas_atlas/train.h5ad \
-  --input_test resources_test/denoising/cxg_mouse_pancreas_atlas/test.h5ad \
+  --input_train resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad \
+  --input_test resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad \
   --output_state state.yaml \
   --publish_dir "$publish_dir"

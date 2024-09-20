@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/denoising/pancreas/train.h5ad"
+example: "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad"
 label: "Training data"
 summary: The subset of molecules used for the training dataset
 info:

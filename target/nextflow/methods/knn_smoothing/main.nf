@@ -2838,7 +2838,7 @@ meta = [
             }
           },
           "example" : [
-            "resources_test/denoising/pancreas/train.h5ad"
+            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -2880,7 +2880,7 @@ meta = [
             }
           },
           "example" : [
-            "resources_test/denoising/pancreas/denoised.h5ad"
+            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -2919,8 +2919,8 @@ meta = [
     },
     {
       "type" : "file",
-      "path" : "/resources_test/denoising/pancreas",
-      "dest" : "resources_test/denoising/pancreas"
+      "path" : "/resources_test/task_denoising/cxg_mouse_pancreas_atlas",
+      "dest" : "resources_test/task_denoising/cxg_mouse_pancreas_atlas"
     }
   ],
   "info" : {
@@ -3024,7 +3024,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/methods/knn_smoothing",
     "viash_version" : "0.9.0",
-    "git_commit" : "bd043b20ca5a1c48dbea68e0f0af199b55413946",
+    "git_commit" : "10119ed5dbf499b0a9abe490e8b742a4494fdc3a",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3039,8 +3039,8 @@ meta = [
       "test_resources" : [
         {
           "type" : "s3",
-          "path" : "s3://openproblems-data/resources_test/denoising/",
-          "dest" : "resources_test/denoising"
+          "path" : "s3://openproblems-data/resources_test/task_denoising/",
+          "dest" : "resources_test/task_denoising"
         },
         {
           "type" : "s3",

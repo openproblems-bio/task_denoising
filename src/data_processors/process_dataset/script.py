@@ -42,9 +42,9 @@ if adata_output.n_obs > par["n_obs_limit"]:
     print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
     print(f">> Setting seed to {par['seed']}", flush=True)
     random.seed(par["seed"])
-    obs_filt = np.ones(dtype=np.bool_, shape=adata.n_obs)
+    obs_filt = np.ones(dtype=np.bool_, shape=adata_output.n_obs)
     obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
-    adata_output = adata[obs_index].copy()
+    adata_output = adata_output[obs_index].copy()
         
 # remove all layers except for counts
 print(">> Remove all layers except for counts", flush=True)

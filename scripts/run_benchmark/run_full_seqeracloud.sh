@@ -10,11 +10,11 @@ set -e
 
 # generate a unique id
 RUN_ID="run_$(date +%Y-%m-%d_%H-%M-%S)"
-publish_dir="s3://openproblems-data/resources/denoising/results/${RUN_ID}"
+publish_dir="s3://openproblems-data/resources/task_denoising/results/${RUN_ID}"
 
 # write the parameters to file
 cat > /tmp/params.yaml << HERE
-input_states: s3://openproblems-data/resources/denoising/datasets/**/state.yaml
+input_states: s3://openproblems-data/resources/task_denoising/datasets/**/state.yaml
 rename_keys: 'input_train:output_train;input_test:output_test'
 output_state: "state.yaml"
 publish_dir: "$publish_dir"
@@ -29,4 +29,4 @@ tw launch https://github.com/openproblems-bio/task_denoising.git \
   --params-file /tmp/params.yaml \
   --entry-name auto \
   --config common/nextflow_helpers/labels_tw.config \
-  --labels denoising,full
+  --labels task_denoising,full

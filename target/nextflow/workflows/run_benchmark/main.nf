@@ -3142,7 +3142,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/run_benchmark",
     "viash_version" : "0.9.0",
-    "git_commit" : "f5021bb07bb8638aef9164cc64e742dde4c7fe76",
+    "git_commit" : "bfa2730431d47be21afe1c62fc4f2139036126a0",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

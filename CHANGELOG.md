@@ -44,6 +44,8 @@
 
 * Fix paths in scripts (PR #18).
 
+* Subsample datasets by batch if batch is defined (PR #22).
+
 ## transfer from openproblems-v2 repository
 
 ### NEW FUNCTIONALITY

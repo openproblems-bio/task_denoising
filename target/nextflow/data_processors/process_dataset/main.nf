@@ -3049,7 +3049,7 @@ meta = [
           "name" : "--n_obs_limit",
           "description" : "The maximum number of cells the dataset may have before subsampling according to `obs.batch`.",
           "default" : [
-            20000
+            10000
           ],
           "required" : false,
           "direction" : "input",
@@ -3172,7 +3172,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/data_processors/process_dataset",
     "viash_version" : "0.9.0",
-    "git_commit" : "f5021bb07bb8638aef9164cc64e742dde4c7fe76",
+    "git_commit" : "bfa2730431d47be21afe1c62fc4f2139036126a0",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3335,27 +3335,30 @@ adata = ad.read_h5ad(par["input"])
 
 # limit to max number of observations
 adata_output = adata.copy()
-if adata.n_obs > par["n_obs_limit"]:
-    print(">> Subsampling the observations", flush=True)
-    print(f">> Setting seed to {par['seed']}")
+
+if "batch" in adata.obs:
+    print(f">> Subsampling observations by largest batch", flush=True)
+    batch_counts = adata.obs.groupby('batch').size()
+    sorted_batches = batch_counts.sort_values(ascending=False)
+    selected_batch = sorted_batches.index[0]
+    adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
+
+if adata_output.n_obs > par["n_obs_limit"]:
+    print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
+    print(f">> Setting seed to {par['seed']}", flush=True)
     random.seed(par["seed"])
-    if "batch" not in adata.obs:
-        obs_filt = np.ones(dtype=np.bool_, shape=adata.n_obs)
-        obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
-        adata_output = adata[obs_index].copy()
-    else:
-        batch_counts = adata.obs.groupby('batch').size()
-        filtered_batches = batch_counts[batch_counts <= par["n_obs_limit"]]
-        sorted_filtered_batches = filtered_batches.sort_values(ascending=False)
-        selected_batch = sorted_filtered_batches.index[0]
-        adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
+    obs_filt = np.ones(dtype=np.bool_, shape=adata_output.n_obs)
+    obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
+    adata_output = adata_output[obs_index].copy()
         
 # remove all layers except for counts
+print(">> Remove all layers except for counts", flush=True)
 for key in list(adata_output.layers.keys()):
     if key != "counts":
         del adata_output.layers[key]
 
 # round counts and convert to int
+print(">> Round counts and convert to int", flush=True)
 counts = np.array(adata_output.layers["counts"]).round().astype(int)
 
 print(">> process and split data", flush=True)
@@ -3371,6 +3374,7 @@ X_train.eliminate_zeros()
 X_test.eliminate_zeros()
 
 # copy adata to train_set, test_set
+print(">> Create AnnData output objects", flush=True)
 output_train = ad.AnnData(
     layers={"counts": X_train},
     obs=adata_output.obs[[]],
@@ -3389,6 +3393,7 @@ output_test = ad.AnnData(
 output_test.uns["train_sum"] = X_train.sum()
 
 # Remove no cells that do not have enough reads
+print(">> Remove cells that do not have enough reads", flush=True)
 is_missing = np.array(X_train.sum(axis=0) == 0)
 
 output_train = output_train[:, ~is_missing.flatten()]

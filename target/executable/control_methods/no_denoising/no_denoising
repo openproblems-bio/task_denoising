@@ -470,9 +470,9 @@ function ViashDockerfile {
 FROM openproblems/base_python:1.0.0
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component control_methods no_denoising"
-LABEL org.opencontainers.image.created="2024-09-20T14:52:37Z"
+LABEL org.opencontainers.image.created="2024-10-02T18:16:53Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="f5021bb07bb8638aef9164cc64e742dde4c7fe76"
+LABEL org.opencontainers.image.revision="bfa2730431d47be21afe1c62fc4f2139036126a0"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

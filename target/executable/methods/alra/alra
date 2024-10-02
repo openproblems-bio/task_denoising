@@ -485,9 +485,9 @@ RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packag
   Rscript -e 'remotes::install_github(c("KlugerLab/ALRA"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component methods alra"
-LABEL org.opencontainers.image.created="2024-09-20T14:52:37Z"
+LABEL org.opencontainers.image.created="2024-10-02T18:16:53Z"
 LABEL org.opencontainers.image.source="https://github.com/KlugerLab/ALRA"
-LABEL org.opencontainers.image.revision="f5021bb07bb8638aef9164cc64e742dde4c7fe76"
+LABEL org.opencontainers.image.revision="bfa2730431d47be21afe1c62fc4f2139036126a0"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

@@ -477,9 +477,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "git+https://github.com/scottgigante-immunai/knn-smoothing@python_package"
 
 LABEL org.opencontainers.image.description="Companion container for running component methods knn_smoothing"
-LABEL org.opencontainers.image.created="2024-09-20T14:52:36Z"
+LABEL org.opencontainers.image.created="2024-10-02T18:16:53Z"
 LABEL org.opencontainers.image.source="https://github.com/yanailab/knn-smoothing"
-LABEL org.opencontainers.image.revision="f5021bb07bb8638aef9164cc64e742dde4c7fe76"
+LABEL org.opencontainers.image.revision="bfa2730431d47be21afe1c62fc4f2139036126a0"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

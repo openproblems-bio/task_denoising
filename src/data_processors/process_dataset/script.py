@@ -5,15 +5,16 @@ import numpy as np
 
 ## VIASH START
 par = {
-    'input': "resources_test/common/cxg_mouse_pancreas_atlas/dataset.h5ad",
-    'output_train': "train.h5ad",
-    'output_test': "test.h5ad",
+    'input': "resources/datasets/openproblems_v1/pancreas/log_cp10k/dataset.h5ad",
+    'output_train': "output/processed_datasets/train.h5ad",
+    'output_test': "output/processed_datasets/test.h5ad",
     'train_frac': 0.9,
-    'seed': 0
+    'seed': 0,
+    'n_obs_limit': 4000
 }
 meta = {
     "name": "process_dataset",
-    "resources_dir": "src/tasks/denoising/process_dataset"
+    "resources_dir": "src/data_processors/process_dataset"
 }
 ## VIASH END
 
@@ -29,20 +30,24 @@ adata = ad.read_h5ad(par["input"])
 
 # limit to max number of observations
 adata_output = adata.copy()
-if adata.n_obs > par["n_obs_limit"]:
-    print(">> Subsampling the observations", flush=True)
-    print(f">> Setting seed to {par['seed']}")
-    random.seed(par["seed"])
-    if "batch" not in adata.obs:
+
+
+print(f">> Subsampling observations", flush=True)
+if "batch" not in adata.obs:
+    print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
+    print(f">> Setting seed to {par['seed']}", flush=True)
+    if adata.n_obs > par["n_obs_limit"]:
+        random.seed(par["seed"])
         obs_filt = np.ones(dtype=np.bool_, shape=adata.n_obs)
         obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
         adata_output = adata[obs_index].copy()
-    else:
-        batch_counts = adata.obs.groupby('batch').size()
-        filtered_batches = batch_counts[batch_counts <= par["n_obs_limit"]]
-        sorted_filtered_batches = filtered_batches.sort_values(ascending=False)
-        selected_batch = sorted_filtered_batches.index[0]
-        adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
+else:
+    print(f">> Subsampling observations by largest batch lower than {par['n_obs_limit']}", flush=True)
+    batch_counts = adata.obs.groupby('batch').size()
+    filtered_batches = batch_counts[batch_counts <= par["n_obs_limit"]]
+    sorted_filtered_batches = filtered_batches.sort_values(ascending=False)
+    selected_batch = sorted_filtered_batches.index[0]
+    adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
         
 # remove all layers except for counts
 for key in list(adata_output.layers.keys()):

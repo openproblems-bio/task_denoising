@@ -11,10 +11,8 @@ cd "$REPO_ROOT"
 
 set -e
 
-export NXF_VER=22.04.5
-
 nextflow run . \
-  -main-script target/nextflow/denoising/workflows/process_datasets/main.nf \
+  -main-script target/nextflow/workflows/process_datasets/main.nf \
   -profile docker \
   -entry auto \
   -c common/nextflow_helpers/labels_ci.config \
@@ -22,4 +20,4 @@ nextflow run . \
   --input_states "resources_test/common/**/state.yaml" \
   --rename_keys 'input:output_dataset' \
   --settings '{"output_train": "train.h5ad", "output_test": "test.h5ad"}' \
-  --publish_dir "resources_test/denoising"
+  --publish_dir "resources_test/task_denoising"

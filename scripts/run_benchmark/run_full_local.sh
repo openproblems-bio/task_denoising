@@ -30,7 +30,7 @@ publish_dir: "$publish_dir"
 HERE
 
 # run the benchmark
-nextflow run openproblems-bio/task_template \
+nextflow run openproblems-bio/task_denoising \
   --revision build/main \
   -main-script target/nextflow/workflows/run_benchmark/main.nf \
   -profile docker \

@@ -31,30 +31,29 @@ adata = ad.read_h5ad(par["input"])
 # limit to max number of observations
 adata_output = adata.copy()
 
+if "batch" in adata.obs:
+    print(f">> Subsampling observations by largest batch", flush=True)
+    batch_counts = adata.obs.groupby('batch').size()
+    sorted_batches = batch_counts.sort_values(ascending=False)
+    selected_batch = sorted_batches.index[0]
+    adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
 
-print(f">> Subsampling observations", flush=True)
-if "batch" not in adata.obs:
+if adata_output.n_obs > par["n_obs_limit"]:
     print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
     print(f">> Setting seed to {par['seed']}", flush=True)
-    if adata.n_obs > par["n_obs_limit"]:
-        random.seed(par["seed"])
-        obs_filt = np.ones(dtype=np.bool_, shape=adata.n_obs)
-        obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
-        adata_output = adata[obs_index].copy()
-else:
-    print(f">> Subsampling observations by largest batch lower than {par['n_obs_limit']}", flush=True)
-    batch_counts = adata.obs.groupby('batch').size()
-    filtered_batches = batch_counts[batch_counts <= par["n_obs_limit"]]
-    sorted_filtered_batches = filtered_batches.sort_values(ascending=False)
-    selected_batch = sorted_filtered_batches.index[0]
-    adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
+    random.seed(par["seed"])
+    obs_filt = np.ones(dtype=np.bool_, shape=adata.n_obs)
+    obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
+    adata_output = adata[obs_index].copy()
         
 # remove all layers except for counts
+print(">> Remove all layers except for counts", flush=True)
 for key in list(adata_output.layers.keys()):
     if key != "counts":
         del adata_output.layers[key]
 
 # round counts and convert to int
+print(">> Round counts and convert to int", flush=True)
 counts = np.array(adata_output.layers["counts"]).round().astype(int)
 
 print(">> process and split data", flush=True)
@@ -70,6 +69,7 @@ X_train.eliminate_zeros()
 X_test.eliminate_zeros()
 
 # copy adata to train_set, test_set
+print(">> Create AnnData output objects", flush=True)
 output_train = ad.AnnData(
     layers={"counts": X_train},
     obs=adata_output.obs[[]],
@@ -88,6 +88,7 @@ output_test = ad.AnnData(
 output_test.uns["train_sum"] = X_train.sum()
 
 # Remove no cells that do not have enough reads
+print(">> Remove cells that do not have enough reads", flush=True)
 is_missing = np.array(X_train.sum(axis=0) == 0)
 
 output_train = output_train[:, ~is_missing.flatten()]

@@ -1,3 +1,5 @@
+include { checkItemAllowed } from "${meta.resources_dir}/helper.nf"
+
 workflow auto {
   findStates(params, meta.config)
     | meta.workflow.run(
@@ -32,7 +34,7 @@ workflow run_wf {
    ****************************/
   dataset_ch = input_ch
     // store join id
-    | map{ id, state -> 
+    | map{ id, state ->
       [id, state + ["_meta": [join_id: id]]]
     }
 
@@ -45,7 +47,7 @@ workflow run_wf {
         ]
       }
     )
-    
+
   /***************************
    * RUN METHODS AND METRICS *
    ***************************/
@@ -57,7 +59,13 @@ workflow run_wf {
 
       // use the 'filter' argument to only run a defined method or all methods
       filter: { id, state, comp ->
-        def method_check = !state.method_ids || state.method_ids.contains(comp.config.name)
+        def method_check = checkItemAllowed(
+          comp.config.name,
+          state.methods_include,
+          state.methods_exclude,
+          "methods_include",
+          "methods_exclude"
+        )
 
         method_check
       },
@@ -88,7 +96,7 @@ workflow run_wf {
       },
       // use 'fromState' to fetch the arguments the component requires from the overall state
       fromState: [
-        input_test: "input_test", 
+        input_test: "input_test",
         input_prediction: "method_output"
       ],
       // use 'toState' to publish that component's outputs to the overall state
@@ -117,7 +125,7 @@ workflow run_wf {
       def score_uns_yaml_blob = toYamlBlob(score_uns)
       def score_uns_file = tempFile("score_uns.yaml")
       score_uns_file.write(score_uns_yaml_blob)
-      
+
       ["output", [output_scores: score_uns_file]]
     }
 
@@ -171,7 +179,7 @@ workflow run_wf {
       ["output", new_state]
     }
 
-  // merge all of the output data 
+  // merge all of the output data
   output_ch = score_ch
     | mix(meta_ch)
     | joinStates{ ids, states ->

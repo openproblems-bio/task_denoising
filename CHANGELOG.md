@@ -46,6 +46,8 @@
 
 * Update `README` (PR #24)
 
+* Add a base method API schema (PR #24)
+
 ## BUG FIXES
 
 * Update the nextflow workflow dependencies (PR #17).

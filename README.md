@@ -45,16 +45,16 @@ dataset.
 ## API
 
 ``` mermaid
-flowchart LR
-  file_common_dataset("Common Dataset")
-  comp_data_processor[/"Data processor"/]
-  file_test("Test data")
-  file_train("Training data")
-  comp_control_method[/"Control Method"/]
-  comp_metric[/"Metric"/]
-  comp_method[/"Method"/]
-  file_prediction("Denoised data")
-  file_score("Score")
+flowchart TB
+  file_common_dataset("<a href='https://github.com/openproblems-bio/task_denoising#file-format-common-dataset'>Common Dataset</a>")
+  comp_data_processor[/"<a href='https://github.com/openproblems-bio/task_denoising#component-type-data-processor'>Data processor</a>"/]
+  file_test("<a href='https://github.com/openproblems-bio/task_denoising#file-format-test-data'>Test data</a>")
+  file_train("<a href='https://github.com/openproblems-bio/task_denoising#file-format-training-data'>Training data</a>")
+  comp_control_method[/"<a href='https://github.com/openproblems-bio/task_denoising#component-type-control-method'>Control Method</a>"/]
+  comp_metric[/"<a href='https://github.com/openproblems-bio/task_denoising#component-type-metric'>Metric</a>"/]
+  comp_method[/"<a href='https://github.com/openproblems-bio/task_denoising#component-type-method'>Method</a>"/]
+  file_prediction("<a href='https://github.com/openproblems-bio/task_denoising#file-format-denoised-data'>Denoised data</a>")
+  file_score("<a href='https://github.com/openproblems-bio/task_denoising#file-format-score'>Score</a>")
   file_common_dataset---comp_data_processor
   comp_data_processor-->file_test
   comp_data_processor-->file_train
@@ -72,8 +72,7 @@ flowchart LR
 
 A subset of the common dataset.
 
-Example file:
-`resources_test/common/cxg_mouse_pancreas_atlas/dataset.h5ad`
+Example file: `resources_test/common/cxg_immune_cell_atlas/dataset.h5ad`
 
 Format:
 
@@ -125,7 +124,7 @@ Arguments:
 The subset of molecules used for the test dataset
 
 Example file:
-`resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad`
+`resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad`
 
 Format:
 
@@ -160,7 +159,7 @@ Data structure:
 The subset of molecules used for the training dataset
 
 Example file:
-`resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad`
+`resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad`
 
 Format:
 
@@ -235,7 +234,7 @@ Arguments:
 A denoised dataset as output by a method.
 
 Example file:
-`resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad`
+`resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad`
 
 Format:
 
@@ -264,7 +263,7 @@ Data structure:
 File indicating the score of a metric.
 
 Example file:
-`resources_test/task_denoising/cxg_mouse_pancreas_atlas/score.h5ad`
+`resources_test/task_denoising/cxg_immune_cell_atlas/score.h5ad`
 
 Format:
 

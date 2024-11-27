@@ -15,3 +15,6 @@ arguments:
     __merge__: file_prediction.yaml
     required: true
     direction: output
+test_resources:
+  - type: python_script
+    path: /common/component_tests/check_config.py

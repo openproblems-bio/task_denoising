@@ -1,11 +1,11 @@
 type: file
-example: "resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad"
+example: "resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad"
 label: "Test data"
 summary: The subset of molecules used for the test dataset
 info:
   format:
     type: h5ad
-    layers: 
+    layers:
       - type: integer
         name: counts
         description: Raw counts

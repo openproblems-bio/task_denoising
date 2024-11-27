@@ -4,7 +4,7 @@ library(ALRA, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input_train = "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad",
+  input_train = "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad",
   norm = "log",
   output = "output.h5ad"
 )

@@ -14,6 +14,8 @@
 
 * Update `process_dataset` component to subsample large datasets (PR #14).
 
+* Add the scPRINT method (PR #25)
+
 ## MAJOR CHANGES
 
 * Revamp `scripts` directory (PR #13).

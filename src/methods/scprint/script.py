@@ -1,16 +1,17 @@
+import os
+
 import anndata as ad
-from scdataloader import Preprocessor
-import sys
-from huggingface_hub import hf_hub_download
-from scprint.tasks import Embedder
-from scprint import scPrint
 import scprint
 import torch
-import os
+from huggingface_hub import hf_hub_download
+from scdataloader import Preprocessor
+from scprint import scPrint
+from scprint.tasks import Denoiser
+import numpy as np
 
 ## VIASH START
 par = {
-    "input": "resources_test/task_batch_integration/cxg_immune_cell_atlas/dataset.h5ad",
+    "input_train": "resources_test/task_batch_integration/cxg_immune_cell_atlas/train.h5ad",
     "output": "output.h5ad",
     "model_name": "large",
     "model": None,
@@ -18,24 +19,27 @@ par = {
 meta = {"name": "scprint"}
 ## VIASH END
 
-sys.path.append(meta["resources_dir"])
-from read_anndata_partial import read_anndata
-
 print(f"====== scPRINT version {scprint.__version__} ======", flush=True)
 
 print("\n>>> Reading input data...", flush=True)
-input = read_anndata(par["input"], X="layers/counts", obs="obs", var="var", uns="uns")
+input = ad.read_h5ad(par["input_train"])
+print(input)
+
+print("\n>>> Preprocessing data...", flush=True)
+adata = ad.AnnData(
+    X=input.layers["counts"]
+)
+adata.obs_names = input.obs_names
+adata.var_names = input.var_names
 if input.uns["dataset_organism"] == "homo_sapiens":
-    input.obs["organism_ontology_term_id"] = "NCBITaxon:9606"
+    adata.obs["organism_ontology_term_id"] = "NCBITaxon:9606"
 elif input.uns["dataset_organism"] == "mus_musculus":
-    input.obs["organism_ontology_term_id"] = "NCBITaxon:10090"
+    adata.obs["organism_ontology_term_id"] = "NCBITaxon:10090"
 else:
     raise ValueError(
         f"scPRINT requires human or mouse data, not '{input.uns['dataset_organism']}'"
     )
-adata = input.copy()
 
-print("\n>>> Preprocessing data...", flush=True)
 preprocessor = Preprocessor(
     # Lower this threshold for test datasets
     min_valid_genes_id=1000 if input.n_vars < 2000 else 10000,
@@ -47,6 +51,7 @@ preprocessor = Preprocessor(
     skip_validate=True,
 )
 adata = preprocessor(adata)
+print(adata)
 
 model_checkpoint_file = par["model"]
 if model_checkpoint_file is None:
@@ -61,10 +66,10 @@ model = scPrint.load_from_checkpoint(
     precpt_gene_emb=None,
 )
 
-print("\n>>> Embedding data...", flush=True)
+print("\n>>> Denoising data...", flush=True)
 if torch.cuda.is_available():
     print("CUDA is available, using GPU", flush=True)
-    precision = "16"
+    precision = "16-mixed"
     dtype = torch.float16
 else:
     print("CUDA is not available, using CPU", flush=True)
@@ -72,28 +77,33 @@ else:
     dtype = torch.float32
 n_cores_available = len(os.sched_getaffinity(0))
 print(f"Using {n_cores_available} worker cores")
-embedder = Embedder(
-    how="random expr",
-    max_len=4000,
-    add_zero_genes=0,
+denoiser = Denoiser(
     num_workers=n_cores_available,
-    doclass=False,
-    doplot=False,
     precision=precision,
+    max_cells=adata.n_obs,
+    doplot=False,
     dtype=dtype,
 )
-embedded, _ = embedder(model, adata, cache=False)
+_, idxs, genes, expr_pred = denoiser(model, adata)
+print(f"Predicted expression dimensions: {expr_pred.shape}")
+
+print("\n>>> Applying denoising...", flush=True)
+adata.X = adata.X.tolil()
+idxs = idxs if idxs is not None else range(adata.shape[0])
+for i, idx in enumerate(idxs):
+    adata.X[idx, adata.var.index.get_indexer(genes)] = expr_pred[i]
+adata.X = adata.X.tocsr()
+print(adata)
 
 print("\n>>> Storing output...", flush=True)
 output = ad.AnnData(
+    layers={
+        "denoised": adata.X[:, adata.var.index.get_indexer(input.var_names)],
+    },
     obs=input.obs[[]],
     var=input.var[[]],
-    obsm={
-        "X_emb": embedded.obsm["scprint"],
-    },
     uns={
         "dataset_id": input.uns["dataset_id"],
-        "normalization_id": input.uns["normalization_id"],
         "method_id": meta["name"],
     },
 )

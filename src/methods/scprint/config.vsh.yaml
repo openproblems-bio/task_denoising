@@ -30,7 +30,6 @@ links:
 
 info:
   preferred_normalization: counts
-  method_types: [embedding]
   variants:
     scprint_large:
       model_name: "large"
@@ -53,7 +52,6 @@ arguments:
 resources:
   - type: python_script
     path: script.py
-  - path: /src/utils/read_anndata_partial.py
 
 engines:
   - type: docker

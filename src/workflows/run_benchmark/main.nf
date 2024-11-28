@@ -20,7 +20,8 @@ workflow run_wf {
     alra,
     dca,
     knn_smoothing,
-    magic
+    magic,
+    scprint
   ]
 
   // construct list of metrics

@@ -38,6 +38,18 @@
 
 * Update workflows to use core repository dependency (PR #20).
 
+* Update the `common` submodule (PR #24)
+
+* Use the common `checkItemAllowed()` for the method check in the benchmark workflow (PR #24)
+
+* Use the `cxg_immune_cell_atlas` dataset instead of the `cxg_mouse_pancreas_atlas` for testing (PR #24)
+
+* Update `README` (PR #24)
+
+* Add a base method API schema (PR #24)
+
+* Add `dataset_organism` to training input files (PR #24)
+
 ## BUG FIXES
 
 * Update the nextflow workflow dependencies (PR #17).
@@ -57,7 +69,7 @@
 * `process_dataset`: Added a component for processing common datasets into task-ready dataset objects.
 
 * `resources_test/denoising/pancreas` with `src/tasks/denoising/resources_test_scripts/pancreas.sh`.
-  
+
 * `workflows/run`: Added nf-tower test script. (PR #205)
 
 ### V1 MIGRATION
@@ -81,7 +93,7 @@
 ### Changes from V1
 
 * Anndata layers are used to store data instead of obsm
-  
+
 * extended the use of sparse data in methods unless it was not possible
 
 * process_dataset also removes unnecessary data from train and test datasets not needed by the methods and metrics.

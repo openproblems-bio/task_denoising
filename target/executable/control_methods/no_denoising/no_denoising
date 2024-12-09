@@ -180,18 +180,16 @@ function ViashHelp {
   echo "Arguments:"
   echo "    --input_train"
   echo "        type: file, required parameter, file must exist"
-  echo "        example:"
-  echo "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad"
+  echo "        example: resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad"
   echo ""
   echo "    --input_test"
   echo "        type: file, required parameter, file must exist"
-  echo "        example:"
-  echo "resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad"
+  echo "        example: resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad"
   echo ""
   echo "    --output"
   echo "        type: file, required parameter, output, file must exist"
   echo "        example:"
-  echo "resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad"
+  echo "resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad"
 }
 
 # initialise variables
@@ -470,9 +468,9 @@ function ViashDockerfile {
 FROM openproblems/base_python:1.0.0
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component control_methods no_denoising"
-LABEL org.opencontainers.image.created="2024-10-02T18:16:53Z"
+LABEL org.opencontainers.image.created="2024-12-09T12:41:14Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="bfa2730431d47be21afe1c62fc4f2139036126a0"
+LABEL org.opencontainers.image.revision="9c77313765b714beac0fc2a331f568bb81f4da10"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

@@ -45,7 +45,7 @@ if adata_output.n_obs > par["n_obs_limit"]:
     obs_filt = np.ones(dtype=np.bool_, shape=adata_output.n_obs)
     obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
     adata_output = adata_output[obs_index].copy()
-        
+
 # remove all layers except for counts
 print(">> Remove all layers except for counts", flush=True)
 for key in list(adata_output.layers.keys()):
@@ -70,11 +70,12 @@ X_test.eliminate_zeros()
 
 # copy adata to train_set, test_set
 print(">> Create AnnData output objects", flush=True)
+train_uns_keys = ["dataset_id", "dataset_organism"]
 output_train = ad.AnnData(
     layers={"counts": X_train},
     obs=adata_output.obs[[]],
     var=adata_output.var[[]],
-    uns={"dataset_id": adata_output.uns["dataset_id"]}
+    uns={key: adata_output.uns[key] for key in train_uns_keys}
 )
 test_uns_keys = ["dataset_id", "dataset_name", "dataset_url", "dataset_reference", "dataset_summary", "dataset_description", "dataset_organism"]
 output_test = ad.AnnData(

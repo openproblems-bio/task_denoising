@@ -1,11 +1,11 @@
 type: file
-example: "resources_test/common/cxg_mouse_pancreas_atlas/dataset.h5ad"
+example: "resources_test/common/cxg_immune_cell_atlas/dataset.h5ad"
 label: "Common Dataset"
 summary: A subset of the common dataset.
 info:
   format:
     type: h5ad
-    layers: 
+    layers:
       - type: integer
         name: counts
         description: Raw counts
@@ -15,7 +15,7 @@ info:
         name: batch
         description: Batch information
         required: false
-      
+
     uns:
       - type: string
         name: dataset_id

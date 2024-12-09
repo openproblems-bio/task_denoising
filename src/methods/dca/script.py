@@ -3,7 +3,7 @@ from dca.api import dca
 
 ## VIASH START
 par = {
-    'input_train': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad',
+    'input_train': 'resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad',
     'output': 'output_dca.h5ad',
     'epochs': 300,
 }

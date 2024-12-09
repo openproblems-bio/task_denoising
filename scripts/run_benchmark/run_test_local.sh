@@ -20,8 +20,8 @@ nextflow run . \
   -profile docker \
   -resume \
   -c common/nextflow_helpers/labels_ci.config \
-  --id cxg_mouse_pancreas_atlas \
-  --input_train resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad \
-  --input_test resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad \
+  --id cxg_immune_cell_atlas \
+  --input_train resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad \
+  --input_test resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad \
   --output_state state.yaml \
   --publish_dir "$publish_dir"

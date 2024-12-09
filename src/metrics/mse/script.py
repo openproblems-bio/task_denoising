@@ -5,8 +5,8 @@ import scprep
 
 ## VIASH START
 par = {
-    'input_test': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad',
-    'input_prediction': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad',
+    'input_test': 'resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad',
+    'input_prediction': 'resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad',
     'output': 'output_mse.h5ad'
 }
 meta = {
@@ -48,4 +48,3 @@ output.uns["metric_values"] = error
 
 print("Write adata to file", flush=True)
 output.write_h5ad(par['output'], compression="gzip")
-

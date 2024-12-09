@@ -1,5 +1,5 @@
 type: file
-example: "resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad"
+example: "resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad"
 label: "Denoised data"
 summary: A denoised dataset as output by a method.
 info:

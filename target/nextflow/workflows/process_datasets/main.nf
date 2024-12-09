@@ -2918,12 +2918,18 @@ meta = [
                   "name" : "dataset_id",
                   "description" : "A unique identifier for the dataset",
                   "required" : true
+                },
+                {
+                  "name" : "dataset_organism",
+                  "type" : "string",
+                  "description" : "The organism of the sample in the dataset.",
+                  "required" : false
                 }
               ]
             }
           },
           "example" : [
-            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad"
+            "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3001,7 +3007,7 @@ meta = [
             }
           },
           "example" : [
-            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad"
+            "resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -3100,7 +3106,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/process_datasets",
     "viash_version" : "0.9.0",
-    "git_commit" : "bfa2730431d47be21afe1c62fc4f2139036126a0",
+    "git_commit" : "9c77313765b714beac0fc2a331f568bb81f4da10",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

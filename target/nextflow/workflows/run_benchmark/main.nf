@@ -2833,12 +2833,18 @@ meta = [
                   "name" : "dataset_id",
                   "description" : "A unique identifier for the dataset",
                   "required" : true
+                },
+                {
+                  "name" : "dataset_organism",
+                  "type" : "string",
+                  "description" : "The organism of the sample in the dataset.",
+                  "required" : false
                 }
               ]
             }
           },
           "example" : [
-            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad"
+            "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -2916,7 +2922,7 @@ meta = [
             }
           },
           "example" : [
-            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad"
+            "resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -2999,12 +3005,22 @@ meta = [
       ]
     },
     {
-      "name" : "Methods",
+      "name" : "Method filtering",
+      "description" : "Use these arguments to filter methods by name. By default, all methods are\nrun. If `--methods_include` is defined, only those methods are run. If\n`--methods_exclude` is defined, all methods except those specified are run.\nThese arguments are mutually exclusive, so only `--methods_include` OR\n`--methods_exclude` can set but not both.\n",
       "arguments" : [
         {
           "type" : "string",
-          "name" : "--method_ids",
-          "description" : "A list of method ids to run. If not specified, all methods will be run.",
+          "name" : "--methods_include",
+          "description" : "A list of method ids to include. If specified, only these methods will be run.\n",
+          "required" : false,
+          "direction" : "input",
+          "multiple" : true,
+          "multiple_sep" : ";"
+        },
+        {
+          "type" : "string",
+          "name" : "--methods_exclude",
+          "description" : "A list of method ids to exclude. If specified, all methods except the ones listed will be run.\n",
           "required" : false,
           "direction" : "input",
           "multiple" : true,
@@ -3023,6 +3039,10 @@ meta = [
     {
       "type" : "file",
       "path" : "/_viash.yaml"
+    },
+    {
+      "type" : "file",
+      "path" : "/common/nextflow_helpers/helper.nf"
     }
   ],
   "status" : "enabled",
@@ -3142,7 +3162,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/run_benchmark",
     "viash_version" : "0.9.0",
-    "git_commit" : "bfa2730431d47be21afe1c62fc4f2139036126a0",
+    "git_commit" : "9c77313765b714beac0fc2a331f568bb81f4da10",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3256,6 +3276,8 @@ include { poisson } from "${meta.resources_dir}/../../../nextflow/metrics/poisso
 
 // inner workflow
 // user-provided Nextflow code
+include { checkItemAllowed } from "${meta.resources_dir}/helper.nf"
+
 workflow auto {
   findStates(params, meta.config)
     | meta.workflow.run(
@@ -3290,7 +3312,7 @@ workflow run_wf {
    ****************************/
   dataset_ch = input_ch
     // store join id
-    | map{ id, state -> 
+    | map{ id, state ->
       [id, state + ["_meta": [join_id: id]]]
     }
 
@@ -3303,7 +3325,7 @@ workflow run_wf {
         ]
       }
     )
-    
+
   /***************************
    * RUN METHODS AND METRICS *
    ***************************/
@@ -3315,7 +3337,13 @@ workflow run_wf {
 
       // use the 'filter' argument to only run a defined method or all methods
       filter: { id, state, comp ->
-        def method_check = !state.method_ids || state.method_ids.contains(comp.config.name)
+        def method_check = checkItemAllowed(
+          comp.config.name,
+          state.methods_include,
+          state.methods_exclude,
+          "methods_include",
+          "methods_exclude"
+        )
 
         method_check
       },
@@ -3346,7 +3374,7 @@ workflow run_wf {
       },
       // use 'fromState' to fetch the arguments the component requires from the overall state
       fromState: [
-        input_test: "input_test", 
+        input_test: "input_test",
         input_prediction: "method_output"
       ],
       // use 'toState' to publish that component's outputs to the overall state
@@ -3375,7 +3403,7 @@ workflow run_wf {
       def score_uns_yaml_blob = toYamlBlob(score_uns)
       def score_uns_file = tempFile("score_uns.yaml")
       score_uns_file.write(score_uns_yaml_blob)
-      
+
       ["output", [output_scores: score_uns_file]]
     }
 
@@ -3429,7 +3457,7 @@ workflow run_wf {
       ["output", new_state]
     }
 
-  // merge all of the output data 
+  // merge all of the output data
   output_ch = score_ch
     | mix(meta_ch)
     | joinStates{ ids, states ->

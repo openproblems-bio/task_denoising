@@ -2833,12 +2833,18 @@ meta = [
                   "name" : "dataset_id",
                   "description" : "A unique identifier for the dataset",
                   "required" : true
+                },
+                {
+                  "name" : "dataset_organism",
+                  "type" : "string",
+                  "description" : "The organism of the sample in the dataset.",
+                  "required" : false
                 }
               ]
             }
           },
           "example" : [
-            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad"
+            "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -2916,7 +2922,7 @@ meta = [
             }
           },
           "example" : [
-            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad"
+            "resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -2958,7 +2964,7 @@ meta = [
             }
           },
           "example" : [
-            "resources_test/task_denoising/cxg_mouse_pancreas_atlas/denoised.h5ad"
+            "resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad"
           ],
           "must_exist" : true,
           "create_parent" : true,
@@ -2997,8 +3003,8 @@ meta = [
     },
     {
       "type" : "file",
-      "path" : "/resources_test/task_denoising/cxg_mouse_pancreas_atlas",
-      "dest" : "resources_test/task_denoising/cxg_mouse_pancreas_atlas"
+      "path" : "/resources_test/task_denoising/cxg_immune_cell_atlas",
+      "dest" : "resources_test/task_denoising/cxg_immune_cell_atlas"
     }
   ],
   "info" : {
@@ -3011,7 +3017,7 @@ meta = [
     "type_info" : {
       "label" : "Control Method",
       "summary" : "A control method.",
-      "description" : "These components have the same interface as the regular methods\nbut also receive the solution object as input. It serves as a\nstarting point to test the relative accuracy of new methods in\nthe task, and also as a quality control for the metrics defined\nin the task. \n"
+      "description" : "These components have the same interface as the regular methods\nbut also receive the solution object as input. It serves as a\nstarting point to test the relative accuracy of new methods in\nthe task, and also as a quality control for the metrics defined\nin the task.\n"
     }
   },
   "status" : "enabled",
@@ -3084,7 +3090,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/control_methods/no_denoising",
     "viash_version" : "0.9.0",
-    "git_commit" : "bfa2730431d47be21afe1c62fc4f2139036126a0",
+    "git_commit" : "9c77313765b714beac0fc2a331f568bb81f4da10",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

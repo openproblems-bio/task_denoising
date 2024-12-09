@@ -1,5 +1,5 @@
 type: file
-example: resources_test/task_denoising/cxg_mouse_pancreas_atlas/score.h5ad
+example: resources_test/task_denoising/cxg_immune_cell_atlas/score.h5ad
 label: Score
 summary: "File indicating the score of a metric."
 info:

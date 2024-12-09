@@ -1,11 +1,11 @@
 type: file
-example: "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad"
+example: "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad"
 label: "Training data"
 summary: The subset of molecules used for the training dataset
 info:
   format:
     type: h5ad
-    layers: 
+    layers:
       - type: integer
         name: counts
         description: Raw counts
@@ -15,3 +15,7 @@ info:
         name: dataset_id
         description: "A unique identifier for the dataset"
         required: true
+      - name: dataset_organism
+        type: string
+        description: The organism of the sample in the dataset.
+        required: false

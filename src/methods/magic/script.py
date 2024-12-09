@@ -7,7 +7,7 @@ import scipy
 
 ## VIASH START
 par = {
-    "input_train": "resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad",
+    "input_train": "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad",
     "output": "output_magic.h5ad",
     "solver": "exact",
     "norm": "sqrt",
@@ -73,4 +73,3 @@ output.layers["denoised"] = X
 
 print("Write Data", flush=True)
 output.write_h5ad(par["output"], compression="gzip")
-

@@ -2,8 +2,8 @@ import anndata as ad
 
 ## VIASH START
 par = {
-    'input_train': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/train.h5ad',
-    'input_test': 'resources_test/task_denoising/cxg_mouse_pancreas_atlas/test.h5ad',
+    'input_train': 'resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad',
+    'input_test': 'resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad',
     'output': 'output_PD.h5ad',
 }
 meta = {

@@ -15,13 +15,19 @@ echo "  Make sure to run 'scripts/project/build_all_docker_containers.sh'!"
 RUN_ID="testrun_$(date +%Y-%m-%d_%H-%M-%S)"
 publish_dir="temp/results/${RUN_ID}"
 
+# write the parameters to file
+cat > /tmp/params.yaml << HERE
+input_states: resources_test/task_denoising/**/state.yaml
+rename_keys: 'input_train:train;input_test:test'
+output_state: "state.yaml"
+publish_dir: "$publish_dir"
+settings: '{"methods_exclude": ["scprint"]}'
+HERE
+
 nextflow run . \
   -main-script target/nextflow/workflows/run_benchmark/main.nf \
   -profile docker \
   -resume \
+  -entry auto \
   -c common/nextflow_helpers/labels_ci.config \
-  --id cxg_immune_cell_atlas \
-  --input_train resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad \
-  --input_test resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad \
-  --output_state state.yaml \
-  --publish_dir "$publish_dir"
+  -params-file /tmp/params.yaml

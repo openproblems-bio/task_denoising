@@ -269,7 +269,7 @@ build_info:
   output: "target/nextflow/data_processors/process_dataset"
   executable: "target/nextflow/data_processors/process_dataset/main.nf"
   viash_version: "0.9.0"
-  git_commit: "2381015cfa38c0905653b960b98e49a66b3c9950"
+  git_commit: "ff5df5af487e9a5de418f344a979857ebe8a1d2d"
   git_remote: "https://github.com/openproblems-bio/task_denoising"
 package_config:
   name: "task_denoising"

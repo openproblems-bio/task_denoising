@@ -3093,6 +3093,12 @@ meta = [
       }
     },
     {
+      "name" : "methods/scprint",
+      "repository" : {
+        "type" : "local"
+      }
+    },
+    {
       "name" : "metrics/mse",
       "repository" : {
         "type" : "local"
@@ -3162,7 +3168,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/run_benchmark",
     "viash_version" : "0.9.0",
-    "git_commit" : "9c77313765b714beac0fc2a331f568bb81f4da10",
+    "git_commit" : "252731bc7276eb8a6a3398dc4bea026ae70eca80",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3271,6 +3277,7 @@ include { alra } from "${meta.resources_dir}/../../../nextflow/methods/alra/main
 include { dca } from "${meta.resources_dir}/../../../nextflow/methods/dca/main.nf"
 include { knn_smoothing } from "${meta.resources_dir}/../../../nextflow/methods/knn_smoothing/main.nf"
 include { magic } from "${meta.resources_dir}/../../../nextflow/methods/magic/main.nf"
+include { scprint } from "${meta.resources_dir}/../../../nextflow/methods/scprint/main.nf"
 include { mse } from "${meta.resources_dir}/../../../nextflow/metrics/mse/main.nf"
 include { poisson } from "${meta.resources_dir}/../../../nextflow/metrics/poisson/main.nf"
 
@@ -3298,7 +3305,8 @@ workflow run_wf {
     alra,
     dca,
     knn_smoothing,
-    magic
+    magic,
+    scprint
   ]
 
   // construct list of metrics

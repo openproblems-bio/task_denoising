@@ -1,4 +1,4 @@
-# denoising 0.1.0
+# denoising v1.0.0
 
 ## BREAKING CHANGES
 

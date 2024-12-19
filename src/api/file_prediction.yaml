@@ -1,0 +1,21 @@
+type: file
+example: "resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad"
+label: "Denoised data"
+summary: A denoised dataset as output by a method.
+info:
+  format:
+    type: h5ad
+    layers:
+      - type: integer
+        name: denoised
+        description: denoised data
+        required: true
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true

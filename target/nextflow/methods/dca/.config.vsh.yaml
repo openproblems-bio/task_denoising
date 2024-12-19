@@ -1,0 +1,285 @@
+name: "dca"
+namespace: "methods"
+version: "1.0.0"
+argument_groups:
+- name: "Arguments"
+  arguments:
+  - type: "file"
+    name: "--input_train"
+    label: "Training data"
+    summary: "The subset of molecules used for the training dataset"
+    info:
+      format:
+        type: "h5ad"
+        layers:
+        - type: "integer"
+          name: "counts"
+          description: "Raw counts"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - name: "dataset_organism"
+          type: "string"
+          description: "The organism of the sample in the dataset."
+          required: false
+    example:
+    - "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "file"
+    name: "--output"
+    label: "Denoised data"
+    summary: "A denoised dataset as output by a method."
+    info:
+      format:
+        type: "h5ad"
+        layers:
+        - type: "integer"
+          name: "denoised"
+          description: "denoised data"
+          required: true
+        uns:
+        - type: "string"
+          name: "dataset_id"
+          description: "A unique identifier for the dataset"
+          required: true
+        - type: "string"
+          name: "method_id"
+          description: "A unique identifier for the method"
+          required: true
+    example:
+    - "resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "integer"
+    name: "--epochs"
+    description: "Number of total epochs in training"
+    info: null
+    default:
+    - 300
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+resources:
+- type: "python_script"
+  path: "script.py"
+  is_executable: true
+label: "DCA"
+summary: "A deep autoencoder with ZINB loss function to address the dropout effect\
+  \ in count data"
+description: "\"Deep Count Autoencoder\n\nRemoves the dropout effect by taking the\
+  \ count structure, overdispersed nature and sparsity of the data into account \n\
+  using a deep autoencoder with zero-inflated negative binomial (ZINB) loss function.\"\
+  \n"
+test_resources:
+- type: "python_script"
+  path: "check_config.py"
+  is_executable: true
+- type: "python_script"
+  path: "run_and_check_output.py"
+  is_executable: true
+- type: "python_script"
+  path: "check_config.py"
+  is_executable: true
+- type: "file"
+  path: "library.bib"
+- type: "file"
+  path: "resources_test/task_denoising/cxg_immune_cell_atlas"
+  dest: "resources_test/task_denoising/cxg_immune_cell_atlas"
+info:
+  v1:
+    path: "openproblems/tasks/denoising/methods/dca.py"
+    commit: "b3456fd73c04c28516f6df34c57e6e3e8b0dab32"
+  preferred_normalization: "counts"
+  type: "method"
+  type_info:
+    label: "Method"
+    summary: "A method."
+    description: "A denoising method to remove noise (i.e. technical artifacts) from\
+      \ a dataset.\n"
+status: "enabled"
+repositories:
+- type: "github"
+  name: "core"
+  repo: "openproblems-bio/core"
+  tag: "build/main"
+  path: "viash/core"
+license: "MIT"
+references:
+  doi:
+  - "10.1038/s41467-018-07931-2"
+links:
+  repository: "https://github.com/theislab/dca"
+  docker_registry: "ghcr.io"
+  documentation: "https://github.com/theislab/dca#readme"
+runners:
+- type: "executable"
+  id: "executable"
+  docker_setup_strategy: "ifneedbepullelsecachedbuild"
+- type: "nextflow"
+  id: "nextflow"
+  directives:
+    label:
+    - "midtime"
+    - "highmem"
+    - "highcpu"
+    tag: "$id"
+  auto:
+    simplifyInput: true
+    simplifyOutput: false
+    transcript: false
+    publish: false
+  config:
+    labels:
+      lowmem: "memory = 20.Gb"
+      midmem: "memory = 50.Gb"
+      highmem: "memory = 100.Gb"
+      lowcpu: "cpus = 5"
+      midcpu: "cpus = 15"
+      highcpu: "cpus = 30"
+      lowtime: "time = 1.h"
+      midtime: "time = 4.h"
+      hightime: "time = 8.h"
+      veryhightime: "time = 24.h"
+  debug: false
+  container: "docker"
+engines:
+- type: "docker"
+  id: "docker"
+  image: "python:3.9"
+  namespace_separator: "/"
+  setup:
+  - type: "apt"
+    packages:
+    - "procps"
+    interactive: false
+  - type: "python"
+    user: false
+    github:
+    - "openproblems-bio/core#subdirectory=packages/python/openproblems"
+    upgrade: true
+  - type: "python"
+    user: false
+    packages:
+    - "anndata~=0.8.0"
+    - "scanpy"
+    - "pyyaml"
+    - "requests"
+    - "jsonschema"
+    - "git+https://github.com/scottgigante-immunai/dca.git@patch-1"
+    - "numpy<2"
+    upgrade: true
+  entrypoint: []
+  cmd: null
+build_info:
+  config: "src/methods/dca/config.vsh.yaml"
+  runner: "nextflow"
+  engine: "docker"
+  output: "target/nextflow/methods/dca"
+  executable: "target/nextflow/methods/dca/main.nf"
+  viash_version: "0.9.0"
+  git_commit: "252731bc7276eb8a6a3398dc4bea026ae70eca80"
+  git_remote: "https://github.com/openproblems-bio/task_denoising"
+package_config:
+  name: "task_denoising"
+  version: "1.0.0"
+  label: "Denoising"
+  summary: "Removing noise in sparse single-cell RNA-sequencing count data"
+  description: "A key challenge in evaluating denoising methods is the general lack\
+    \ of a ground truth. A\nrecent benchmark study ([Hou et al.,\n2020](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02132-x))\n\
+    relied on flow-sorted datasets, mixture control experiments ([Tian et al.,\n2019](https://www.nature.com/articles/s41592-019-0425-8)),\
+    \ and comparisons with bulk\nRNA-Seq data. Since each of these approaches suffers\
+    \ from specific limitations, it is\ndifficult to combine these different approaches\
+    \ into a single quantitative measure of\ndenoising accuracy. Here, we instead\
+    \ rely on an approach termed molecular\ncross-validation (MCV), which was specifically\
+    \ developed to quantify denoising accuracy\nin the absence of a ground truth ([Batson\
+    \ et al.,\n2019](https://www.biorxiv.org/content/10.1101/786269v1)). In MCV, the\
+    \ observed molecules\nin a given scRNA-Seq dataset are first partitioned between\
+    \ a *training* and a *test*\ndataset. Next, a denoising method is applied to the\
+    \ training dataset. Finally, denoising\naccuracy is measured by comparing the\
+    \ result to the test dataset. The authors show that\nboth in theory and in practice,\
+    \ the measured denoising accuracy is representative of the\naccuracy that would\
+    \ be obtained on a ground truth dataset.\n"
+  info:
+    image: "thumbnail.svg"
+    motivation: "Single-cell RNA-Seq protocols only detect a fraction of the mRNA\
+      \ molecules present\nin each cell. As a result, the measurements (UMI counts)\
+      \ observed for each gene and each\ncell are associated with generally high levels\
+      \ of technical noise ([Grün et al.,\n2014](https://www.nature.com/articles/nmeth.2930)).\
+      \ Denoising describes the task of\nestimating the true expression level of each\
+      \ gene in each cell. In the single-cell\nliterature, this task is also referred\
+      \ to as *imputation*, a term which is typically\nused for missing data problems\
+      \ in statistics. Similar to the use of the terms \"dropout\",\n\"missing data\"\
+      , and \"technical zeros\", this terminology can create confusion about the\n\
+      underlying measurement process ([Sarkar and Stephens,\n2020](https://www.biorxiv.org/content/10.1101/2020.04.07.030007v2)).\n"
+    test_resources:
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/task_denoising/"
+      dest: "resources_test/task_denoising"
+    - type: "s3"
+      path: "s3://openproblems-data/resources_test/common/"
+      dest: "resources_test/common"
+  repositories:
+  - type: "github"
+    name: "core"
+    repo: "openproblems-bio/core"
+    tag: "build/main"
+    path: "viash/core"
+  viash_version: "0.9.0"
+  source: "src"
+  target: "target"
+  config_mods:
+  - ".runners[.type == \"nextflow\"].config.labels := { lowmem : \"memory = 20.Gb\"\
+    , midmem : \"memory = 50.Gb\", highmem : \"memory = 100.Gb\", lowcpu : \"cpus\
+    \ = 5\", midcpu : \"cpus = 15\", highcpu : \"cpus = 30\", lowtime : \"time = 1.h\"\
+    , midtime : \"time = 4.h\", hightime : \"time = 8.h\", veryhightime : \"time =\
+    \ 24.h\" }"
+  authors:
+  - name: "Wesley Lewis"
+    roles:
+    - "author"
+    - "maintainer"
+    info:
+      github: "wes-lewis"
+  - name: "Scott Gigante"
+    roles:
+    - "author"
+    - "maintainer"
+    info:
+      github: "scottgigante"
+      orcid: "0000-0002-4544-2764"
+  - name: "Robrecht Cannoodt"
+    roles:
+    - "author"
+    info:
+      github: "rcannood"
+      orcid: "0000-0003-3641-729X"
+  - name: "Kai Waldrant"
+    roles:
+    - "contributor"
+    info:
+      github: "KaiWaldrant"
+      orcid: "0009-0003-8555-1361"
+  keywords:
+  - "single-cell"
+  - "openproblems"
+  - "benchmark"
+  - "denoising"
+  license: "MIT"
+  organization: "openproblems-bio"
+  links:
+    repository: "https://github.com/openproblems-bio/task_denoising"
+    docker_registry: "ghcr.io"
+    issue_tracker: "https://github.com/openproblems-bio/task_denoising/issues"

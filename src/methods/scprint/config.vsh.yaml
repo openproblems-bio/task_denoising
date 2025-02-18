@@ -48,6 +48,18 @@ arguments:
     type: file
     description: Path to the scPRINT model.
     required: false
+  - name: max_len
+    type: "int"
+    description: Maximum number of genes to consider.
+    default: 4000
+  - name: batch_size
+    type: "int"
+    description: Batch size for processing.
+    default: 32
+  - name: predict_depth_mult
+    type: "float"
+    description: Multiplier for prediction depth.
+    default: 10.0
 
 resources:
   - type: python_script
@@ -59,14 +71,13 @@ engines:
     setup:
       - type: python
         pip:
-          - huggingface_hub
           - scprint
       - type: docker
         run: lamin init --storage ./main --name main --schema bionty
-      - type: python
-        script: import bionty as bt; bt.core.sync_all_sources_to_latest()
       - type: docker
         run: lamin load anonymous/main
+      - type: python
+        script: import bionty as bt; bt.core.sync_all_sources_to_latest()
       - type: python
         script: from scdataloader.utils import populate_my_ontology; populate_my_ontology()
 

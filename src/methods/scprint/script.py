@@ -15,6 +15,9 @@ par = {
     "output": "output.h5ad",
     "model_name": "large",
     "model": None,
+    "predict_depth_mult": 10.0,
+    "max_len": 4000,
+    "batch_size": 32,
 }
 meta = {"name": "scprint"}
 ## VIASH END
@@ -26,9 +29,7 @@ input = ad.read_h5ad(par["input_train"])
 print(input)
 
 print("\n>>> Preprocessing data...", flush=True)
-adata = ad.AnnData(
-    X=input.layers["counts"]
-)
+adata = ad.AnnData(X=input.layers["counts"])
 adata.obs_names = input.obs_names
 adata.var_names = input.var_names
 if input.uns["dataset_organism"] == "homo_sapiens":
@@ -60,27 +61,35 @@ if model_checkpoint_file is None:
         repo_id="jkobject/scPRINT", filename=f"{par['model_name']}.ckpt"
     )
 print(f"Model checkpoint file: '{model_checkpoint_file}'", flush=True)
-model = scPrint.load_from_checkpoint(
-    model_checkpoint_file,
-    transformer="normal",  # Don't use this for GPUs with flashattention
-    precpt_gene_emb=None,
-)
 
 print("\n>>> Denoising data...", flush=True)
 if torch.cuda.is_available():
     print("CUDA is available, using GPU", flush=True)
     precision = "16-mixed"
     dtype = torch.float16
+    transformer = "flash"
 else:
     print("CUDA is not available, using CPU", flush=True)
     precision = "32"
     dtype = torch.float32
-n_cores_available = len(os.sched_getaffinity(0))
-print(f"Using {n_cores_available} worker cores")
+    transformer = "normal"
+
+model = scPrint.load_from_checkpoint(
+    model_checkpoint_file,
+    transformer=transformer,  # Don't use this for GPUs with flashattention
+    precpt_gene_emb=None,
+)
+
+n_cores = min(len(os.sched_getaffinity(0)), 24)
+print(f"Using {n_cores} worker cores")
 denoiser = Denoiser(
-    num_workers=n_cores_available,
+    num_workers=n_cores,
     precision=precision,
-    max_cells=adata.n_obs,
+    max_cells=adata.n_obs + 1000,
+    max_len=par["max_len"],
+    batch_size=par["batch_size"],
+    predict_depth_mult=par["predict_depth_mult"],
+    downsample=False,
     doplot=False,
     dtype=dtype,
 )

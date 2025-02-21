@@ -59,7 +59,7 @@ arguments:
   - name: predict_depth_mult
     type: "float"
     description: Multiplier for prediction depth.
-    default: 10.0
+    default: 6.0
 
 resources:
   - type: python_script

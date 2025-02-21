@@ -15,7 +15,7 @@ par = {
     "output": "output.h5ad",
     "model_name": "large",
     "model": None,
-    "predict_depth_mult": 10.0,
+    "predict_depth_mult": 5.0,
     "max_len": 4000,
     "batch_size": 32,
 }

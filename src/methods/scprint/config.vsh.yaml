@@ -53,7 +53,7 @@ arguments:
     description: Maximum number of genes to consider.
     default: 4000
   - name: batch_size
-    type: "int"
+    type: integer
     description: Batch size for processing.
     default: 32
   - name: predict_depth_mult

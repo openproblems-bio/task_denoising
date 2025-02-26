@@ -49,7 +49,7 @@ arguments:
     description: Path to the scPRINT model.
     required: false
   - name: max_len
-    type: "int"
+    type: integer
     description: Maximum number of genes to consider.
     default: 4000
   - name: batch_size

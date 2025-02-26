@@ -57,7 +57,7 @@ arguments:
     description: Batch size for processing.
     default: 32
   - name: predict_depth_mult
-    type: "float"
+    type: double
     description: Multiplier for prediction depth.
     default: 6.0
 

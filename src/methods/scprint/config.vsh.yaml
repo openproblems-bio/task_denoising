@@ -34,7 +34,7 @@ info:
     scprint_large:
       model_name: "large"
     scprint_medium:
-      model_name: "medium"
+      model_name: "v2-medium"
     scprint_small:
       model_name: "small"
 
@@ -42,8 +42,8 @@ arguments:
   - name: "--model_name"
     type: "string"
     description: Which model to use. Not used if --model is provided.
-    choices: ["large", "medium", "small"]
-    default: "large"
+    choices: ["large", "v2-medium", "small"]
+    default: "v2-medium"
   - name: --model
     type: file
     description: Path to the scPRINT model.
@@ -51,7 +51,7 @@ arguments:
   - name: max_len
     type: integer
     description: Maximum number of genes to consider.
-    default: 4000
+    default: 5000
   - name: batch_size
     type: integer
     description: Batch size for processing.
@@ -59,7 +59,7 @@ arguments:
   - name: predict_depth_mult
     type: double
     description: Multiplier for prediction depth.
-    default: 6.0
+    default: 5.0
 
 resources:
   - type: python_script

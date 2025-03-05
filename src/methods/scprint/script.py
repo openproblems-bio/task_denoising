@@ -16,7 +16,7 @@ par = {
     "model_name": "large",
     "model": None,
     "predict_depth_mult": 5.0,
-    "max_len": 4000,
+    "max_len": 5000,
     "batch_size": 32,
 }
 meta = {"name": "scprint"}
@@ -74,11 +74,21 @@ else:
     dtype = torch.float32
     transformer = "normal"
 
-model = scPrint.load_from_checkpoint(
-    model_checkpoint_file,
-    transformer=transformer,  # Don't use this for GPUs with flashattention
-    precpt_gene_emb=None,
-)
+m = torch.load(model_checkpoint_file, map_location=torch.device("cpu"))
+if "label_counts" in m["hyper_parameters"]:
+    model = scPrint.load_from_checkpoint(
+        model_checkpoint_file,
+        transformer=transformer,  # Don't use this for GPUs with flashattention
+        precpt_gene_emb=None,
+        classes=m["hyper_parameters"]["label_counts"],
+    )
+else:
+    model = scPrint.load_from_checkpoint(
+        model_checkpoint_file,
+        transformer=transformer,  # Don't use this for GPUs with flashattention
+        precpt_gene_emb=None,
+    )
+del m
 
 n_cores = min(len(os.sched_getaffinity(0)), 24)
 print(f"Using {n_cores} worker cores")
@@ -92,30 +102,20 @@ denoiser = Denoiser(
     downsample=False,
     doplot=False,
     dtype=dtype,
+    how="most var",
 )
-_, idxs, genes, expr_pred = denoiser(model, adata)
-print(f"Predicted expression dimensions: {expr_pred.shape}")
+_, idxs, output = denoiser(model, adata)
+print(f"Predicted expression dimensions: {output.shape}")
 
-print("\n>>> Applying denoising...", flush=True)
-adata.X = adata.X.tolil()
-idxs = idxs if idxs is not None else range(adata.shape[0])
-for i, idx in enumerate(idxs):
-    adata.X[idx, adata.var.index.get_indexer(genes)] = expr_pred[i]
-adata.X = adata.X.tocsr()
-print(adata)
 
-print("\n>>> Storing output...", flush=True)
-output = ad.AnnData(
-    layers={
-        "denoised": adata.X[:, adata.var.index.get_indexer(input.var_names)],
-    },
-    obs=input.obs[[]],
-    var=input.var[[]],
-    uns={
-        "dataset_id": input.uns["dataset_id"],
-        "method_id": meta["name"],
-    },
-)
+output.layers["denoised"] = output.layers["scprint_mu"]
+output.uns["method_id"] = meta["name"]
+output.uns["dataset_id"] = input.uns["dataset_id"]
+output.obs = input.obs[[]]
+
+print("\n>>> subsetting output to original genes...", flush=True)
+output = output[:, output.var.index.get_indexer(input.var_names)]
+
 print(output)
 
 print("\n>>> Writing output AnnData to file...", flush=True)

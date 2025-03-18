@@ -7,7 +7,6 @@ from huggingface_hub import hf_hub_download
 from scdataloader import Preprocessor
 from scprint import scPrint
 from scprint.tasks import Denoiser
-import numpy as np
 
 ## VIASH START
 par = {

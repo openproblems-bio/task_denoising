@@ -3090,7 +3090,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/control_methods/no_denoising",
     "viash_version" : "0.9.0",
-    "git_commit" : "ff5df5af487e9a5de418f344a979857ebe8a1d2d",
+    "git_commit" : "06d5439b1c89662216bad49ddb1218570e819ca4",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3170,6 +3170,16 @@ meta = [
         "info" : {
           "github" : "KaiWaldrant",
           "orcid" : "0009-0003-8555-1361"
+        }
+      },
+      {
+        "name" : "Jeremie Kalfon",
+        "roles" : [
+          "contributor"
+        ],
+        "info" : {
+          "github" : "jkobject",
+          "orcid" : "0000-0002-2818-9728"
         }
       }
     ],

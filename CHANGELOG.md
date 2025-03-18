@@ -1,3 +1,7 @@
+# denoising devel
+
+* Update scPRINT, including a new default model (PR #26)
+
 # denoising v1.0.0
 
 ## BREAKING CHANGES

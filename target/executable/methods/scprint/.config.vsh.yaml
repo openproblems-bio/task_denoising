@@ -67,11 +67,11 @@ argument_groups:
     description: "Which model to use. Not used if --model is provided."
     info: null
     default:
-    - "large"
+    - "v2-medium"
     required: false
     choices:
     - "large"
-    - "medium"
+    - "v2-medium"
     - "small"
     direction: "input"
     multiple: false
@@ -82,6 +82,36 @@ argument_groups:
     info: null
     must_exist: true
     create_parent: true
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "integer"
+    name: "max_len"
+    description: "Maximum number of genes to consider."
+    info: null
+    default:
+    - 5000
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "integer"
+    name: "batch_size"
+    description: "Batch size for processing."
+    info: null
+    default:
+    - 32
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "double"
+    name: "predict_depth_mult"
+    description: "Multiplier for prediction depth."
+    info: null
+    default:
+    - 5.0
     required: false
     direction: "input"
     multiple: false
@@ -111,7 +141,7 @@ info:
     scprint_large:
       model_name: "large"
     scprint_medium:
-      model_name: "medium"
+      model_name: "v2-medium"
     scprint_small:
       model_name: "small"
   type: "method"
@@ -176,20 +206,21 @@ engines:
   - type: "python"
     user: false
     pip:
-    - "huggingface_hub"
-    - "scprint"
+    - "git+https://github.com/cantinilab/scPRINT.git@d8cc270b099c8d5dacf6913acc26f2b696685b2b"
+    - "gseapy==1.1.2"
+    - "git+https://github.com/jkobject/scDataLoader.git@c67c24a2e5c62399912be39169aae76e29e108aa"
     upgrade: true
   - type: "docker"
     run:
     - "lamin init --storage ./main --name main --schema bionty"
+  - type: "docker"
+    run:
+    - "lamin load anonymous/main"
   - type: "python"
     user: false
     script:
     - "import bionty as bt; bt.core.sync_all_sources_to_latest()"
     upgrade: true
-  - type: "docker"
-    run:
-    - "lamin load anonymous/main"
   - type: "python"
     user: false
     script:
@@ -204,7 +235,7 @@ build_info:
   output: "target/executable/methods/scprint"
   executable: "target/executable/methods/scprint/scprint"
   viash_version: "0.9.0"
-  git_commit: "ff5df5af487e9a5de418f344a979857ebe8a1d2d"
+  git_commit: "06d5439b1c89662216bad49ddb1218570e819ca4"
   git_remote: "https://github.com/openproblems-bio/task_denoising"
 package_config:
   name: "task_denoising"
@@ -286,6 +317,12 @@ package_config:
     info:
       github: "KaiWaldrant"
       orcid: "0009-0003-8555-1361"
+  - name: "Jeremie Kalfon"
+    roles:
+    - "contributor"
+    info:
+      github: "jkobject"
+      orcid: "0000-0002-2818-9728"
   keywords:
   - "single-cell"
   - "openproblems"

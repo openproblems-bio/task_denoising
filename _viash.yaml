@@ -70,7 +70,11 @@ authors:
     info:
       github: KaiWaldrant
       orcid: "0009-0003-8555-1361"
-
+  - name: Jeremie Kalfon
+    roles: [ contributor ]
+    info:
+      github: jkobject
+      orcid: "0000-0002-2818-9728"
 repositories:
   - name: core
     type: github

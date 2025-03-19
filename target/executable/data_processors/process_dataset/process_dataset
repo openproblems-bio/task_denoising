@@ -494,9 +494,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "numpy" "scipy"
 
 LABEL org.opencontainers.image.description="Companion container for running component data_processors process_dataset"
-LABEL org.opencontainers.image.created="2025-03-18T10:15:31Z"
+LABEL org.opencontainers.image.created="2025-03-19T21:49:43Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="06d5439b1c89662216bad49ddb1218570e819ca4"
+LABEL org.opencontainers.image.revision="61919187b12a73666f4f030e3811636e7fed024b"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -1189,6 +1189,7 @@ adata = ad.read_h5ad(par["input"])
 # limit to max number of observations
 adata_output = adata.copy()
 
+#subsample to largest batch, by default
 if "batch" in adata.obs:
     print(f">> Subsampling observations by largest batch", flush=True)
     batch_counts = adata.obs.groupby('batch').size()
@@ -1196,13 +1197,14 @@ if "batch" in adata.obs:
     selected_batch = sorted_batches.index[0]
     adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
 
-if adata_output.n_obs > par["n_obs_limit"]:
-    print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
-    print(f">> Setting seed to {par['seed']}", flush=True)
-    random.seed(par["seed"])
-    obs_filt = np.ones(dtype=np.bool_, shape=adata_output.n_obs)
-    obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
-    adata_output = adata_output[obs_index].copy()
+#downsample above chosen n_obs_limit
+#if adata_output.n_obs > par["n_obs_limit"]:
+    #print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
+    #print(f">> Setting seed to {par['seed']}", flush=True)
+    #random.seed(par["seed"])
+    #obs_filt = np.ones(dtype=np.bool_, shape=adata_output.n_obs)
+    #obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
+    #adata_output = adata_output[obs_index].copy()
 
 # remove all layers except for counts
 print(">> Remove all layers except for counts", flush=True)

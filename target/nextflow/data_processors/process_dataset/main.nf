@@ -3178,7 +3178,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/data_processors/process_dataset",
     "viash_version" : "0.9.0",
-    "git_commit" : "06d5439b1c89662216bad49ddb1218570e819ca4",
+    "git_commit" : "61919187b12a73666f4f030e3811636e7fed024b",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3352,6 +3352,7 @@ adata = ad.read_h5ad(par["input"])
 # limit to max number of observations
 adata_output = adata.copy()
 
+#subsample to largest batch, by default
 if "batch" in adata.obs:
     print(f">> Subsampling observations by largest batch", flush=True)
     batch_counts = adata.obs.groupby('batch').size()
@@ -3359,13 +3360,14 @@ if "batch" in adata.obs:
     selected_batch = sorted_batches.index[0]
     adata_output = adata[adata.obs["batch"]==selected_batch,:].copy()
 
-if adata_output.n_obs > par["n_obs_limit"]:
-    print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
-    print(f">> Setting seed to {par['seed']}", flush=True)
-    random.seed(par["seed"])
-    obs_filt = np.ones(dtype=np.bool_, shape=adata_output.n_obs)
-    obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
-    adata_output = adata_output[obs_index].copy()
+#downsample above chosen n_obs_limit
+#if adata_output.n_obs > par["n_obs_limit"]:
+    #print(f">> Randomly subsampling observations to {par['n_obs_limit']}", flush=True)
+    #print(f">> Setting seed to {par['seed']}", flush=True)
+    #random.seed(par["seed"])
+    #obs_filt = np.ones(dtype=np.bool_, shape=adata_output.n_obs)
+    #obs_index = np.random.choice(np.where(obs_filt)[0], par["n_obs_limit"], replace=False)
+    #adata_output = adata_output[obs_index].copy()
 
 # remove all layers except for counts
 print(">> Remove all layers except for counts", flush=True)

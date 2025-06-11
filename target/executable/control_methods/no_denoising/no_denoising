@@ -465,12 +465,12 @@ function ViashDockerfile {
 
   if [[ "$engine_id" == "docker" ]]; then
     cat << 'VIASHDOCKER'
-FROM openproblems/base_python:1.0.0
+FROM openproblems/base_python:1
 ENTRYPOINT []
 LABEL org.opencontainers.image.description="Companion container for running component control_methods no_denoising"
-LABEL org.opencontainers.image.created="2025-03-19T21:49:43Z"
+LABEL org.opencontainers.image.created="2025-06-11T11:45:54Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="61919187b12a73666f4f030e3811636e7fed024b"
+LABEL org.opencontainers.image.revision="01e02de1cbdd0eafa291914c8839a79df143c78f"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

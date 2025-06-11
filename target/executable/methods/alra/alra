@@ -477,16 +477,16 @@ function ViashDockerfile {
 
   if [[ "$engine_id" == "docker" ]]; then
     cat << 'VIASHDOCKER'
-FROM openproblems/base_r:1.0.0
+FROM openproblems/base_r:1
 ENTRYPOINT []
 RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
   Rscript -e 'remotes::install_cran(c("Matrix", "rsvd"), repos = "https://cran.rstudio.com")' && \
   Rscript -e 'remotes::install_github(c("KlugerLab/ALRA"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component methods alra"
-LABEL org.opencontainers.image.created="2025-03-19T21:49:44Z"
+LABEL org.opencontainers.image.created="2025-06-11T11:45:54Z"
 LABEL org.opencontainers.image.source="https://github.com/KlugerLab/ALRA"
-LABEL org.opencontainers.image.revision="61919187b12a73666f4f030e3811636e7fed024b"
+LABEL org.opencontainers.image.revision="01e02de1cbdd0eafa291914c8839a79df143c78f"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

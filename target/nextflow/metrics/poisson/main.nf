@@ -3096,7 +3096,7 @@ meta = [
     {
       "type" : "docker",
       "id" : "docker",
-      "image" : "openproblems/base_python:1.0.0",
+      "image" : "openproblems/base_python:1",
       "namespace_separator" : "/",
       "setup" : [
         {
@@ -3117,7 +3117,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/metrics/poisson",
     "viash_version" : "0.9.0",
-    "git_commit" : "61919187b12a73666f4f030e3811636e7fed024b",
+    "git_commit" : "01e02de1cbdd0eafa291914c8839a79df143c78f",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

@@ -1,0 +1,80 @@
+# The API specifies which type of component this is.
+# It contains specifications for:
+#   - The input/output files
+#   - Common parameters
+#   - A unit test
+__merge__: ../../api/comp_method.yaml
+
+# A unique identifier for your component (required).
+# Can contain only lowercase letters or underscores.
+name: cellmapper
+# A relatively short label, used when rendering visualisations (required)
+label: CellMapper
+# A one sentence summary of how this method works (required). Used when 
+# rendering summary tables.
+summary: "CellMapper is a general framework for k-NN based mapping tasks in single-cell genomics"
+# A multi-line description of how this component works (required). Used
+# when rendering reference documentation.
+description: |
+  k-NN-based mapping of cells across representations to tranfer labels, embeddings and expression values. 
+  Works for millions of cells, on CPU and GPU, across molecular modalities, between spatial and non-spatial data, 
+  for arbitrary query and reference datasets. We treat data denoising as self-mapping, were the query and reference datasets are the same.
+references:
+  doi: 
+    - 10.5281/zenodo.15683594
+#   bibtex:
+#     - |
+#       @article{foo,
+#         title={Foo},
+#         author={Bar},
+#         journal={Baz},
+#         year={2024}
+#       }
+links:
+  # URL to the documentation for this method (required).
+  documentation: https://cellmapper.readthedocs.io/en/latest/
+  # URL to the code repository for this method (required).
+  repository: https://github.com/quadbio/cellmapper
+
+
+
+# Metadata for your component
+info:
+  # Which normalisation method this component prefers to use (required).
+  preferred_normalization: counts
+
+# Component-specific parameters (optional)
+# arguments:
+#   - name: "--n_neighbors"
+#     type: "integer"
+#     default: 5
+#     description: Number of neighbors to use.
+
+# Resources required to run the component
+resources:
+  # The script of your component (required)
+  - type: python_script
+    path: script.py
+  # Additional resources your script needs (optional)
+  # - type: file
+  #   path: weights.pt
+
+engines:
+  # Specifications for the Docker image for this component.
+  - type: docker
+    image: openproblems/base_python:1
+    # Add custom dependencies here (optional). For more information, see
+    # https://viash.io/reference/config/engines/docker/#setup .
+    setup:
+      - type: python
+        packages: 
+          - cellmapper>=0.2.0
+          - scanpy
+
+runners:
+  # This platform allows running the component natively
+  - type: executable
+  # Allows turning the component into a Nextflow module / pipeline.
+  - type: nextflow
+    directives:
+      label: [midtime,midmem,midcpu]

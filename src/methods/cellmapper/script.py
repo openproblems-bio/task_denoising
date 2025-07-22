@@ -1,5 +1,7 @@
 import anndata as ad
+import numpy as np
 import scanpy as sc
+from scipy.sparse import issparse
 import cellmapper as cm
 
 ## VIASH START
@@ -9,6 +11,7 @@ par = {
   'input_train': 'resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad',
   'output': 'output_cellmapper.h5ad',
   'kernel_method': 'umap',
+  'norm': 'log',
   't': 3
 }
 meta = {
@@ -28,7 +31,18 @@ input_train.X = input_train.layers["counts"].copy()
 
 print('Preprocess the data', flush=True)
 sc.pp.normalize_total(input_train, target_sum=1e4)
-sc.pp.log1p(input_train)
+
+if par['norm'] == 'sqrt':
+    # Safe square root for both sparse and dense matrices
+    if issparse(input_train.X):
+        input_train.X.data = np.sqrt(input_train.X.data)
+    else:
+        input_train.X = np.sqrt(input_train.X)
+elif par['norm'] == 'log':
+    sc.pp.log1p(input_train)
+else:
+    raise ValueError(f"Unknown normalization method: {par['norm']}")
+
 sc.pp.highly_variable_genes(input_train)
 sc.pp.pca(input_train)
 

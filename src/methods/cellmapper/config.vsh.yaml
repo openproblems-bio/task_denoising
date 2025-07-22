@@ -15,10 +15,15 @@ links:
 info:
   preferred_normalization: counts
   variants: 
-    cellmapper-jaccard:
+    cellmapper_jaccard_log:
       kernel_method: jaccard
-    cellmapper-umap:
+      norm: log
+    cellmapper_umap_log:
       kernel_method: umap
+      norm: log
+    cellmapper_umap_sqrt:
+      kernel_method: umap
+      norm: sqrt
 arguments:
   - name: "--kernel_method"
     type: "string"
@@ -29,6 +34,11 @@ arguments:
     type: "integer"
     default: 3
     description: Number of steps for data smoothing.
+  - name: "--norm"
+    type: string
+    choices: ["sqrt", "log"]
+    default: "log"
+    description: Normalization method
 resources:
   - type: python_script
     path: script.py

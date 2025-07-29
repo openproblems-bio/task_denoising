@@ -467,9 +467,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scprep" "numpy<2"
 
 LABEL org.opencontainers.image.description="Companion container for running component metrics poisson"
-LABEL org.opencontainers.image.created="2025-06-11T11:45:53Z"
+LABEL org.opencontainers.image.created="2025-07-29T18:28:31Z"
 LABEL org.opencontainers.image.source="https://github.com/openproblems-bio/task_denoising"
-LABEL org.opencontainers.image.revision="01e02de1cbdd0eafa291914c8839a79df143c78f"
+LABEL org.opencontainers.image.revision="a7fc6a0a88fb8b752be40df420129f2bb2e592bb"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

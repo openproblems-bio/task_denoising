@@ -3075,6 +3075,12 @@ meta = [
       }
     },
     {
+      "name" : "methods/cellmapper",
+      "repository" : {
+        "type" : "local"
+      }
+    },
+    {
       "name" : "methods/dca",
       "repository" : {
         "type" : "local"
@@ -3168,7 +3174,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/run_benchmark",
     "viash_version" : "0.9.0",
-    "git_commit" : "01e02de1cbdd0eafa291914c8839a79df143c78f",
+    "git_commit" : "a7fc6a0a88fb8b752be40df420129f2bb2e592bb",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3259,6 +3265,16 @@ meta = [
           "github" : "jkobject",
           "orcid" : "0000-0002-2818-9728"
         }
+      },
+      {
+        "name" : "Marius Lange",
+        "roles" : [
+          "contributor"
+        ],
+        "info" : {
+          "github" : "marius1311",
+          "orcid" : "0000-0002-4846-1266"
+        }
       }
     ],
     "keywords" : [
@@ -3284,6 +3300,7 @@ include { extract_uns_metadata } from "${meta.root_dir}/dependencies/github/open
 include { no_denoising } from "${meta.resources_dir}/../../../nextflow/control_methods/no_denoising/main.nf"
 include { perfect_denoising } from "${meta.resources_dir}/../../../nextflow/control_methods/perfect_denoising/main.nf"
 include { alra } from "${meta.resources_dir}/../../../nextflow/methods/alra/main.nf"
+include { cellmapper } from "${meta.resources_dir}/../../../nextflow/methods/cellmapper/main.nf"
 include { dca } from "${meta.resources_dir}/../../../nextflow/methods/dca/main.nf"
 include { knn_smoothing } from "${meta.resources_dir}/../../../nextflow/methods/knn_smoothing/main.nf"
 include { magic } from "${meta.resources_dir}/../../../nextflow/methods/magic/main.nf"
@@ -3313,6 +3330,7 @@ workflow run_wf {
     no_denoising,
     perfect_denoising,
     alra,
+    cellmapper,
     dca,
     knn_smoothing,
     magic,

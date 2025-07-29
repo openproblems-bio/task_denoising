@@ -3036,7 +3036,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/methods/knn_smoothing",
     "viash_version" : "0.9.0",
-    "git_commit" : "01e02de1cbdd0eafa291914c8839a79df143c78f",
+    "git_commit" : "a7fc6a0a88fb8b752be40df420129f2bb2e592bb",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3126,6 +3126,16 @@ meta = [
         "info" : {
           "github" : "jkobject",
           "orcid" : "0000-0002-2818-9728"
+        }
+      },
+      {
+        "name" : "Marius Lange",
+        "roles" : [
+          "contributor"
+        ],
+        "info" : {
+          "github" : "marius1311",
+          "orcid" : "0000-0002-4846-1266"
         }
       }
     ],

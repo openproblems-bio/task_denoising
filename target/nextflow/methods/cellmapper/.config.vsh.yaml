@@ -1,13 +1,13 @@
-name: "poisson"
-namespace: "metrics"
+name: "cellmapper"
+namespace: "methods"
 version: "build_main"
 argument_groups:
 - name: "Arguments"
   arguments:
   - type: "file"
-    name: "--input_test"
-    label: "Test data"
-    summary: "The subset of molecules used for the test dataset"
+    name: "--input_train"
+    label: "Training data"
+    summary: "The subset of molecules used for the training dataset"
     info:
       format:
         type: "h5ad"
@@ -21,36 +21,12 @@ argument_groups:
           name: "dataset_id"
           description: "A unique identifier for the dataset"
           required: true
-        - name: "dataset_name"
-          type: "string"
-          description: "Nicely formatted name."
-          required: true
-        - type: "string"
-          name: "dataset_url"
-          description: "Link to the original source of the dataset."
-          required: false
-        - name: "dataset_reference"
-          type: "string"
-          description: "Bibtex reference of the paper in which the dataset was published."
-          required: false
-        - name: "dataset_summary"
-          type: "string"
-          description: "Short description of the dataset."
-          required: true
-        - name: "dataset_description"
-          type: "string"
-          description: "Long description of the dataset."
-          required: true
         - name: "dataset_organism"
           type: "string"
           description: "The organism of the sample in the dataset."
           required: false
-        - name: "train_sum"
-          type: "integer"
-          description: "The total number of counts in the training dataset."
-          required: true
     example:
-    - "resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad"
+    - "resources_test/task_denoising/cxg_immune_cell_atlas/train.h5ad"
     must_exist: true
     create_parent: true
     required: true
@@ -58,7 +34,7 @@ argument_groups:
     multiple: false
     multiple_sep: ";"
   - type: "file"
-    name: "--input_prediction"
+    name: "--output"
     label: "Denoised data"
     summary: "A denoised dataset as output by a method."
     info:
@@ -83,48 +59,64 @@ argument_groups:
     must_exist: true
     create_parent: true
     required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--kernel_method"
+    description: "Kernel function to compute k-NN edge weights."
+    info: null
+    default:
+    - "umap"
+    required: false
+    choices:
+    - "jaccard"
+    - "umap"
     direction: "input"
     multiple: false
     multiple_sep: ";"
-  - type: "file"
-    name: "--output"
-    label: "Score"
-    summary: "File indicating the score of a metric."
-    info:
-      format:
-        type: "h5ad"
-        uns:
-        - type: "string"
-          name: "dataset_id"
-          description: "A unique identifier for the dataset"
-          required: true
-        - type: "string"
-          name: "method_id"
-          description: "A unique identifier for the method"
-          required: true
-        - type: "string"
-          name: "metric_ids"
-          description: "One or more unique metric identifiers"
-          multiple: true
-          required: true
-        - type: "double"
-          name: "metric_values"
-          description: "The metric values obtained for the given prediction. Must\
-            \ be of same length as 'metric_ids'."
-          multiple: true
-          required: true
-    example:
-    - "resources_test/task_denoising/cxg_immune_cell_atlas/score.h5ad"
-    must_exist: true
-    create_parent: true
-    required: true
-    direction: "output"
+  - type: "integer"
+    name: "--t"
+    description: "Number of steps for data smoothing."
+    info: null
+    default:
+    - 3
+    required: false
+    direction: "input"
+    multiple: false
+    multiple_sep: ";"
+  - type: "string"
+    name: "--norm"
+    description: "Normalization method"
+    info: null
+    default:
+    - "log"
+    required: false
+    choices:
+    - "sqrt"
+    - "log"
+    direction: "input"
     multiple: false
     multiple_sep: ";"
 resources:
 - type: "python_script"
   path: "script.py"
   is_executable: true
+label: "CellMapper"
+summary: "CellMapper is a general framework for k-NN based mapping tasks in single-cell\
+  \ and spatial genomics"
+description: "k-NN-based mapping of cells across representations to transfer labels,\
+  \ embeddings and expression values. \nWorks for millions of cells, on CPU and GPU,\
+  \ across molecular modalities, between spatial and non-spatial data, \nfor arbitrary\
+  \ query and reference datasets. We treat data denoising as self-mapping, where the\
+  \ query and reference datasets are the same. \nBased on some joint representation\
+  \ (here: PCA), CellMapper computes a k-NN graph and applies a kernel function to\
+  \ compute edge weights. Here,\nwe use a kernel based on Jaccard similarity (as e.g.\
+  \ in HNOCA-tools) or UMAP's `fuzzy_simplicial_set` (as in scanpy). Given the row-normalized\
+  \ \nweighted adjacency matrix, we simulate a t-step random walk to smooth the data,\
+  \ similar to MAGIC. For large t-values, we also provide a spectral \napproximation\
+  \ of the application of the t-step transition matrix to the data (not used here).\
+  \ \n"
 test_resources:
 - type: "python_script"
   path: "check_config.py"
@@ -132,32 +124,32 @@ test_resources:
 - type: "python_script"
   path: "run_and_check_output.py"
   is_executable: true
+- type: "python_script"
+  path: "check_config.py"
+  is_executable: true
 - type: "file"
   path: "library.bib"
 - type: "file"
   path: "resources_test/task_denoising/cxg_immune_cell_atlas"
   dest: "resources_test/task_denoising/cxg_immune_cell_atlas"
 info:
-  metrics:
-  - name: "poisson"
-    label: "Poisson Loss"
-    summary: "The Poisson log likelihood of the true counts observed in the distribution\
-      \ of denoised counts"
-    description: "The Poisson log likelihood of observing the true counts of the test\
-      \ dataset given the distribution given in the denoised dataset."
-    references:
-      doi: "10.1101/786269"
-    v1:
-      path: "openproblems/tasks/denoising/metrics/poisson.py"
-      commit: "b3456fd73c04c28516f6df34c57e6e3e8b0dab32"
-    maximize: false
-    min: 0
-    max: "+.inf"
-  type: "metric"
+  preferred_normalization: "counts"
+  variants:
+    cellmapper_jaccard_log:
+      kernel_method: "jaccard"
+      norm: "log"
+    cellmapper_umap_log:
+      kernel_method: "umap"
+      norm: "log"
+    cellmapper_umap_sqrt:
+      kernel_method: "umap"
+      norm: "sqrt"
+  type: "method"
   type_info:
-    label: "Metric"
-    summary: "A metric."
-    description: "A metric for evaluating denoised datasets.\n"
+    label: "Method"
+    summary: "A method."
+    description: "A denoising method to remove noise (i.e. technical artifacts) from\
+      \ a dataset.\n"
 status: "enabled"
 repositories:
 - type: "github"
@@ -166,9 +158,13 @@ repositories:
   tag: "build/main"
   path: "viash/core"
 license: "MIT"
+references:
+  doi:
+  - "10.5281/zenodo.15683594"
 links:
-  repository: "https://github.com/openproblems-bio/task_denoising"
+  repository: "https://github.com/quadbio/cellmapper"
   docker_registry: "ghcr.io"
+  documentation: "https://cellmapper.readthedocs.io/en/latest/"
 runners:
 - type: "executable"
   id: "executable"
@@ -178,7 +174,7 @@ runners:
   directives:
     label:
     - "midtime"
-    - "highmem"
+    - "midmem"
     - "midcpu"
     tag: "$id"
   auto:
@@ -208,18 +204,17 @@ engines:
   setup:
   - type: "python"
     user: false
-    pypi:
-    - "scprep"
-    - "numpy<2"
+    packages:
+    - "cellmapper>=0.2.1"
     upgrade: true
   entrypoint: []
   cmd: null
 build_info:
-  config: "src/metrics/poisson/config.vsh.yaml"
+  config: "src/methods/cellmapper/config.vsh.yaml"
   runner: "nextflow"
   engine: "docker"
-  output: "target/nextflow/metrics/poisson"
-  executable: "target/nextflow/metrics/poisson/main.nf"
+  output: "target/nextflow/methods/cellmapper"
+  executable: "target/nextflow/methods/cellmapper/main.nf"
   viash_version: "0.9.0"
   git_commit: "a7fc6a0a88fb8b752be40df420129f2bb2e592bb"
   git_remote: "https://github.com/openproblems-bio/task_denoising"

@@ -3,9 +3,14 @@ name: cellmapper
 label: CellMapper
 summary: "CellMapper is a general framework for k-NN based mapping tasks in single-cell and spatial genomics"
 description: |
-  k-NN-based mapping of cells across representations to tranfer labels, embeddings and expression values. 
+  k-NN-based mapping of cells across representations to transfer labels, embeddings and expression values. 
   Works for millions of cells, on CPU and GPU, across molecular modalities, between spatial and non-spatial data, 
-  for arbitrary query and reference datasets. We treat data denoising as self-mapping, were the query and reference datasets are the same.
+  for arbitrary query and reference datasets. We treat data denoising as self-mapping, where the query and reference datasets are the same. 
+  Based on some joint representation (here: PCA), CellMapper computes a k-NN graph and applies a kernel function to compute edge weights. Here,
+  we use a kernel based on Jaccard similarity (as e.g. in HNOCA-tools) or UMAP's `fuzzy_simplicial_set` (as in scanpy). Given the row-normalized 
+  weighted adjacency matrix, we simulate a t-step random walk to smooth the data, similar to MAGIC. For large t-values, we also provide a spectral 
+  approximation of the application of the t-step transition matrix to the data (not used here). 
+
 references:
   doi: 
     - 10.5281/zenodo.15683594

@@ -55,7 +55,7 @@ cmap.compute_mapping_matrix(kernel_method=par['kernel_method'])
 
 print('Run data smoothing', flush=True)
 
-# run t-step smothing and write back to input 
+# run t-step smoothing and write back to input 
 cmap.map_layers(key="counts", t=par['t'])
 
 print("Write output AnnData to file", flush=True)

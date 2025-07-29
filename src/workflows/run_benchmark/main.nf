@@ -18,6 +18,7 @@ workflow run_wf {
     no_denoising,
     perfect_denoising,
     alra,
+    cellmapper,
     dca,
     knn_smoothing,
     magic,

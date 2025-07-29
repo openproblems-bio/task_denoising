@@ -1,5 +1,6 @@
 # denoising devel
 
+* Add new method: CellMapper (PR #31)
 * Update scPRINT, including a new default model (PR #26)
 
 # denoising v1.0.0

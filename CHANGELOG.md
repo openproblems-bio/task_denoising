@@ -1,7 +1,19 @@
 # denoising devel
 
+## NEW FUNCTIONALITY
+
 * Add new method: CellMapper (PR #31)
+
+## MINOR CHANGES
+
+* Update the Viash version to 0.9.4 (PR #32)
+
+* Dependencies were moved to main openproblems repository (PR #32)
+
+## BUG FIXES
+
 * Update scPRINT, including a new default model (PR #26)
+
 
 # denoising v1.0.0
 

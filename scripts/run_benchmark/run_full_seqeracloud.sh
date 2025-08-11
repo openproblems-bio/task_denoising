@@ -10,7 +10,7 @@ set -e
 
 # generate a unique id
 RUN_ID="run_$(date +%Y-%m-%d_%H-%M-%S)"
-publish_dir="s3://openproblems-data/resources/task_denoising/results/${RUN_ID}"
+publish_dir="s3://openproblems-data/resources/results/${RUN_ID}"
 
 # write the parameters to file
 cat > /tmp/params.yaml << HERE
@@ -21,11 +21,10 @@ publish_dir: "$publish_dir"
 HERE
 
 tw launch https://github.com/openproblems-bio/task_denoising.git \
-  --revision v1.0.0 \
+  --revision build/main \
   --pull-latest \
   --main-script target/nextflow/workflows/run_benchmark/main.nf \
   --workspace 53907369739130 \
-  --compute-env 5DwwhQoBi0knMSGcwThnlF \
   --params-file /tmp/params.yaml \
   --entry-name auto \
   --config common/nextflow_helpers/labels_tw.config \

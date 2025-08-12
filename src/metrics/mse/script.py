@@ -1,22 +1,20 @@
 import anndata as ad
 import scanpy as sc
-import sklearn.metrics
 import scprep
+import sklearn.metrics
 
 ## VIASH START
 par = {
-    'input_test': 'resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad',
-    'input_prediction': 'resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad',
-    'output': 'output_mse.h5ad'
+    "input_test": "resources_test/task_denoising/cxg_immune_cell_atlas/test.h5ad",
+    "input_prediction": "resources_test/task_denoising/cxg_immune_cell_atlas/denoised.h5ad",
+    "output": "output_mse.h5ad",
 }
-meta = {
-    'name': 'mse'
-}
+meta = {"name": "mse"}
 ## VIASH END
 
 print("Load data", flush=True)
-input_denoised = ad.read_h5ad(par['input_prediction'])
-input_test = ad.read_h5ad(par['input_test'])
+input_denoised = ad.read_h5ad(par["input_prediction"])
+input_test = ad.read_h5ad(par["input_test"])
 
 test_data = ad.AnnData(X=input_test.layers["counts"])
 denoised_data = ad.AnnData(X=input_denoised.layers["denoised"])
@@ -39,12 +37,13 @@ error = sklearn.metrics.mean_squared_error(
 
 print("Store mse value", flush=True)
 output = ad.AnnData(
-    uns={ key: val for key, val in input_test.uns.items() },
+    uns={key: val for key, val in input_test.uns.items()},
 )
 
 output.uns["method_id"] = input_denoised.uns["method_id"]
-output.uns["metric_ids"] = meta['name']
+output.uns["metric_ids"] = meta["name"]
 output.uns["metric_values"] = error
 
 print("Write adata to file", flush=True)
-output.write_h5ad(par['output'], compression="gzip")
+print(output.uns)
+output.write_h5ad(par["output"], compression="gzip")

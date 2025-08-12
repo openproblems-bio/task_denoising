@@ -1,5 +1,6 @@
 # denoising devel
 
+* Add new method: CellMapper (PR #31)
 * Update scPRINT, including a new default model (PR #26)
 
 # denoising v1.0.0
@@ -55,6 +56,8 @@
 * Add a base method API schema (PR #24)
 
 * Add `dataset_organism` to training input files (PR #24)
+
+* Remove n_obs_limit default setting.
 
 ## BUG FIXES
 

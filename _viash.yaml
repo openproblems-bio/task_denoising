@@ -3,6 +3,8 @@ organization: openproblems-bio
 version: dev
 license: MIT
 
+viash_version: 0.9.4
+
 label: Denoising
 keywords: [single-cell, openproblems, benchmark, denoising]
 summary: "Removing noise in sparse single-cell RNA-sequencing count data"
@@ -80,14 +82,12 @@ authors:
     info:
       github: marius1311
       orcid: 0000-0002-4846-1266
-repositories:
-  - name: core
-    type: github
-    repo: openproblems-bio/core
-    tag: build/main
-    path: viash/core
 
-viash_version: 0.9.0
+repositories:
+  - name: openproblems
+    type: github
+    repo: openproblems-bio/openproblems
+    tag: build/main
 
 config_mods: |
   .runners[.type == "nextflow"].config.labels := { lowmem : "memory = 20.Gb", midmem : "memory = 50.Gb", highmem : "memory = 100.Gb", lowcpu : "cpus = 5", midcpu : "cpus = 15", highcpu : "cpus = 30", lowtime : "time = 1.h", midtime : "time = 4.h", hightime : "time = 8.h", veryhightime : "time = 24.h" }

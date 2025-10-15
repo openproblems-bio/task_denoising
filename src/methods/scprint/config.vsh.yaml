@@ -39,7 +39,7 @@ info:
       model_name: "small"
 
 arguments:
-  - name: "--model_name"
+  - name: --model_name
     type: "string"
     description: Which model to use. Not used if --model is provided.
     choices: ["large", "v2-medium", "small"]
@@ -48,18 +48,18 @@ arguments:
     type: file
     description: Path to the scPRINT model.
     required: false
-  - name: max_len
+  - name: --max_len
     type: integer
     description: Maximum number of genes to consider.
-    default: 5000
-  - name: batch_size
+    default: 12000
+  - name: --batch_size
     type: integer
     description: Batch size for processing.
     default: 32
-  - name: predict_depth_mult
+  - name: --predict_depth_mult
     type: double
     description: Multiplier for prediction depth.
-    default: 5.0
+    default: 1.0
 
 resources:
   - type: python_script
@@ -71,9 +71,7 @@ engines:
     setup:
       - type: python
         pip:
-          - git+https://github.com/cantinilab/scPRINT.git@d8cc270b099c8d5dacf6913acc26f2b696685b2b
-          - gseapy==1.1.2
-          - git+https://github.com/jkobject/scDataLoader.git@c67c24a2e5c62399912be39169aae76e29e108aa
+          - scprint==2.3.5
       - type: docker
         run: lamin init --storage ./main --name main --schema bionty
       - type: docker
@@ -85,6 +83,7 @@ engines:
 
 runners:
   - type: executable
+    # docker_run_args: --gpus all
   - type: nextflow
     directives:
       label: [midtime, midmem, midcpu, gpu]

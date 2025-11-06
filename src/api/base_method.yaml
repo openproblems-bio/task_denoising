@@ -1,0 +1,20 @@
+namespace: "methods"
+info:
+  type: method
+  type_info:
+    label: Method
+    summary: A method.
+    description: |
+      A denoising method to remove noise (i.e. technical artifacts) from a dataset.
+arguments:
+  - name: --input_train
+    __merge__: file_train.yaml
+    required: true
+    direction: input
+  - name: --output
+    __merge__: file_prediction.yaml
+    required: true
+    direction: output
+test_resources:
+  - type: python_script
+    path: /common/component_tests/check_config.py

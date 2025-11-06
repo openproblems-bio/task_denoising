@@ -1,0 +1,61 @@
+__merge__: ../../api/comp_method.yaml
+name: cellmapper
+label: CellMapper
+summary: "CellMapper is a general framework for k-NN based mapping tasks in single-cell and spatial genomics"
+description: |
+  k-NN-based mapping of cells across representations to transfer labels, embeddings and expression values. 
+  Works for millions of cells, on CPU and GPU, across molecular modalities, between spatial and non-spatial data, 
+  for arbitrary query and reference datasets. We treat data denoising as self-mapping, where the query and reference datasets are the same. 
+  Based on some joint representation (here: PCA), CellMapper computes a k-NN graph and applies a kernel function to compute edge weights. Here,
+  we use a kernel based on Jaccard similarity (as e.g. in HNOCA-tools) or UMAP's `fuzzy_simplicial_set` (as in scanpy). Given the row-normalized 
+  weighted adjacency matrix, we simulate a t-step random walk to smooth the data, similar to MAGIC. For large t-values, we also provide a spectral 
+  approximation of the application of the t-step transition matrix to the data (not used here). 
+
+references:
+  doi: 
+    - 10.5281/zenodo.15683594
+links:
+  documentation: https://cellmapper.readthedocs.io/en/latest/
+  repository: https://github.com/quadbio/cellmapper
+info:
+  preferred_normalization: counts
+  variants: 
+    cellmapper_jaccard_log:
+      kernel_method: jaccard
+      norm: log
+    cellmapper_umap_log:
+      kernel_method: umap
+      norm: log
+    cellmapper_umap_sqrt:
+      kernel_method: umap
+      norm: sqrt
+arguments:
+  - name: "--kernel_method"
+    type: "string"
+    choices: ["jaccard", "umap"]
+    default: "umap"
+    description: Kernel function to compute k-NN edge weights. 
+  - name: "--t"
+    type: "integer"
+    default: 3
+    description: Number of steps for data smoothing.
+  - name: "--norm"
+    type: string
+    choices: ["sqrt", "log"]
+    default: "log"
+    description: Normalization method
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        packages: 
+          - cellmapper>=0.2.1
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime,midmem,midcpu]

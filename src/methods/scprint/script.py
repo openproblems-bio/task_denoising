@@ -32,13 +32,15 @@ print("\n>>> Preprocessing data...", flush=True)
 adata = ad.AnnData(X=input.layers["counts"])
 adata.obs_names = input.obs_names
 adata.var_names = input.var_names
-if input.uns["dataset_organism"] == "homo_sapiens":
+
+input_organism = input.uns.get("dataset_organism", None)
+if input_organism == "homo_sapiens":
     adata.obs["organism_ontology_term_id"] = "NCBITaxon:9606"
-elif input.uns["dataset_organism"] == "mus_musculus":
+elif input_organism == "mus_musculus":
     adata.obs["organism_ontology_term_id"] = "NCBITaxon:10090"
 else:
     raise ValueError(
-        f"scPRINT requires human or mouse data, not '{input.uns['dataset_organism']}'"
+        f"scPRINT requires human or mouse data, not '{input_organism}'"
     )
 
 preprocessor = Preprocessor(

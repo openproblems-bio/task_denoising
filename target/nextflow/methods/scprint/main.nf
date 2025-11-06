@@ -3064,7 +3064,7 @@ meta = [
                   "name" : "dataset_organism",
                   "type" : "string",
                   "description" : "The organism of the sample in the dataset.",
-                  "required" : false
+                  "required" : true
                 }
               ]
             }
@@ -3343,7 +3343,7 @@ meta = [
     "engine" : "docker",
     "output" : "target/nextflow/methods/scprint",
     "viash_version" : "0.9.4",
-    "git_commit" : "75fde1c6a03738f1902b79fa60b906fccad2bfa7",
+    "git_commit" : "6233222758328ceea11651cc6f3aeb11fe3ae396",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {
@@ -3529,13 +3529,15 @@ print("\\\\n>>> Preprocessing data...", flush=True)
 adata = ad.AnnData(X=input.layers["counts"])
 adata.obs_names = input.obs_names
 adata.var_names = input.var_names
-if input.uns["dataset_organism"] == "homo_sapiens":
+
+input_organism = input.uns.get("dataset_organism", None)
+if input_organism == "homo_sapiens":
     adata.obs["organism_ontology_term_id"] = "NCBITaxon:9606"
-elif input.uns["dataset_organism"] == "mus_musculus":
+elif input_organism == "mus_musculus":
     adata.obs["organism_ontology_term_id"] = "NCBITaxon:10090"
 else:
     raise ValueError(
-        f"scPRINT requires human or mouse data, not '{input.uns['dataset_organism']}'"
+        f"scPRINT requires human or mouse data, not '{input_organism}'"
     )
 
 preprocessor = Preprocessor(

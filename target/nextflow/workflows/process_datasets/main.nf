@@ -3102,7 +3102,7 @@ meta = [
                   "name" : "dataset_organism",
                   "type" : "string",
                   "description" : "The organism of the sample in the dataset.",
-                  "required" : false
+                  "required" : true
                 }
               ]
             }
@@ -3149,7 +3149,7 @@ meta = [
                   "name" : "dataset_organism",
                   "type" : "string",
                   "description" : "The organism of the sample in the dataset.",
-                  "required" : false
+                  "required" : true
                 }
               ]
             }
@@ -3221,7 +3221,7 @@ meta = [
                   "name" : "dataset_organism",
                   "type" : "string",
                   "description" : "The organism of the sample in the dataset.",
-                  "required" : false
+                  "required" : true
                 },
                 {
                   "name" : "train_sum",
@@ -3334,7 +3334,7 @@ meta = [
     "engine" : "native",
     "output" : "target/nextflow/workflows/process_datasets",
     "viash_version" : "0.9.4",
-    "git_commit" : "75fde1c6a03738f1902b79fa60b906fccad2bfa7",
+    "git_commit" : "6233222758328ceea11651cc6f3aeb11fe3ae396",
     "git_remote" : "https://github.com/openproblems-bio/task_denoising"
   },
   "package_config" : {

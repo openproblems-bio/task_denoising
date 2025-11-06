@@ -449,9 +449,9 @@ RUN pip install --upgrade pip && \
   pip install --upgrade --no-cache-dir "scprep" "magic-impute" "scipy" "scikit-learn<1.2" "numpy<2"
 
 LABEL org.opencontainers.image.description="Companion container for running component methods magic"
-LABEL org.opencontainers.image.created="2025-10-15T13:46:14Z"
+LABEL org.opencontainers.image.created="2025-11-06T13:57:54Z"
 LABEL org.opencontainers.image.source="https://github.com/KrishnaswamyLab/MAGIC"
-LABEL org.opencontainers.image.revision="75fde1c6a03738f1902b79fa60b906fccad2bfa7"
+LABEL org.opencontainers.image.revision="6233222758328ceea11651cc6f3aeb11fe3ae396"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER

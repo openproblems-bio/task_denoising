@@ -41,6 +41,8 @@ dataset.
 | Scott Gigante     | author, maintainer |
 | Robrecht Cannoodt | author             |
 | Kai Waldrant      | contributor        |
+| Jeremie Kalfon    | contributor        |
+| Marius Lange      | contributor        |
 
 ## API
 
@@ -99,7 +101,7 @@ Data structure:
 | `uns["dataset_reference"]` | `string` | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
 | `uns["dataset_summary"]` | `string` | Short description of the dataset. |
 | `uns["dataset_description"]` | `string` | Long description of the dataset. |
-| `uns["dataset_organism"]` | `string` | (*Optional*) The organism of the sample in the dataset. |
+| `uns["dataset_organism"]` | `string` | The organism of the sample in the dataset. |
 
 </div>
 
@@ -149,7 +151,7 @@ Data structure:
 | `uns["dataset_reference"]` | `string` | (*Optional*) Bibtex reference of the paper in which the dataset was published. |
 | `uns["dataset_summary"]` | `string` | Short description of the dataset. |
 | `uns["dataset_description"]` | `string` | Long description of the dataset. |
-| `uns["dataset_organism"]` | `string` | (*Optional*) The organism of the sample in the dataset. |
+| `uns["dataset_organism"]` | `string` | The organism of the sample in the dataset. |
 | `uns["train_sum"]` | `integer` | The total number of counts in the training dataset. |
 
 </div>
@@ -167,7 +169,7 @@ Format:
 
     AnnData object
      layers: 'counts'
-     uns: 'dataset_id'
+     uns: 'dataset_id', 'dataset_organism'
 
 </div>
 
@@ -175,10 +177,11 @@ Data structure:
 
 <div class="small">
 
-| Slot                | Type      | Description                          |
-|:--------------------|:----------|:-------------------------------------|
-| `layers["counts"]`  | `integer` | Raw counts.                          |
-| `uns["dataset_id"]` | `string`  | A unique identifier for the dataset. |
+| Slot | Type | Description |
+|:---|:---|:---|
+| `layers["counts"]` | `integer` | Raw counts. |
+| `uns["dataset_id"]` | `string` | A unique identifier for the dataset. |
+| `uns["dataset_organism"]` | `string` | The organism of the sample in the dataset. |
 
 </div>
 

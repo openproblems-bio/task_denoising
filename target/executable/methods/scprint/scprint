@@ -457,9 +457,9 @@ RUN pip install --upgrade pip && \
   python -c 'from scdataloader.utils import populate_my_ontology; populate_my_ontology()'
 
 LABEL org.opencontainers.image.description="Companion container for running component methods scprint"
-LABEL org.opencontainers.image.created="2025-10-15T13:46:15Z"
+LABEL org.opencontainers.image.created="2025-11-06T13:57:55Z"
 LABEL org.opencontainers.image.source="https://github.com/cantinilab/scPRINT"
-LABEL org.opencontainers.image.revision="75fde1c6a03738f1902b79fa60b906fccad2bfa7"
+LABEL org.opencontainers.image.revision="6233222758328ceea11651cc6f3aeb11fe3ae396"
 LABEL org.opencontainers.image.version="build_main"
 
 VIASHDOCKER
@@ -1235,13 +1235,15 @@ print("\\n>>> Preprocessing data...", flush=True)
 adata = ad.AnnData(X=input.layers["counts"])
 adata.obs_names = input.obs_names
 adata.var_names = input.var_names
-if input.uns["dataset_organism"] == "homo_sapiens":
+
+input_organism = input.uns.get("dataset_organism", None)
+if input_organism == "homo_sapiens":
     adata.obs["organism_ontology_term_id"] = "NCBITaxon:9606"
-elif input.uns["dataset_organism"] == "mus_musculus":
+elif input_organism == "mus_musculus":
     adata.obs["organism_ontology_term_id"] = "NCBITaxon:10090"
 else:
     raise ValueError(
-        f"scPRINT requires human or mouse data, not '{input.uns['dataset_organism']}'"
+        f"scPRINT requires human or mouse data, not '{input_organism}'"
     )
 
 preprocessor = Preprocessor(

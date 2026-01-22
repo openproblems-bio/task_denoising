@@ -31,7 +31,7 @@ denoised_data = denoised_data * target_sum / initial_sum
 def poisson_nll_loss(y_pred: np.ndarray, y_true: np.ndarray) -> float:
     return (y_pred - y_true * np.log(y_pred + 1e-6)).mean()
 
-error = poisson_nll_loss(test_data, denoised_data)
+error = poisson_nll_loss(denoised_data, test_data)
 
 print("Store poisson value", flush=True)
 output = ad.AnnData(

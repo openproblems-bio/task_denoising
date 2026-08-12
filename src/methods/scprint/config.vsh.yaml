@@ -32,18 +32,18 @@ info:
   preferred_normalization: counts
   variants:
     scprint_large:
-      model_name: "large"
+      model_name: "large-v1"
     scprint_medium:
-      model_name: "v2-medium"
+      model_name: "medium-v1.5"
     scprint_small:
-      model_name: "small"
+      model_name: "small-v1"
 
 arguments:
   - name: --model_name
     type: "string"
     description: Which model to use. Not used if --model is provided.
-    choices: ["large", "v2-medium", "small"]
-    default: "v2-medium"
+    choices: ["large-v1", "medium-v1.5", "small-v1"]
+    default: "medium-v1.5"
   - name: --model
     type: file
     description: Path to the scPRINT model.

@@ -22,6 +22,7 @@ workflow run_wf {
     dca,
     knn_smoothing,
     magic,
+    mcv_diffusion,
     scprint
   ]
 

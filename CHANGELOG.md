@@ -4,7 +4,7 @@
 
 * Add new method: CellMapper (PR #31)
 
-* Add new method: MCV-calibrated diffusion (`mcv_diffusion`)
+* Add new method: MCV-calibrated diffusion (`mcv_diffusion`) (PR #39)
 
 ## MINOR CHANGES
 

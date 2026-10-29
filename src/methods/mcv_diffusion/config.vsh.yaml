@@ -1,0 +1,73 @@
+__merge__: ../../api/comp_method.yaml
+name: mcv_diffusion
+label: MCV-calibrated diffusion
+summary: "kNN-graph diffusion in log-CP10k space whose diffusion time and restart weight are calibrated by molecular cross-validation on the training counts."
+description: |
+  Cells are connected by a symmetrised k-nearest-neighbour graph built on the PCA of
+  log-normalised (log1p CP10k) highly variable genes. The log1p CP10k expression matrix Y is
+  smoothed by a lazy random walk with restart, Z = (1 - b) Y + b P^t Y, where P is the
+  row-normalised graph, and the denoised counts are expm1(Z) rescaled to each cell's library size.
+  Instead of fixing the amount of smoothing, the diffusion time t and the restart weight b are
+  chosen by molecular cross-validation (Batson et al., 2019) on the training data only: the
+  training molecules are binomially split into a train' and a test' part, every (t, b) on a
+  small grid is applied to train', and the pair with the lowest mean squared error between
+  log1p CP10k of the smoothed train' and of test' is used to denoise the full training matrix.
+  This lets the method adapt the smoothing strength to sequencing depth and technology
+  (UMI vs. full-length read counts) without access to the test molecules.
+references:
+  doi:
+    - 10.1101/786269
+links:
+  documentation: https://github.com/openproblems-bio/task_denoising
+  repository: https://github.com/openproblems-bio/task_denoising
+info:
+  preferred_normalization: counts
+  variants:
+    mcv_diffusion:
+arguments:
+  - name: "--n_pcs"
+    type: integer
+    default: 50
+    description: Number of principal components used to build the kNN graph.
+  - name: "--n_neighbors"
+    type: integer
+    default: 15
+    description: Number of nearest neighbours (including the cell itself).
+  - name: "--t_grid"
+    type: integer
+    multiple: true
+    default: [1, 2, 3, 4, 6, 8, 12, 16]
+    description: Candidate diffusion times evaluated by molecular cross-validation.
+  - name: "--b_grid"
+    type: double
+    multiple: true
+    default: [0.3, 0.6, 0.8, 0.9, 1.0]
+    description: Candidate weights of the diffused profile (1 - b is the restart weight on the cell's own profile).
+  - name: "--mcv_frac"
+    type: double
+    default: 0.888888889
+    description: Fraction of training molecules kept in train' for molecular cross-validation (8/9 gives a test' with the depth of the benchmark test set).
+  - name: "--mcv_gene_frac"
+    type: double
+    default: 0.25
+    description: Fraction of genes on which the cross-validation error is evaluated.
+  - name: "--seed"
+    type: integer
+    default: 0
+    description: Random seed for the molecule split, gene subset and PCA.
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        packages:
+          - scanpy
+          - scikit-learn
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime, highmem, midcpu]
